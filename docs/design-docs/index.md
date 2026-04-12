@@ -6,6 +6,7 @@
 - `core-beliefs.md`: agent-first 设计信念
 - `doc-source-map.md`: 新旧设计文档映射
 - `doc-gardening.md`: 文档维护规则
+- `frontend_demo_console.md`: 前端演示页的范围与约束
 - `../DESIGN.md`: 设计总入口
 
 ## 旧文档映射

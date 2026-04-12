@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusReco Demo Console</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<div class="page-shell">
+    <div class="ambient ambient-left"></div>
+    <div class="ambient ambient-right"></div>
+
+    <header class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">Campus social matching demo</p>
+            <h1>CampusReco Demo Console</h1>
+            <p class="hero-text">
+                A single-page console for the current backend MVP. It exposes the full recommendation flow,
+                evaluation exports, and feedback loop without adding a separate frontend build chain.
+            </p>
+            <div class="hero-tags">
+                <span>Recommendation Flow</span>
+                <span>Evaluation Matrix</span>
+                <span>Feedback Loop</span>
+            </div>
+        </div>
+        <div class="hero-metrics">
+            <div class="metric-card accent-sand">
+                <span class="metric-label">Current stage</span>
+                <strong class="metric-value">Backend MVP</strong>
+                <span class="metric-note">API, tests, evaluation exports, and demo UI are connected.</span>
+            </div>
+            <div class="metric-card accent-green">
+                <span class="metric-label">Demo dataset</span>
+                <strong class="metric-value" id="hero-data-scale">12 / 12 / 48</strong>
+                <span class="metric-note">Users / tags / relations</span>
+            </div>
+            <div class="metric-card accent-blue">
+                <span class="metric-label">Default user</span>
+                <strong class="metric-value" id="hero-user-id">2001</strong>
+                <span class="metric-note">Ready for recommendation and feedback demo</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-grid">
+        <section class="panel panel-control">
+            <div class="panel-header">
+                <div>
+                    <p class="panel-kicker">Console controls</p>
+                    <h2>Data and evaluation</h2>
+                </div>
+                <button class="ghost-button" id="refresh-overview" type="button">Refresh overview</button>
+            </div>
+
+            <div class="control-stack">
+                <button class="primary-button" id="init-mock-data" type="button">Initialize mock data</button>
+                <div class="button-row">
+                    <button class="secondary-button" id="rebuild-profiles" type="button">Rebuild all profiles</button>
+                    <button class="secondary-button" id="rebuild-recall-index" type="button">Rebuild recall index</button>
+                </div>
+                <div class="button-row">
+                    <button class="secondary-button" id="export-evaluation" type="button">Export latest evaluation</button>
+                    <button class="secondary-button" id="export-matrix" type="button">Export evaluation matrix</button>
+                </div>
+            </div>
+
+            <div class="status-strip" id="status-strip">
+                <span class="status-dot"></span>
+                <span>Waiting for action</span>
+            </div>
+
+            <div class="result-card">
+                <div class="result-head">
+                    <h3>System overview</h3>
+                    <span id="overview-timestamp">Not loaded yet</span>
+                </div>
+                <dl class="overview-grid" id="overview-grid">
+                    <div>
+                        <dt>Active users</dt>
+                        <dd>12</dd>
+                    </div>
+                    <div>
+                        <dt>Tags</dt>
+                        <dd>12</dd>
+                    </div>
+                    <div>
+                        <dt>Relations</dt>
+                        <dd>48</dd>
+                    </div>
+                    <div>
+                        <dt>Top K</dt>
+                        <dd>3</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="result-card">
+                <div class="result-head">
+                    <h3>Latest exports</h3>
+                    <span>docs/generated</span>
+                </div>
+                <div class="export-list" id="export-list">
+                    <div class="export-item">
+                        <strong>Evaluation snapshot</strong>
+                        <span>recommendation-evaluation-latest.md</span>
+                    </div>
+                    <div class="export-item">
+                        <strong>Experiment matrix</strong>
+                        <span>recommendation-evaluation-matrix-latest.md</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel panel-user">
+            <div class="panel-header">
+                <div>
+                    <p class="panel-kicker">Recommendation flow</p>
+                    <h2>User workspace</h2>
+                </div>
+            </div>
+
+            <form class="user-form" id="user-form">
+                <label>
+                    <span>User ID</span>
+                    <input id="user-id" name="userId" type="number" value="2001" min="1">
+                </label>
+                <label>
+                    <span>Top K</span>
+                    <input id="top-k" name="topK" type="number" value="3" min="1" max="10">
+                </label>
+                <label>
+                    <span>Matrix Top Ks</span>
+                    <input id="matrix-topks" name="matrixTopKs" type="text" value="3,5">
+                </label>
+                <div class="button-row">
+                    <button class="primary-button" type="button" id="load-user">Load profile</button>
+                    <button class="primary-button" type="button" id="run-recommendation">Run recommendation</button>
+                </div>
+            </form>
+
+            <div class="split-card">
+                <article class="result-card">
+                    <div class="result-head">
+                        <h3>User profile</h3>
+                        <span id="profile-updated-at">Not loaded yet</span>
+                    </div>
+                    <div class="tag-pills" id="profile-top-tags"></div>
+                    <pre class="code-block" id="profile-json">Profile data will appear here.</pre>
+                </article>
+
+                <article class="result-card">
+                    <div class="result-head">
+                        <h3>Offline evaluation summary</h3>
+                        <span id="evaluation-generated-at">Not loaded yet</span>
+                    </div>
+                    <div class="evaluation-table-wrap">
+                        <table class="evaluation-table">
+                            <thead>
+                            <tr>
+                                <th>Baseline</th>
+                                <th>Precision@K</th>
+                                <th>HitRate@K</th>
+                                <th>Explanation coverage</th>
+                            </tr>
+                            </thead>
+                            <tbody id="evaluation-summary-body">
+                            <tr>
+                                <td colspan="4">Evaluation summary will appear here.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel panel-results">
+            <div class="panel-header">
+                <div>
+                    <p class="panel-kicker">Recommendations</p>
+                    <h2>Candidates and explanation</h2>
+                </div>
+                <span class="panel-subnote" id="recommendation-trace">No requestTraceId yet</span>
+            </div>
+
+            <div class="recommendation-list" id="recommendation-list">
+                <article class="recommendation-card empty-card">
+                    <p>Run a recommendation request to populate this area.</p>
+                </article>
+            </div>
+
+            <div class="split-card">
+                <article class="result-card">
+                    <div class="result-head">
+                        <h3>Recommendation detail</h3>
+                        <span id="detail-meta">Waiting for data</span>
+                    </div>
+                    <pre class="code-block" id="recommendation-detail">
+Recommendation detail JSON and recall candidate counts will appear here.
+                    </pre>
+                </article>
+
+                <article class="result-card">
+                    <div class="result-head">
+                        <h3>Explanation detail</h3>
+                        <span id="explanation-meta">Select a candidate</span>
+                    </div>
+                    <pre class="code-block" id="explanation-detail">
+Use "View explanation" on a recommendation card.
+                    </pre>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel panel-log">
+            <div class="panel-header">
+                <div>
+                    <p class="panel-kicker">Run log</p>
+                    <h2>Action replay</h2>
+                </div>
+            </div>
+            <div class="log-stream" id="log-stream"></div>
+        </section>
+    </main>
+</div>
+
+<template id="recommendation-card-template">
+    <article class="recommendation-card">
+        <div class="recommendation-topline">
+            <span class="rank-chip"></span>
+            <span class="score-chip"></span>
+        </div>
+        <h3 class="candidate-name"></h3>
+        <p class="candidate-meta"></p>
+        <p class="candidate-explanation"></p>
+        <div class="button-row">
+            <button class="ghost-button explanation-button" type="button">View explanation</button>
+            <button class="ghost-button feedback-button" type="button">Submit follow</button>
+        </div>
+    </article>
+</template>
+
+<script src="/app.js"></script>
+</body>
+</html>

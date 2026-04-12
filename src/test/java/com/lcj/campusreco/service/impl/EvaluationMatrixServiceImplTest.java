@@ -24,7 +24,7 @@ class EvaluationMatrixServiceImplTest {
 
     @Test
     void exportTopKMatrixWritesComparisonMarkdownForMultipleTopKValues() throws Exception {
-        Path exportDir = Path.of("target/test-generated-docs");
+        Path exportDir = Path.of("target/test-generated-docs-matrix");
         Files.createDirectories(exportDir);
         Files.deleteIfExists(exportDir.resolve("recommendation-evaluation-matrix-latest.md"));
 
@@ -57,7 +57,7 @@ class EvaluationMatrixServiceImplTest {
 
         EvaluationBaselineVO fullPipeline = new EvaluationBaselineVO();
         fullPipeline.setBaselineCode("full_pipeline");
-        fullPipeline.setBaselineName("完整链路");
+        fullPipeline.setBaselineName("Full Pipeline");
         fullPipeline.setPrecisionAtK(new java.math.BigDecimal(precisionAtK));
         fullPipeline.setHitRateAtK(new java.math.BigDecimal("1.0000"));
         fullPipeline.setExplanationPresenceRate(new java.math.BigDecimal("1.0000"));

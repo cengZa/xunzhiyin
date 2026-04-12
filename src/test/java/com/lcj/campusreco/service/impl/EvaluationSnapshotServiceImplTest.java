@@ -23,7 +23,7 @@ class EvaluationSnapshotServiceImplTest {
 
     @Test
     void exportLatestReportWritesMarkdownSnapshotToConfiguredDirectory() throws Exception {
-        Path exportDir = Path.of("target/test-generated-docs");
+        Path exportDir = Path.of("target/test-generated-docs-snapshot");
         Files.createDirectories(exportDir);
         Files.deleteIfExists(exportDir.resolve("recommendation-evaluation-latest.md"));
 

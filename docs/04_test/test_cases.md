@@ -4,6 +4,11 @@
 - 在 Java 21 会话中运行 `powershell -ExecutionPolicy Bypass -File scripts/run-governance-checks.ps1`
 - 期望：全部通过
 
+## 1.1 前端演示页
+- 访问 `/`
+- 期望：返回 HTML 页面
+- 重点检查：页面中包含 `CampusReco Demo Console`、`Recommendation Flow`、`Evaluation Matrix`、`Feedback Loop`
+
 ## 2. 单元测试
 - 在 Java 21 会话中运行 `mvn test`
 - 期望：画像构建、推荐编排、mock 数据初始化相关测试通过

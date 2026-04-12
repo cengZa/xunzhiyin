@@ -39,7 +39,7 @@
 - 评估报告接口：`GET /api/admin/evaluation/report`
 - 评估落盘接口：`POST /api/admin/evaluation/export`
 - 默认导出路径：`docs/generated/recommendation-evaluation-latest.md`
-- 集成测试导出路径：`target/generated-docs/recommendation-evaluation-latest.md`
+- 集成测试会把评估快照导出到 `target` 下的专用临时目录，避免污染仓库内的正式生成物
 
 ## 6. 当前限制
 - 仍为小规模演示数据，不用于正式学术指标结论

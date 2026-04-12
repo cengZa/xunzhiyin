@@ -22,4 +22,4 @@ mybatis-plus:
       id-type: assign_id
 
 app:
-  generated-docs-dir: target/generated-docs
+  generated-docs-dir: target/integration-generated-docs

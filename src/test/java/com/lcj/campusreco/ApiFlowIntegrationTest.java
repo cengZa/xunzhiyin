@@ -3,6 +3,7 @@ package com.lcj.campusreco;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,6 +33,19 @@ class ApiFlowIntegrationTest {
     @BeforeEach
     void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @Test
+    void shouldServeFrontendDashboard() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/index.html"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("CampusReco Demo Console")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Recommendation Flow")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Evaluation Matrix")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Feedback Loop")));
     }
 
     @Test
@@ -68,7 +82,7 @@ class ApiFlowIntegrationTest {
                 .andExpect(jsonPath("$.data.fileName").value("recommendation-evaluation-latest.md"))
                 .andExpect(jsonPath("$.data.topK").value(3))
                 .andExpect(jsonPath("$.data.baselineCount").value(3));
-        assertThat(Files.exists(Path.of("target/generated-docs/recommendation-evaluation-latest.md"))).isTrue();
+        assertThat(Files.exists(Path.of("target/integration-generated-docs/recommendation-evaluation-latest.md"))).isTrue();
 
         mockMvc.perform(post("/api/admin/evaluation/experiments/export")
                         .param("topKs", "3,5"))
@@ -77,7 +91,7 @@ class ApiFlowIntegrationTest {
                 .andExpect(jsonPath("$.data.fileName").value("recommendation-evaluation-matrix-latest.md"))
                 .andExpect(jsonPath("$.data.experimentCount").value(2))
                 .andExpect(jsonPath("$.data.topKValues.length()").value(2));
-        assertThat(Files.exists(Path.of("target/generated-docs/recommendation-evaluation-matrix-latest.md"))).isTrue();
+        assertThat(Files.exists(Path.of("target/integration-generated-docs/recommendation-evaluation-matrix-latest.md"))).isTrue();
 
         MvcResult recommendationResult = mockMvc.perform(get("/api/recommendations/{userId}", 2001L)
                         .param("topK", "3")

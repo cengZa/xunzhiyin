@@ -80,9 +80,9 @@ public class EvaluationServiceImpl implements EvaluationService {
                 ));
 
         Map<Long, UserEntity> userCache = new HashMap<>();
-        BaselineAccumulator overlap = new BaselineAccumulator("tag_overlap", "标签重叠");
-        BaselineAccumulator cosine = new BaselineAccumulator("cosine_similarity", "纯排序得分");
-        BaselineAccumulator full = new BaselineAccumulator("full_pipeline", "完整链路");
+        BaselineAccumulator overlap = new BaselineAccumulator("tag_overlap", "Tag Overlap");
+        BaselineAccumulator cosine = new BaselineAccumulator("cosine_similarity", "Cosine Ranking");
+        BaselineAccumulator full = new BaselineAccumulator("full_pipeline", "Full Pipeline");
 
         for (UserEntity requestUser : activeUsers) {
             UserProfileModel profileModel = profileService.getProfile(requestUser.getId());
@@ -168,7 +168,7 @@ public class EvaluationServiceImpl implements EvaluationService {
         builder.append("- tagCount: ").append(summary.getTagCount()).append('\n');
         builder.append("- relationCount: ").append(summary.getRelationCount()).append('\n');
         builder.append("- proxyRule: ").append(summary.getProxyRelevanceRule()).append("\n\n");
-        builder.append("| 基线 | recall均值 | topK返回均值 | Precision@K | HitRate@K | 解释覆盖率 |\n");
+        builder.append("| Baseline | Avg Recall Candidates | Avg TopK Return | Precision@K | HitRate@K | Explanation Coverage |\n");
         builder.append("| --- | --- | --- | --- | --- | --- |\n");
         for (EvaluationBaselineVO baseline : summary.getBaselines()) {
             builder.append("| ")
@@ -293,7 +293,8 @@ public class EvaluationServiceImpl implements EvaluationService {
             Set<Long> requestTags = userTagMap.getOrDefault(requestUser.getId(), Set.of());
             Set<Long> targetTags = userTagMap.getOrDefault(targetUser.getId(), Set.of());
             long sharedTagCount = requestTags.stream().filter(targetTags::contains).count();
-            boolean sameMajor = requestUser.getMajor() != null && requestUser.getMajor().equalsIgnoreCase(targetUser.getMajor());
+            boolean sameMajor = requestUser.getMajor() != null
+                    && requestUser.getMajor().equalsIgnoreCase(targetUser.getMajor());
             return sharedTagCount >= 2 || (sameMajor && sharedTagCount >= 1);
         }
     }

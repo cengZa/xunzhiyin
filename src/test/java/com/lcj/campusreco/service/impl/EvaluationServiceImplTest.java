@@ -113,9 +113,9 @@ class EvaluationServiceImplTest {
         assertEquals(new BigDecimal("1.0000"), full.getExplanationPresenceRate());
 
         String markdown = evaluationService.generateMarkdownReport(1);
-        assertTrue(markdown.contains("| 基线 |"));
-        assertTrue(markdown.contains("标签重叠"));
-        assertTrue(markdown.contains("完整链路"));
+        assertTrue(markdown.contains("| Baseline |"));
+        assertTrue(markdown.contains("Tag Overlap"));
+        assertTrue(markdown.contains("Full Pipeline"));
     }
 
     private UserEntity createUser(Long id, String major) {

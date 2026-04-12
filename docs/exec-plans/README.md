@@ -18,3 +18,4 @@
 - `completed/2026-04-12_recommendation_evaluation_prep.md`
 - `completed/2026-04-12_mock_expansion_and_snapshot_export.md`
 - `completed/2026-04-12_topk_experiment_matrix.md`
+- `completed/2026-04-12_frontend_demo_console.md`

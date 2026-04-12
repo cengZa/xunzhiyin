@@ -18,7 +18,7 @@
 - mock 数据已扩充到 12 个标签、12 个用户、48 条关系
 - 新增 `POST /api/admin/evaluation/export`
 - 新增 `EvaluationSnapshotService` 与 `EvaluationExportVO`
-- 集成测试已验证评估快照会落到 `target/generated-docs/recommendation-evaluation-latest.md`
+- 集成测试已验证评估快照会落到 `target` 下的专用临时导出目录
 - 文档已补充快照导出入口与更大的 mock 数据说明
 
 ## 验收结果

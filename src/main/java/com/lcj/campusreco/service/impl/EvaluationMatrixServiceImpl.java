@@ -80,7 +80,7 @@ public class EvaluationMatrixServiceImpl implements EvaluationMatrixService {
         builder.append("# Recommendation Evaluation Matrix\n\n");
         builder.append("- experiments: ").append(topKValues.size()).append('\n');
         builder.append("- topKValues: ").append(topKValues).append("\n\n");
-        builder.append("| topK | activeUserCount | baseline | Precision@K | HitRate@K | 解释覆盖率 |\n");
+        builder.append("| topK | activeUserCount | baseline | Precision@K | HitRate@K | Explanation Coverage |\n");
         builder.append("| --- | --- | --- | --- | --- | --- |\n");
 
         for (EvaluationSummaryVO summary : summaries) {
