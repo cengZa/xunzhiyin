@@ -1,0 +1,21 @@
+﻿# Docs README
+
+`docs/` 是本项目的系统记录层。旧的 numbered docs 继续保留内容，新索引层负责让 agent 以渐进披露方式获取信息。
+
+## 阅读入口
+- 产品目标与边界：`product-specs/index.md`
+- 架构与设计：`design-docs/index.md`
+- 计划与任务：`exec-plans/README.md`
+- 统一规范：`DESIGN.md`、`PLANS.md`、`PRODUCT_SENSE.md`、`QUALITY_SCORE.md`、`RELIABILITY.md`、`SECURITY.md`
+- 执行检查：`RELIABILITY_CHECKLIST.md`
+- 文档运维：`DOCS_OPERATIONS.md`
+- Prompt 壳：`06_prompt/index.md`
+
+## 旧文档保留原则
+- `00_meta`、`01_planning`、`02_design`、`03_backend`、`04_test`、`05_thesis`、`07_task` 仍然有效。
+- 以后新增 agent 可读知识时，优先落到新的索引层，再决定是否沉到旧分区。
+
+## 文档治理规则
+- 重要规则先写成短索引，再链接到细节文档。
+- 执行计划必须放进 `exec-plans/`。
+- 跨文档冲突需要在计划或质量文档里显式记录。
