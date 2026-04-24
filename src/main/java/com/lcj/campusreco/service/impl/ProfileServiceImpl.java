@@ -1,6 +1,7 @@
 package com.lcj.campusreco.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lcj.campusreco.config.RecommendationTuningContext;
 import com.lcj.campusreco.domain.entity.TagEntity;
 import com.lcj.campusreco.domain.entity.UserProfileEntity;
 import com.lcj.campusreco.domain.entity.UserTagRelationEntity;
@@ -27,17 +28,20 @@ public class ProfileServiceImpl implements ProfileService {
     private final TagMapper tagMapper;
     private final UserProfileMapper userProfileMapper;
     private final ProfileWeightCalculator profileWeightCalculator;
+    private final RecommendationTuningContext tuningContext;
 
     public ProfileServiceImpl(ProfileCacheRepository profileCacheRepository,
                               UserTagRelationMapper userTagRelationMapper,
                               TagMapper tagMapper,
                               UserProfileMapper userProfileMapper,
-                              ProfileWeightCalculator profileWeightCalculator) {
+                              ProfileWeightCalculator profileWeightCalculator,
+                              RecommendationTuningContext tuningContext) {
         this.profileCacheRepository = profileCacheRepository;
         this.userTagRelationMapper = userTagRelationMapper;
         this.tagMapper = tagMapper;
         this.userProfileMapper = userProfileMapper;
         this.profileWeightCalculator = profileWeightCalculator;
+        this.tuningContext = tuningContext;
     }
 
     @Override
@@ -59,7 +63,9 @@ public class ProfileServiceImpl implements ProfileService {
         UserProfileModel profileModel = new UserProfileModel();
         profileModel.setUserId(userId);
         profileModel.setTagWeights(tagWeights);
-        profileModel.setTopKTags(new ArrayList<>(tagWeights.stream().limit(5).toList()));
+        profileModel.setTopKTags(new ArrayList<>(tagWeights.stream()
+                .limit(tuningContext.getProfileTopTagLimit())
+                .toList()));
         profileModel.setVector(tagWeights.stream().collect(java.util.stream.Collectors.toMap(
                 TagWeightModel::getTagId,
                 TagWeightModel::getFinalWeight,

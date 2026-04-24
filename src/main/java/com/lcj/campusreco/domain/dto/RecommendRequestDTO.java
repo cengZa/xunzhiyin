@@ -14,4 +14,6 @@ public class RecommendRequestDTO {
     private Integer topK = 10;
 
     private Boolean useCache = Boolean.TRUE;
+
+    private String scenarioMode = "interest_partner";
 }

@@ -7,5 +7,5 @@ public interface RecommendationService {
 
     RecommendationDetailVO recommend(RecommendRequestDTO dto);
 
-    RecommendationDetailVO getRecommendationDetail(Long userId);
+    RecommendationDetailVO getRecommendationDetail(Long userId, String scenarioMode);
 }

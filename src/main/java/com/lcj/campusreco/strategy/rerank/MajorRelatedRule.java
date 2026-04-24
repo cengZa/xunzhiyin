@@ -13,7 +13,7 @@ public class MajorRelatedRule implements RerankRule {
     public RuleHitModel apply(UserEntity requestUser, UserEntity candidateUser, RankingCandidateModel candidateModel) {
         RuleHitModel ruleHitModel = new RuleHitModel();
         ruleHitModel.setRuleCode("MAJOR_RELATED");
-        ruleHitModel.setRuleDesc("专业相同或相近加分");
+        ruleHitModel.setRuleDesc("专业方向相近");
         boolean hit = requestUser != null
                 && candidateUser != null
                 && requestUser.getMajor() != null

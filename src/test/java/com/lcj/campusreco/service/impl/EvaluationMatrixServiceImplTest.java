@@ -42,7 +42,7 @@ class EvaluationMatrixServiceImplTest {
         assertTrue(Files.exists(Path.of(export.getFilePath())));
 
         String markdown = Files.readString(Path.of(export.getFilePath()));
-        assertTrue(markdown.contains("# Recommendation Evaluation Matrix"));
+        assertTrue(markdown.contains("# 推荐评估矩阵"));
         assertTrue(markdown.contains("| 3 |"));
         assertTrue(markdown.contains("| 5 |"));
     }
@@ -57,7 +57,7 @@ class EvaluationMatrixServiceImplTest {
 
         EvaluationBaselineVO fullPipeline = new EvaluationBaselineVO();
         fullPipeline.setBaselineCode("full_pipeline");
-        fullPipeline.setBaselineName("Full Pipeline");
+        fullPipeline.setBaselineName("完整链路");
         fullPipeline.setPrecisionAtK(new java.math.BigDecimal(precisionAtK));
         fullPipeline.setHitRateAtK(new java.math.BigDecimal("1.0000"));
         fullPipeline.setExplanationPresenceRate(new java.math.BigDecimal("1.0000"));

@@ -2,16 +2,20 @@ spring:
   application:
     name: campusreco
   datasource:
-    url: jdbc:mysql://localhost:3306/campus_reco?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/campus_reco?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-local.sql
   data:
     redis:
       host: localhost
       port: 6379
       database: 0
-      timeout: 3s
+      timeout: 100ms
 
 mybatis-plus:
   configuration:
@@ -22,3 +26,17 @@ mybatis-plus:
 
 server:
   port: 8080
+
+app:
+  recommendation:
+    profile-top-tag-limit: 5
+    rerank-weight-scale: 1.0
+  ai:
+    explanation:
+      enabled: true
+    zhipu:
+      base-url: https://open.bigmodel.cn/api/paas/v4
+      api-key: ${ZAI_API_KEY:}
+      model: GLM-4.7
+      temperature: 0.2
+      timeout-ms: 5000

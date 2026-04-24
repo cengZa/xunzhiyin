@@ -77,10 +77,10 @@ public class EvaluationMatrixServiceImpl implements EvaluationMatrixService {
 
     private String buildMarkdown(List<Integer> topKValues, List<EvaluationSummaryVO> summaries) {
         StringBuilder builder = new StringBuilder();
-        builder.append("# Recommendation Evaluation Matrix\n\n");
-        builder.append("- experiments: ").append(topKValues.size()).append('\n');
-        builder.append("- topKValues: ").append(topKValues).append("\n\n");
-        builder.append("| topK | activeUserCount | baseline | Precision@K | HitRate@K | Explanation Coverage |\n");
+        builder.append("# 推荐评估矩阵\n\n");
+        builder.append("- 实验数量: ").append(topKValues.size()).append('\n');
+        builder.append("- TopK 集合: ").append(topKValues).append("\n\n");
+        builder.append("| TopK | 活跃用户数 | 基线 | Precision@K | HitRate@K | 解释覆盖率 |\n");
         builder.append("| --- | --- | --- | --- | --- | --- |\n");
 
         for (EvaluationSummaryVO summary : summaries) {

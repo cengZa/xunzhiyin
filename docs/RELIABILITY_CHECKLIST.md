@@ -1,10 +1,5 @@
 ﻿# Reliability Checklist
 
-交给 agent 的较大任务完成前，至少检查以下事项：
+该清单已并入 [RELIABILITY.md](D:\.projects\xunzhiyin\docs\RELIABILITY.md) 的“完成前检查”章节。
 
-- 是否读取了相关系统记录入口
-- 是否存在对应执行计划
-- 是否把新增知识回写到 docs
-- 是否做了至少一种验证
-- 是否记录了阻塞项与环境问题
-- 是否更新了技术债或质量评分（若适用）
+保留本页仅用于兼容旧链接；新增规则请只更新 `RELIABILITY.md`。

@@ -38,7 +38,6 @@ class MockDataServiceImplTest {
     void initMockDataSeedsUsersTagsRelationsAndRebuildsArtifacts() {
         when(tagMapper.selectById(any())).thenReturn(null);
         when(userMapper.selectById(any())).thenReturn(null);
-        when(userTagRelationMapper.selectOne(any())).thenReturn(null);
 
         UserEntity activeUser = new UserEntity();
         activeUser.setId(2001L);
@@ -61,9 +60,9 @@ class MockDataServiceImplTest {
 
         var result = service.initMockData();
 
-        assertEquals(12, result.get("tagCount"));
-        assertEquals(12, result.get("userCount"));
-        assertEquals(48, result.get("relationCount"));
+        assertEquals(18, result.get("tagCount"));
+        assertEquals(18, result.get("userCount"));
+        assertEquals(86, result.get("relationCount"));
         verify(tagMapper, atLeastOnce()).insert(any(TagEntity.class));
         verify(userMapper, atLeastOnce()).insert(any(UserEntity.class));
         verify(userTagRelationMapper, atLeastOnce()).insert(any(UserTagRelationEntity.class));

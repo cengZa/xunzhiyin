@@ -34,7 +34,7 @@ class EvaluationSnapshotServiceImplTest {
         summary.getBaselines().add(new EvaluationBaselineVO());
         summary.getBaselines().add(new EvaluationBaselineVO());
         when(evaluationService.generateSummary(3)).thenReturn(summary);
-        when(evaluationService.generateMarkdownReport(3)).thenReturn("# Recommendation Evaluation Summary\n");
+        when(evaluationService.generateMarkdownReport(3)).thenReturn("# 推荐评估摘要\n");
 
         EvaluationSnapshotServiceImpl snapshotService =
                 new EvaluationSnapshotServiceImpl(evaluationService, exportDir.toString());
@@ -45,7 +45,7 @@ class EvaluationSnapshotServiceImplTest {
         assertEquals(3, export.getBaselineCount());
         assertTrue(export.getFileName().endsWith(".md"));
         assertTrue(Files.exists(Path.of(export.getFilePath())));
-        assertTrue(Files.readString(Path.of(export.getFilePath())).contains("Recommendation Evaluation Summary"));
+        assertTrue(Files.readString(Path.of(export.getFilePath())).contains("推荐评估摘要"));
 
         Files.deleteIfExists(Path.of(export.getFilePath()));
     }

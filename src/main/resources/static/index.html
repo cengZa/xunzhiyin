@@ -1,244 +1,345 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusReco Demo Console</title>
+    <title>CampusReco 校园匹配首页</title>
     <link rel="stylesheet" href="/app.css">
 </head>
-<body>
+<body class="defense-mode">
 <div class="page-shell">
-    <div class="ambient ambient-left"></div>
-    <div class="ambient ambient-right"></div>
+    <div class="backdrop backdrop-left"></div>
+    <div class="backdrop backdrop-right"></div>
 
     <header class="hero">
-        <div class="hero-copy">
-            <p class="eyebrow">Campus social matching demo</p>
-            <h1>CampusReco Demo Console</h1>
+        <div class="hero-main">
+            <p class="eyebrow">校园用户匹配推荐系统</p>
+            <h1>CampusReco 校园匹配首页</h1>
             <p class="hero-text">
-                A single-page console for the current backend MVP. It exposes the full recommendation flow,
-                evaluation exports, and feedback loop without adding a separate frontend build chain.
+                页面围绕固定演示用户 <strong id="hero-user-id">2001</strong> 展示“兴趣相似 + 场景重排 + 可信连接分”的新算法匹配过程，
+                把推荐理由、规则命中、可信信号、反馈闭环和参数实验组织成适合答辩讲解的产品首页。
             </p>
             <div class="hero-tags">
-                <span>Recommendation Flow</span>
-                <span>Evaluation Matrix</span>
-                <span>Feedback Loop</span>
+                <span>新算法匹配</span>
+                <span>可信连接分</span>
+                <span>反馈闭环</span>
+            </div>
+            <div class="hero-actions">
+                <button class="primary-button" id="run-recommendation" type="button">立即生成推荐</button>
+                <button class="ghost-button" id="load-user" type="button">刷新用户画像</button>
+                <a class="ghost-button" href="/pipeline.html?userId=2001&topK=3&scenarioMode=interest_partner">查看透明链路</a>
+                <label class="mode-switch">
+                    <input id="presentation-mode-toggle" type="checkbox" checked>
+                    <span>答辩模式</span>
+                </label>
             </div>
         </div>
-        <div class="hero-metrics">
-            <div class="metric-card accent-sand">
-                <span class="metric-label">Current stage</span>
-                <strong class="metric-value">Backend MVP</strong>
-                <span class="metric-note">API, tests, evaluation exports, and demo UI are connected.</span>
-            </div>
-            <div class="metric-card accent-green">
-                <span class="metric-label">Demo dataset</span>
-                <strong class="metric-value" id="hero-data-scale">12 / 12 / 48</strong>
-                <span class="metric-note">Users / tags / relations</span>
-            </div>
-            <div class="metric-card accent-blue">
-                <span class="metric-label">Default user</span>
-                <strong class="metric-value" id="hero-user-id">2001</strong>
-                <span class="metric-note">Ready for recommendation and feedback demo</span>
-            </div>
+        <div class="hero-stats">
+            <article class="metric-card metric-highlight">
+                <span class="metric-label">当前阶段</span>
+                <strong class="metric-value">后端 MVP + 答辩演示页</strong>
+                <span class="metric-note">主链路、解释、双视图、可信连接分和实验导出已经打通。</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-label">演示数据规模</span>
+                <strong class="metric-value" id="hero-data-scale">18 / 18 / 86</strong>
+                <span class="metric-note">用户 / 标签 / 关系</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-label">当前演示模式</span>
+                <strong class="metric-value" id="hero-scenario-label">兴趣搭子</strong>
+                <span class="metric-note" id="hero-user-display">用户 2001</span>
+            </article>
         </div>
     </header>
 
-    <main class="dashboard-grid">
-        <section class="panel panel-control">
-            <div class="panel-header">
-                <div>
-                    <p class="panel-kicker">Console controls</p>
-                    <h2>Data and evaluation</h2>
-                </div>
-                <button class="ghost-button" id="refresh-overview" type="button">Refresh overview</button>
-            </div>
-
-            <div class="control-stack">
-                <button class="primary-button" id="init-mock-data" type="button">Initialize mock data</button>
-                <div class="button-row">
-                    <button class="secondary-button" id="rebuild-profiles" type="button">Rebuild all profiles</button>
-                    <button class="secondary-button" id="rebuild-recall-index" type="button">Rebuild recall index</button>
-                </div>
-                <div class="button-row">
-                    <button class="secondary-button" id="export-evaluation" type="button">Export latest evaluation</button>
-                    <button class="secondary-button" id="export-matrix" type="button">Export evaluation matrix</button>
-                </div>
-            </div>
-
-            <div class="status-strip" id="status-strip">
-                <span class="status-dot"></span>
-                <span>Waiting for action</span>
-            </div>
-
-            <div class="result-card">
-                <div class="result-head">
-                    <h3>System overview</h3>
-                    <span id="overview-timestamp">Not loaded yet</span>
-                </div>
-                <dl class="overview-grid" id="overview-grid">
+    <main class="layout-grid">
+        <section class="main-stack">
+            <section class="story-card">
+                <div class="section-head">
                     <div>
-                        <dt>Active users</dt>
-                        <dd>12</dd>
+                        <p class="section-kicker">答辩故事线</p>
+                        <h2 id="story-title">演示用户 2001：兴趣搭子模式</h2>
                     </div>
-                    <div>
-                        <dt>Tags</dt>
-                        <dd>12</dd>
-                    </div>
-                    <div>
-                        <dt>Relations</dt>
-                        <dd>48</dd>
-                    </div>
-                    <div>
-                        <dt>Top K</dt>
-                        <dd>3</dd>
-                    </div>
-                </dl>
-            </div>
-
-            <div class="result-card">
-                <div class="result-head">
-                    <h3>Latest exports</h3>
-                    <span>docs/generated</span>
+                    <button class="ghost-button" id="refresh-overview" type="button">刷新概览</button>
                 </div>
-                <div class="export-list" id="export-list">
-                    <div class="export-item">
-                        <strong>Evaluation snapshot</strong>
-                        <span>recommendation-evaluation-latest.md</span>
+                <p class="story-persona" id="story-persona">演示用户的人设和核心偏好会显示在这里。</p>
+                <p class="story-narrative" id="story-narrative">页面会把推荐逻辑拆成兴趣分、校园场景分和可信连接分三层。</p>
+                <div class="highlight-grid" id="algorithm-highlight-list"></div>
+                <div class="spotlight-grid" id="candidate-spotlight-list"></div>
+            </section>
+
+            <section class="dashboard-row">
+                <article class="panel-card">
+                    <div class="section-head compact">
+                        <div>
+                            <p class="section-kicker">用户画像</p>
+                            <h3>演示用户工作台</h3>
+                        </div>
+                        <span class="section-meta" id="profile-updated-at">尚未加载</span>
                     </div>
-                    <div class="export-item">
-                        <strong>Experiment matrix</strong>
-                        <span>recommendation-evaluation-matrix-latest.md</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="panel panel-user">
-            <div class="panel-header">
-                <div>
-                    <p class="panel-kicker">Recommendation flow</p>
-                    <h2>User workspace</h2>
-                </div>
-            </div>
-
-            <form class="user-form" id="user-form">
-                <label>
-                    <span>User ID</span>
-                    <input id="user-id" name="userId" type="number" value="2001" min="1">
-                </label>
-                <label>
-                    <span>Top K</span>
-                    <input id="top-k" name="topK" type="number" value="3" min="1" max="10">
-                </label>
-                <label>
-                    <span>Matrix Top Ks</span>
-                    <input id="matrix-topks" name="matrixTopKs" type="text" value="3,5">
-                </label>
-                <div class="button-row">
-                    <button class="primary-button" type="button" id="load-user">Load profile</button>
-                    <button class="primary-button" type="button" id="run-recommendation">Run recommendation</button>
-                </div>
-            </form>
-
-            <div class="split-card">
-                <article class="result-card">
-                    <div class="result-head">
-                        <h3>User profile</h3>
-                        <span id="profile-updated-at">Not loaded yet</span>
+                    <div class="user-toolbar">
+                        <label>
+                            <span>用户 ID</span>
+                            <input id="user-id" name="userId" type="number" value="2001" min="1">
+                        </label>
+                        <label>
+                            <span>Top K</span>
+                            <input id="top-k" name="topK" type="number" value="3" min="1" max="10">
+                        </label>
+                        <label>
+                            <span>实验 Top Ks</span>
+                            <input id="matrix-topks" name="matrixTopKs" type="text" value="3,5">
+                        </label>
                     </div>
                     <div class="tag-pills" id="profile-top-tags"></div>
-                    <pre class="code-block" id="profile-json">Profile data will appear here.</pre>
+                    <details class="raw-box" open>
+                        <summary>画像原始数据</summary>
+                        <pre class="code-block" id="profile-json">画像数据将在这里显示。</pre>
+                    </details>
                 </article>
 
-                <article class="result-card">
-                    <div class="result-head">
-                        <h3>Offline evaluation summary</h3>
-                        <span id="evaluation-generated-at">Not loaded yet</span>
+                <article class="panel-card">
+                    <div class="section-head compact">
+                        <div>
+                            <p class="section-kicker">离线评估</p>
+                            <h3>当前实验摘要</h3>
+                        </div>
+                        <span class="section-meta" id="evaluation-generated-at">尚未加载</span>
                     </div>
+                    <div class="overview-grid" id="overview-grid"></div>
                     <div class="evaluation-table-wrap">
                         <table class="evaluation-table">
                             <thead>
                             <tr>
-                                <th>Baseline</th>
+                                <th>基线</th>
                                 <th>Precision@K</th>
                                 <th>HitRate@K</th>
-                                <th>Explanation coverage</th>
+                                <th>解释覆盖率</th>
                             </tr>
                             </thead>
                             <tbody id="evaluation-summary-body">
                             <tr>
-                                <td colspan="4">Evaluation summary will appear here.</td>
+                                <td colspan="4">评估摘要将在这里显示。</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
+                    <div class="comparison-grid" id="baseline-comparison-grid"></div>
                 </article>
-            </div>
-        </section>
+            </section>
 
-        <section class="panel panel-results">
-            <div class="panel-header">
-                <div>
-                    <p class="panel-kicker">Recommendations</p>
-                    <h2>Candidates and explanation</h2>
-                </div>
-                <span class="panel-subnote" id="recommendation-trace">No requestTraceId yet</span>
-            </div>
-
-            <div class="recommendation-list" id="recommendation-list">
-                <article class="recommendation-card empty-card">
-                    <p>Run a recommendation request to populate this area.</p>
-                </article>
-            </div>
-
-            <div class="split-card">
-                <article class="result-card">
-                    <div class="result-head">
-                        <h3>Recommendation detail</h3>
-                        <span id="detail-meta">Waiting for data</span>
+            <section class="panel-card">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker">双视图对比</p>
+                        <h2>标签重叠基线 vs 完整链路</h2>
                     </div>
-                    <pre class="code-block" id="recommendation-detail">
-Recommendation detail JSON and recall candidate counts will appear here.
-                    </pre>
-                </article>
-
-                <article class="result-card">
-                    <div class="result-head">
-                        <h3>Explanation detail</h3>
-                        <span id="explanation-meta">Select a candidate</span>
-                    </div>
-                    <pre class="code-block" id="explanation-detail">
-Use "View explanation" on a recommendation card.
-                    </pre>
-                </article>
-            </div>
-        </section>
-
-        <section class="panel panel-log">
-            <div class="panel-header">
-                <div>
-                    <p class="panel-kicker">Run log</p>
-                    <h2>Action replay</h2>
+                    <span class="section-meta" id="compare-meta">等待对比结果</span>
                 </div>
-            </div>
-            <div class="log-stream" id="log-stream"></div>
+                <div class="compare-layout">
+                    <article class="compare-panel">
+                        <div class="compare-panel-head">
+                            <h3 id="tag-overlap-title">标签重叠基线</h3>
+                            <span id="tag-overlap-summary">等待加载</span>
+                        </div>
+                        <div class="compare-card-list" id="tag-overlap-list"></div>
+                    </article>
+                    <article class="compare-panel">
+                        <div class="compare-panel-head">
+                            <h3 id="full-pipeline-title">完整链路</h3>
+                            <span id="full-pipeline-summary">等待加载</span>
+                        </div>
+                        <div class="compare-card-list" id="full-pipeline-list"></div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="panel-card">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker">推荐对象与算法拆解</p>
+                        <h2>兴趣分、校园场景分与可信连接分</h2>
+                    </div>
+                    <span class="section-meta" id="recommendation-trace">尚未生成 requestTraceId</span>
+                </div>
+                <div class="recommendation-list" id="recommendation-list">
+                    <article class="candidate-card empty-card">
+                        <p>执行推荐请求后，这里会显示候选用户、匹配标签、命中规则、可信连接原因和分数拆解。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="dashboard-row">
+                <article class="panel-card">
+                    <div class="section-head compact">
+                        <div>
+                            <p class="section-kicker">推荐解释</p>
+                            <h3>为什么推荐这个人</h3>
+                        </div>
+                        <span class="section-meta" id="explanation-meta">请选择一个候选人</span>
+                    </div>
+                    <div class="explanation-shell">
+                        <div class="summary-pills" id="explanation-summary"></div>
+                        <div class="explanation-panel">
+                            <div class="explanation-block">
+                                <strong>当前展示解释</strong>
+                                <p id="explanation-primary">点击推荐卡片中的“查看解释”。</p>
+                            </div>
+                            <div class="explanation-block">
+                                <strong>规则依据</strong>
+                                <p id="explanation-rule">系统会在这里显示规则链路产生的解释。</p>
+                            </div>
+                            <div class="explanation-block">
+                                <strong>LLM 改写解释</strong>
+                                <p id="explanation-llm">当智谱可用时，这里会显示基于规则证据改写后的自然语言解释。</p>
+                            </div>
+                        </div>
+                        <details class="raw-box debug-only" open>
+                            <summary>解释详情</summary>
+                            <pre class="code-block" id="explanation-detail">点击推荐卡片中的“查看解释”。</pre>
+                        </details>
+                    </div>
+                </article>
+
+                <article class="panel-card debug-only">
+                    <div class="section-head compact">
+                        <div>
+                            <p class="section-kicker">原始明细</p>
+                            <h3>调试与答辩备用数据</h3>
+                        </div>
+                        <span class="section-meta" id="detail-meta">等待数据</span>
+                    </div>
+                    <details class="raw-box" open>
+                        <summary>推荐原始 JSON</summary>
+                        <pre class="code-block" id="recommendation-detail">推荐详情会显示在这里。</pre>
+                    </details>
+                </article>
+            </section>
+
+            <section class="panel-card">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker">反馈前后变化</p>
+                        <h2>画像与推荐如何被反馈改变</h2>
+                    </div>
+                    <span class="section-meta" id="feedback-diff-meta">尚未发生反馈</span>
+                </div>
+                <div class="feedback-diff-grid">
+                    <article class="diff-panel">
+                        <h3>反馈前</h3>
+                        <div class="tag-pills" id="feedback-before-tags"></div>
+                        <div class="diff-list" id="feedback-before-list"></div>
+                    </article>
+                    <article class="diff-panel">
+                        <h3>反馈后</h3>
+                        <div class="tag-pills" id="feedback-after-tags"></div>
+                        <div class="diff-list" id="feedback-after-list"></div>
+                    </article>
+                </div>
+                <div class="feedback-summary" id="feedback-change-log">在推荐卡片中提交一次“关注反馈”后，这里会展示画像和推荐的变化。</div>
+            </section>
         </section>
+
+        <aside class="demo-sidebar">
+            <section class="sidebar-card">
+                <div class="section-head compact">
+                    <div>
+                        <p class="section-kicker">演示侧栏</p>
+                        <h3>操作入口</h3>
+                    </div>
+                </div>
+                <div class="control-stack">
+                    <button class="primary-button" id="init-mock-data" type="button">初始化演示数据</button>
+                    <label class="sidebar-input">
+                        <span>场景模式</span>
+                        <select id="scenario-mode">
+                            <option value="interest_partner">兴趣搭子</option>
+                            <option value="study_partner">学习搭子</option>
+                            <option value="club_partner">社团搭子</option>
+                        </select>
+                    </label>
+                    <label class="sidebar-input">
+                        <span>场景模式集合</span>
+                        <input id="scenario-modes" type="text" value="interest_partner,study_partner,club_partner">
+                    </label>
+                    <label class="sidebar-input">
+                        <span>画像 Top 标签数集合</span>
+                        <input id="profile-top-tag-counts" type="text" value="3,5">
+                    </label>
+                    <label class="sidebar-input">
+                        <span>重排权重缩放集合</span>
+                        <input id="rerank-weight-scales" type="text" value="0.8,1.0,1.2">
+                    </label>
+                    <div class="button-row">
+                        <button class="secondary-button" id="rebuild-profiles" type="button">重建全部画像</button>
+                        <button class="secondary-button" id="rebuild-recall-index" type="button">重建召回索引</button>
+                    </div>
+                    <div class="button-row">
+                        <button class="secondary-button" id="export-evaluation" type="button">导出评估快照</button>
+                        <button class="secondary-button" id="export-matrix" type="button">导出场景矩阵</button>
+                    </div>
+                </div>
+                <div class="status-strip" id="status-strip">
+                    <span class="status-dot"></span>
+                    <span>等待操作</span>
+                </div>
+            </section>
+
+            <section class="sidebar-card">
+                <div class="section-head compact">
+                    <div>
+                        <p class="section-kicker">最近导出</p>
+                        <h3>实验产物</h3>
+                    </div>
+                    <span class="section-meta" id="overview-timestamp">尚未加载</span>
+                </div>
+                <div class="export-list" id="export-list">
+                    <div class="export-item">
+                        <strong>评估快照</strong>
+                        <span>recommendation-evaluation-latest.md</span>
+                    </div>
+                    <div class="export-item">
+                        <strong>场景矩阵</strong>
+                        <span>recommendation-scenario-matrix-latest.md</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="sidebar-card">
+                <div class="section-head compact">
+                    <div>
+                        <p class="section-kicker">运行日志</p>
+                        <h3>操作回放</h3>
+                    </div>
+                </div>
+                <div class="log-stream" id="log-stream"></div>
+            </section>
+        </aside>
     </main>
 </div>
 
 <template id="recommendation-card-template">
-    <article class="recommendation-card">
-        <div class="recommendation-topline">
+    <article class="candidate-card">
+        <div class="candidate-topline">
             <span class="rank-chip"></span>
-            <span class="score-chip"></span>
+            <span class="label-chip"></span>
         </div>
         <h3 class="candidate-name"></h3>
         <p class="candidate-meta"></p>
+        <div class="score-board">
+            <div><span>兴趣分</span><strong class="interest-score"></strong></div>
+            <div><span>场景分</span><strong class="campus-score"></strong></div>
+            <div><span>可信分</span><strong class="trust-score"></strong></div>
+            <div><span>最终分</span><strong class="final-score"></strong></div>
+        </div>
+        <div class="chip-group matched-tags"></div>
+        <div class="chip-group matched-rules"></div>
+        <div class="chip-group trust-reasons"></div>
         <p class="candidate-explanation"></p>
         <div class="button-row">
-            <button class="ghost-button explanation-button" type="button">View explanation</button>
-            <button class="ghost-button feedback-button" type="button">Submit follow</button>
+            <button class="ghost-button explanation-button" type="button">查看解释</button>
+            <button class="ghost-button feedback-button" type="button">提交关注反馈</button>
         </div>
     </article>
 </template>

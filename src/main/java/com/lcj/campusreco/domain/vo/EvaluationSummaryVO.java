@@ -9,6 +9,8 @@ public class EvaluationSummaryVO {
 
     private String generatedAt;
     private Integer topK;
+    private String scenarioMode;
+    private String scenarioLabel;
     private Integer activeUserCount;
     private Integer tagCount;
     private Integer relationCount;

@@ -1,6 +1,8 @@
 package com.lcj.campusreco.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lcj.campusreco.common.constant.RecommendationScenarioMode;
+import com.lcj.campusreco.config.RecommendationTuningContext;
 import com.lcj.campusreco.domain.entity.TagEntity;
 import com.lcj.campusreco.domain.entity.UserEntity;
 import com.lcj.campusreco.domain.entity.UserTagRelationEntity;
@@ -42,6 +44,7 @@ public class EvaluationServiceImpl implements EvaluationService {
     private final RankingService rankingService;
     private final RerankService rerankService;
     private final ExplanationService explanationService;
+    private final RecommendationTuningContext tuningContext;
 
     public EvaluationServiceImpl(UserMapper userMapper,
                                  TagMapper tagMapper,
@@ -50,7 +53,8 @@ public class EvaluationServiceImpl implements EvaluationService {
                                  RecallService recallService,
                                  RankingService rankingService,
                                  RerankService rerankService,
-                                 ExplanationService explanationService) {
+                                 ExplanationService explanationService,
+                                 RecommendationTuningContext tuningContext) {
         this.userMapper = userMapper;
         this.tagMapper = tagMapper;
         this.userTagRelationMapper = userTagRelationMapper;
@@ -59,11 +63,14 @@ public class EvaluationServiceImpl implements EvaluationService {
         this.rankingService = rankingService;
         this.rerankService = rerankService;
         this.explanationService = explanationService;
+        this.tuningContext = tuningContext;
     }
 
     @Override
     public EvaluationSummaryVO generateSummary(Integer topK) {
         int effectiveTopK = topK == null || topK < 1 ? 3 : topK;
+        String scenarioMode = tuningContext.getScenarioMode();
+
         List<UserEntity> activeUsers = userMapper.selectList(
                 new LambdaQueryWrapper<UserEntity>().eq(UserEntity::getStatus, 1)
         );
@@ -80,9 +87,10 @@ public class EvaluationServiceImpl implements EvaluationService {
                 ));
 
         Map<Long, UserEntity> userCache = new HashMap<>();
-        BaselineAccumulator overlap = new BaselineAccumulator("tag_overlap", "Tag Overlap");
-        BaselineAccumulator cosine = new BaselineAccumulator("cosine_similarity", "Cosine Ranking");
-        BaselineAccumulator full = new BaselineAccumulator("full_pipeline", "Full Pipeline");
+        BaselineAccumulator overlap = new BaselineAccumulator("tag_overlap", "标签重叠");
+        BaselineAccumulator cosine = new BaselineAccumulator("cosine_similarity", "余弦排序");
+        BaselineAccumulator fullNoTrust = new BaselineAccumulator("full_pipeline_no_trust", "完整链路（无可信分）");
+        BaselineAccumulator fullWithTrust = new BaselineAccumulator("full_pipeline_with_trust", "完整链路（含可信分）");
 
         for (UserEntity requestUser : activeUsers) {
             UserProfileModel profileModel = profileService.getProfile(requestUser.getId());
@@ -93,21 +101,14 @@ public class EvaluationServiceImpl implements EvaluationService {
             if (profileModel.getVector().isEmpty()) {
                 profileModel = profileService.buildProfile(requestUser.getId(), "evaluation");
             }
-            if (profileModel == null) {
-                profileModel = new UserProfileModel();
-                profileModel.setUserId(requestUser.getId());
-            }
-
             Set<Long> candidateUserIds = defaultIfNull(recallService.recallCandidateUserIds(profileModel), Set.of());
             List<RankingCandidateModel> rankingList = defaultIfNull(
                     rankingService.rank(requestUser.getId(), candidateUserIds),
                     List.of()
             );
             List<RankingCandidateModel> rankingSnapshot = cloneCandidates(rankingList);
-            List<RankingCandidateModel> rerankedList = defaultIfNull(
-                    rerankService.rerank(requestUser.getId(), cloneCandidates(rankingList)),
-                    List.of()
-            );
+            List<RankingCandidateModel> rerankedWithTrust = rerankWithCurrentScenario(requestUser.getId(), rankingList, true);
+            List<RankingCandidateModel> rerankedNoTrust = rerankWithCurrentScenario(requestUser.getId(), rankingList, false);
 
             overlap.addEvaluation(
                     requestUser,
@@ -131,9 +132,20 @@ public class EvaluationServiceImpl implements EvaluationService {
                     userTagMap,
                     userCache
             );
-            full.addEvaluation(
+            fullNoTrust.addEvaluation(
                     requestUser,
-                    sortCandidates(rerankedList, Comparator
+                    sortCandidates(rerankedNoTrust, Comparator
+                            .comparing(RankingCandidateModel::getFinalScore, Comparator.nullsLast(BigDecimal::compareTo))
+                            .reversed()
+                            .thenComparing(RankingCandidateModel::getTargetUserId)),
+                    candidateUserIds.size(),
+                    effectiveTopK,
+                    userTagMap,
+                    userCache
+            );
+            fullWithTrust.addEvaluation(
+                    requestUser,
+                    sortCandidates(rerankedWithTrust, Comparator
                             .comparing(RankingCandidateModel::getFinalScore, Comparator.nullsLast(BigDecimal::compareTo))
                             .reversed()
                             .thenComparing(RankingCandidateModel::getTargetUserId)),
@@ -147,13 +159,16 @@ public class EvaluationServiceImpl implements EvaluationService {
         EvaluationSummaryVO summary = new EvaluationSummaryVO();
         summary.setGeneratedAt(LocalDateTime.now().toString());
         summary.setTopK(effectiveTopK);
+        summary.setScenarioMode(scenarioMode);
+        summary.setScenarioLabel(RecommendationScenarioMode.labelOf(scenarioMode));
         summary.setActiveUserCount(activeUsers.size());
         summary.setTagCount(activeTags.size());
         summary.setRelationCount(relations.size());
         summary.setProxyRelevanceRule(PROXY_RULE);
         summary.getBaselines().add(overlap.toVO());
         summary.getBaselines().add(cosine.toVO());
-        summary.getBaselines().add(full.toVO());
+        summary.getBaselines().add(fullNoTrust.toVO());
+        summary.getBaselines().add(fullWithTrust.toVO());
         return summary;
     }
 
@@ -161,14 +176,15 @@ public class EvaluationServiceImpl implements EvaluationService {
     public String generateMarkdownReport(Integer topK) {
         EvaluationSummaryVO summary = generateSummary(topK);
         StringBuilder builder = new StringBuilder();
-        builder.append("# Recommendation Evaluation Summary\n\n");
-        builder.append("- generatedAt: ").append(summary.getGeneratedAt()).append('\n');
-        builder.append("- topK: ").append(summary.getTopK()).append('\n');
-        builder.append("- activeUserCount: ").append(summary.getActiveUserCount()).append('\n');
-        builder.append("- tagCount: ").append(summary.getTagCount()).append('\n');
-        builder.append("- relationCount: ").append(summary.getRelationCount()).append('\n');
-        builder.append("- proxyRule: ").append(summary.getProxyRelevanceRule()).append("\n\n");
-        builder.append("| Baseline | Avg Recall Candidates | Avg TopK Return | Precision@K | HitRate@K | Explanation Coverage |\n");
+        builder.append("# 推荐评估摘要\n\n");
+        builder.append("- 生成时间: ").append(summary.getGeneratedAt()).append('\n');
+        builder.append("- 场景模式: ").append(summary.getScenarioMode()).append(" / ").append(summary.getScenarioLabel()).append('\n');
+        builder.append("- TopK: ").append(summary.getTopK()).append('\n');
+        builder.append("- 活跃用户数: ").append(summary.getActiveUserCount()).append('\n');
+        builder.append("- 标签数: ").append(summary.getTagCount()).append('\n');
+        builder.append("- 关系数: ").append(summary.getRelationCount()).append('\n');
+        builder.append("- 代理相关性规则: ").append(summary.getProxyRelevanceRule()).append("\n\n");
+        builder.append("| 基线 | 平均召回候选数 | 平均返回数 | Precision@K | HitRate@K | 解释覆盖率 |\n");
         builder.append("| --- | --- | --- | --- | --- | --- |\n");
         for (EvaluationBaselineVO baseline : summary.getBaselines()) {
             builder.append("| ")
@@ -188,6 +204,19 @@ public class EvaluationServiceImpl implements EvaluationService {
         return builder.toString();
     }
 
+    private List<RankingCandidateModel> rerankWithCurrentScenario(Long requestUserId,
+                                                                  List<RankingCandidateModel> rankingList,
+                                                                  boolean trustEnabled) {
+        try (RecommendationTuningContext.Scope ignored = tuningContext.withOverrides(
+                null,
+                null,
+                tuningContext.getScenarioMode(),
+                trustEnabled
+        )) {
+            return defaultIfNull(rerankService.rerank(requestUserId, cloneCandidates(rankingList)), List.of());
+        }
+    }
+
     private List<RankingCandidateModel> sortCandidates(List<RankingCandidateModel> candidates,
                                                        Comparator<RankingCandidateModel> comparator) {
         return candidates.stream().sorted(comparator).toList();
@@ -200,8 +229,14 @@ public class EvaluationServiceImpl implements EvaluationService {
             copy.setTargetUserId(candidate.getTargetUserId());
             copy.setRecallScore(candidate.getRecallScore());
             copy.setRankScore(candidate.getRankScore());
+            copy.setInterestScore(candidate.getInterestScore());
             copy.setRerankScore(candidate.getRerankScore());
+            copy.setCampusScore(candidate.getCampusScore());
+            copy.setTrustScore(candidate.getTrustScore());
             copy.setFinalScore(candidate.getFinalScore());
+            copy.setScenarioMode(candidate.getScenarioMode());
+            copy.setScenarioLabel(candidate.getScenarioLabel());
+            copy.setTrustReasons(new ArrayList<>(candidate.getTrustReasons()));
             copy.setContributions(new ArrayList<>(candidate.getContributions()));
             copy.setRuleHits(new ArrayList<>(candidate.getRuleHits()));
             copies.add(copy);

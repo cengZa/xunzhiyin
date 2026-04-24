@@ -3,6 +3,7 @@
 产品规格入口，供 agent 快速确认“做什么、为什么做、做到什么程度算完成”。
 
 ## 主要来源
+- 开题报告提炼：`../00_meta/source_opening_report.md`
 - 主题与背景：`../00_meta/topic.md`
 - 固定约束：`../00_meta/constraints.md`
 - 项目范围：`../01_planning/project_scope.md`

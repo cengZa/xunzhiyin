@@ -28,6 +28,10 @@ public class RecommendationQueryRepository {
         );
     }
 
+    public RecommendationResultEntity getRecommendationResultById(Long recommendationId) {
+        return recommendationResultMapper.selectById(recommendationId);
+    }
+
     public RecommendationExplanationEntity getExplanationByRecommendationId(Long recommendationId) {
         return recommendationExplanationMapper.selectOne(
                 new LambdaQueryWrapper<RecommendationExplanationEntity>()

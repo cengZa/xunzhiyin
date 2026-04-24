@@ -13,7 +13,7 @@ public class GradeDiffRule implements RerankRule {
     public RuleHitModel apply(UserEntity requestUser, UserEntity candidateUser, RankingCandidateModel candidateModel) {
         RuleHitModel ruleHitModel = new RuleHitModel();
         ruleHitModel.setRuleCode("GRADE_DIFF");
-        ruleHitModel.setRuleDesc("年级差不超过 1 加分");
+        ruleHitModel.setRuleDesc("年级接近");
         boolean hit = requestUser != null
                 && candidateUser != null
                 && requestUser.getGrade() != null

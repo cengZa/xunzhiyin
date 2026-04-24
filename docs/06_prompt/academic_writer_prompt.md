@@ -7,7 +7,10 @@
 - `docs/product-specs/index.md`
 - `docs/design-docs/index.md`
 - `docs/04_test/`
+- `docs/00_meta/source_opening_report.md`
+- `docs/05_thesis/README.md`
 - `docs/05_thesis/thesis_outline.md`
+- `docs/05_thesis/template_bridge.md`
 
 ## 产出
 - 章节草稿

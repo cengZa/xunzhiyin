@@ -7,6 +7,7 @@
 - `doc-source-map.md`: 新旧设计文档映射
 - `doc-gardening.md`: 文档维护规则
 - `frontend_demo_console.md`: 前端演示页的范围与约束
+- `llm_explanation_integration.md`: 智谱 `GLM-4.7` 解释改写接入与规则回退策略
 - `../DESIGN.md`: 设计总入口
 
 ## 旧文档映射

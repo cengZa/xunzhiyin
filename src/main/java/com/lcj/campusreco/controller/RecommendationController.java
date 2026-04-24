@@ -28,17 +28,21 @@ public class RecommendationController {
     @GetMapping("/{userId}")
     public ApiResponse<RecommendationDetailVO> recommend(@PathVariable Long userId,
                                                          @RequestParam(defaultValue = "10") Integer topK,
-                                                         @RequestParam(defaultValue = "true") Boolean useCache) {
+                                                         @RequestParam(defaultValue = "true") Boolean useCache,
+                                                         @RequestParam(defaultValue = "interest_partner") String scenarioMode) {
         RecommendRequestDTO dto = new RecommendRequestDTO();
         dto.setUserId(userId);
         dto.setTopK(topK);
         dto.setUseCache(useCache);
+        dto.setScenarioMode(scenarioMode);
         return ApiResponse.success(recommendationService.recommend(dto));
     }
 
     @GetMapping("/{userId}/detail")
-    public ApiResponse<RecommendationDetailVO> getRecommendationDetail(@PathVariable Long userId) {
-        return ApiResponse.success(recommendationService.getRecommendationDetail(userId));
+    public ApiResponse<RecommendationDetailVO> getRecommendationDetail(@PathVariable Long userId,
+                                                                       @RequestParam(defaultValue = "interest_partner")
+                                                                       String scenarioMode) {
+        return ApiResponse.success(recommendationService.getRecommendationDetail(userId, scenarioMode));
     }
 
     @GetMapping("/{recommendationId}/explanation")

@@ -7,12 +7,13 @@
 - 架构与设计：`design-docs/index.md`
 - 计划与任务：`exec-plans/README.md`
 - 统一规范：`DESIGN.md`、`PLANS.md`、`PRODUCT_SENSE.md`、`QUALITY_SCORE.md`、`RELIABILITY.md`、`SECURITY.md`
-- 执行检查：`RELIABILITY_CHECKLIST.md`
 - 文档运维：`DOCS_OPERATIONS.md`
 - Prompt 壳：`06_prompt/index.md`
+- 论文写作入口：`05_thesis/README.md`
 
 ## 旧文档保留原则
 - `00_meta`、`01_planning`、`02_design`、`03_backend`、`04_test`、`05_thesis`、`07_task` 仍然有效。
+- `05_thesis/` 属于论文输出层，默认不在实现任务的起步阅读链路中；仅在论文写作、答辩材料整理、图表说明编写时进入。
 - 以后新增 agent 可读知识时，优先落到新的索引层，再决定是否沉到旧分区。
 
 ## 文档治理规则

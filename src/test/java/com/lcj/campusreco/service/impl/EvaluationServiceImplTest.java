@@ -3,8 +3,10 @@ package com.lcj.campusreco.service.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
+import com.lcj.campusreco.config.RecommendationTuningContext;
 import com.lcj.campusreco.domain.entity.TagEntity;
 import com.lcj.campusreco.domain.entity.UserEntity;
 import com.lcj.campusreco.domain.entity.UserTagRelationEntity;
@@ -26,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -50,11 +51,20 @@ class EvaluationServiceImplTest {
     @Mock
     private ExplanationService explanationService;
 
-    @InjectMocks
-    private EvaluationServiceImpl evaluationService;
-
     @Test
-    void generateSummaryComparesThreeBaselinesAndBuildsMarkdownReport() {
+    void generateSummaryBuildsScenarioAwareBaselines() {
+        EvaluationServiceImpl evaluationService = new EvaluationServiceImpl(
+                userMapper,
+                tagMapper,
+                userTagRelationMapper,
+                profileService,
+                recallService,
+                rankingService,
+                rerankService,
+                explanationService,
+                new RecommendationTuningContext(5, BigDecimal.ONE, "study_partner", true)
+        );
+
         UserEntity requestUser = createUser(1L, "Computer Science");
         UserEntity nonRelevantCandidate = createUser(2L, "Mathematics");
         UserEntity relevantCandidate = createUser(3L, "Computer Science");
@@ -80,7 +90,8 @@ class EvaluationServiceImplTest {
         RankingCandidateModel candidateTwo = createCandidate(2L, "1.0", "0.2", "0.0", "0.2");
         RankingCandidateModel candidateThree = createCandidate(3L, "1.0", "0.9", "0.1", "1.0");
         when(rankingService.rank(1L, Set.of(2L, 3L))).thenReturn(List.of(candidateTwo, candidateThree));
-        when(rerankService.rerank(1L, List.of(candidateTwo, candidateThree))).thenReturn(List.of(candidateThree, candidateTwo));
+        when(rerankService.rerank(eq(1L), any()))
+                .thenReturn(List.of(candidateThree, candidateTwo));
 
         ExplanationVO explanationVO = new ExplanationVO();
         explanationVO.setReasonText("shared interests");
@@ -88,34 +99,35 @@ class EvaluationServiceImplTest {
 
         var summary = evaluationService.generateSummary(1);
 
+        assertEquals("study_partner", summary.getScenarioMode());
+        assertEquals("学习搭子", summary.getScenarioLabel());
         assertEquals(1, summary.getActiveUserCount());
         assertEquals(3, summary.getTagCount());
         assertEquals(4, summary.getRelationCount());
-        assertEquals(3, summary.getBaselines().size());
+        assertEquals(4, summary.getBaselines().size());
 
-        EvaluationBaselineVO overlap = summary.getBaselines().stream()
-                .filter(item -> "tag_overlap".equals(item.getBaselineCode()))
-                .findFirst()
-                .orElseThrow();
-        EvaluationBaselineVO cosine = summary.getBaselines().stream()
-                .filter(item -> "cosine_similarity".equals(item.getBaselineCode()))
-                .findFirst()
-                .orElseThrow();
-        EvaluationBaselineVO full = summary.getBaselines().stream()
-                .filter(item -> "full_pipeline".equals(item.getBaselineCode()))
-                .findFirst()
-                .orElseThrow();
+        EvaluationBaselineVO overlap = find(summary, "tag_overlap");
+        EvaluationBaselineVO cosine = find(summary, "cosine_similarity");
+        EvaluationBaselineVO fullNoTrust = find(summary, "full_pipeline_no_trust");
+        EvaluationBaselineVO fullWithTrust = find(summary, "full_pipeline_with_trust");
 
         assertEquals(new BigDecimal("2.0000"), overlap.getAverageRecallCandidateCount());
         assertEquals(new BigDecimal("0.0000"), overlap.getPrecisionAtK());
         assertEquals(new BigDecimal("1.0000"), cosine.getPrecisionAtK());
-        assertEquals(new BigDecimal("1.0000"), full.getHitRateAtK());
-        assertEquals(new BigDecimal("1.0000"), full.getExplanationPresenceRate());
+        assertEquals(new BigDecimal("1.0000"), fullNoTrust.getHitRateAtK());
+        assertEquals(new BigDecimal("1.0000"), fullWithTrust.getExplanationPresenceRate());
 
         String markdown = evaluationService.generateMarkdownReport(1);
-        assertTrue(markdown.contains("| Baseline |"));
-        assertTrue(markdown.contains("Tag Overlap"));
-        assertTrue(markdown.contains("Full Pipeline"));
+        assertTrue(markdown.contains("| 基线 |"));
+        assertTrue(markdown.contains("标签重叠"));
+        assertTrue(markdown.contains("完整链路（含可信分）"));
+    }
+
+    private EvaluationBaselineVO find(com.lcj.campusreco.domain.vo.EvaluationSummaryVO summary, String code) {
+        return summary.getBaselines().stream()
+                .filter(item -> code.equals(item.getBaselineCode()))
+                .findFirst()
+                .orElseThrow();
     }
 
     private UserEntity createUser(Long id, String major) {
@@ -154,7 +166,9 @@ class EvaluationServiceImplTest {
         candidate.setTargetUserId(targetUserId);
         candidate.setRecallScore(new BigDecimal(recallScore));
         candidate.setRankScore(new BigDecimal(rankScore));
+        candidate.setInterestScore(new BigDecimal(rankScore));
         candidate.setRerankScore(new BigDecimal(rerankScore));
+        candidate.setCampusScore(new BigDecimal(rerankScore));
         candidate.setFinalScore(new BigDecimal(finalScore));
         return candidate;
     }
