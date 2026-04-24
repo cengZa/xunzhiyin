@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusReco 透明链路页</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body class="defense-mode">
+<div class="page-shell">
+    <div class="backdrop backdrop-left"></div>
+    <div class="backdrop backdrop-right"></div>
+
+    <header class="hero">
+        <div class="hero-main">
+            <p class="eyebrow">透明链路页</p>
+            <h1>单个用户的推荐全链路</h1>
+            <p class="hero-text">
+                这个页面按固定顺序展开单个用户在当前场景模式下的输入标签、画像构建、召回候选池、排序、重排、可信连接分、
+                轻量探索与最终解释。默认加载用户 2001，但任何用户都可以切换查看。
+            </p>
+            <div class="hero-actions">
+                <button class="primary-button" id="load-pipeline" type="button">加载透明链路</button>
+                <a class="ghost-button" href="/">返回首页</a>
+                <label class="mode-switch">
+                    <input id="pipeline-presentation-mode-toggle" type="checkbox" checked>
+                    <span>答辩模式</span>
+                </label>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <article class="metric-card metric-highlight">
+                <span class="metric-label">当前用户</span>
+                <strong class="metric-value" id="pipeline-user-display">用户 2001</strong>
+                <span class="metric-note" id="pipeline-user-meta">等待加载</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-label">当前场景</span>
+                <strong class="metric-value" id="pipeline-scenario-label">兴趣搭子</strong>
+                <span class="metric-note" id="pipeline-recall-count">召回候选池：-</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-label">目标</span>
+                <strong class="metric-value">过程透明化</strong>
+                <span class="metric-note">让老师看清推荐结果是如何一步一步形成的</span>
+            </article>
+        </div>
+    </header>
+
+    <main class="main-stack" style="max-width: 1400px; margin: 0 auto;">
+        <section class="panel-card">
+            <div class="section-head compact">
+                <div>
+                    <p class="section-kicker">控制区</p>
+                    <h3>选择用户与场景</h3>
+                </div>
+                <span class="section-meta" id="pipeline-status">等待加载</span>
+            </div>
+            <div class="user-toolbar">
+                <label>
+                    <span>用户 ID</span>
+                    <input id="pipeline-user-id" type="number" value="2001" min="1">
+                </label>
+                <label>
+                    <span>Top K</span>
+                    <input id="pipeline-top-k" type="number" value="3" min="1" max="10">
+                </label>
+                <label>
+                    <span>场景模式</span>
+                    <select id="pipeline-scenario-mode">
+                        <option value="interest_partner">兴趣搭子</option>
+                        <option value="study_partner">学习搭子</option>
+                        <option value="club_partner">社团搭子</option>
+                    </select>
+                </label>
+            </div>
+            <div class="overview-grid">
+                <div>
+                    <dt>当前模式目标</dt>
+                    <dd id="pipeline-scenario-objective">等待加载</dd>
+                </div>
+                <div>
+                    <dt>当前模式变化</dt>
+                    <dd>
+                        <div class="chip-group" id="pipeline-scenario-changes"></div>
+                    </dd>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel-card">
+            <div class="section-head compact">
+                <div>
+                    <p class="section-kicker">Step 1</p>
+                    <h3>输入标签</h3>
+                </div>
+            </div>
+            <div class="tag-pills" id="pipeline-input-tags"></div>
+            <details class="raw-box debug-only">
+                <summary>原始标签数据</summary>
+                <pre class="code-block" id="pipeline-input-raw">等待加载</pre>
+            </details>
+        </section>
+
+        <section class="dashboard-row">
+            <article class="panel-card">
+                <div class="section-head compact">
+                    <div>
+                        <p class="section-kicker">Step 2</p>
+                        <h3>画像构建</h3>
+                    </div>
+                </div>
+                <p class="hero-text" id="pipeline-profile-formula">等待加载</p>
+                <div class="pipeline-table-wrap">
+                    <table class="evaluation-table">
+                        <thead>
+                        <tr>
+                            <th>标签</th>
+                            <th>领域</th>
+                            <th>TF</th>
+                            <th>IDF</th>
+                            <th>时间衰减</th>
+                            <th>最终权重</th>
+                            <th>计算说明</th>
+                        </tr>
+                        </thead>
+                        <tbody id="pipeline-profile-body"></tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="panel-card">
+                <div class="section-head compact">
+                    <div>
+                        <p class="section-kicker">Step 2.1</p>
+                        <h3>Top-K 画像标签</h3>
+                    </div>
+                </div>
+                <div class="tag-pills" id="pipeline-top-tags"></div>
+                <details class="raw-box debug-only">
+                    <summary>画像阶段原始结构</summary>
+                    <pre class="code-block" id="pipeline-profile-raw">等待加载</pre>
+                </details>
+            </article>
+        </section>
+
+        <section class="panel-card">
+            <div class="section-head">
+                <div>
+                    <p class="section-kicker">Step 3</p>
+                    <h2>召回候选池</h2>
+                </div>
+            </div>
+            <div class="compare-card-list" id="pipeline-recall-stage"></div>
+        </section>
+
+        <section class="dashboard-row">
+            <article class="panel-card">
+                <div class="section-head compact">
+                    <div>
+                        <p class="section-kicker">Step 4</p>
+                        <h3>排序结果</h3>
+                    </div>
+                </div>
+                <div class="compare-card-list" id="pipeline-ranking-stage"></div>
+            </article>
+
+            <article class="panel-card">
+                <div class="section-head compact">
+                    <div>
+                        <p class="section-kicker">Step 5</p>
+                        <h3>重排 / 可信分 / 探索位</h3>
+                    </div>
+                </div>
+                <div class="compare-card-list" id="pipeline-rerank-stage"></div>
+            </article>
+        </section>
+
+        <section class="panel-card">
+            <div class="section-head">
+                <div>
+                    <p class="section-kicker">Step 6</p>
+                    <h2>最终 Top-K 与解释</h2>
+                </div>
+            </div>
+            <div class="recommendation-list" id="pipeline-final-stage"></div>
+        </section>
+
+        <section class="panel-card">
+            <div class="section-head compact">
+                <div>
+                    <p class="section-kicker">Step 6.1</p>
+                    <h3>规则解释 vs LLM 改写</h3>
+                </div>
+                <span class="section-meta" id="pipeline-explanation-source">请选择一条最终推荐</span>
+            </div>
+            <div class="explanation-panel">
+                <div class="explanation-block">
+                    <strong>当前展示解释</strong>
+                    <p id="pipeline-explanation-primary">点击最终推荐卡片中的“查看解释对照”。</p>
+                </div>
+                <div class="explanation-block">
+                    <strong>规则依据</strong>
+                    <p id="pipeline-explanation-rule">这里会显示规则链路直接生成的解释。</p>
+                </div>
+                <div class="explanation-block">
+                    <strong>LLM 改写解释</strong>
+                    <p id="pipeline-explanation-llm">当智谱可用时，这里会显示基于规则证据改写后的自然语言解释。</p>
+                </div>
+            </div>
+            <details class="raw-box debug-only" open>
+                <summary>解释原始 JSON</summary>
+                <pre class="code-block" id="pipeline-explanation-detail">等待加载</pre>
+            </details>
+        </section>
+
+        <section class="panel-card debug-only">
+            <div class="section-head compact">
+                <div>
+                    <p class="section-kicker">Raw</p>
+                    <h3>透明链路原始 JSON</h3>
+                </div>
+            </div>
+            <pre class="code-block" id="pipeline-raw-json">等待加载</pre>
+        </section>
+    </main>
+</div>
+<script src="/pipeline.js"></script>
+</body>
+</html>
