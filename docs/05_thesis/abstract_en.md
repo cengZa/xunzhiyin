@@ -1,1 +1,11 @@
-# Abstract EN
+# Abstract
+
+Campus learning, club activities, and interest-based communication create a practical need for matching users with suitable partners. Simple tag-overlap matching is easily affected by popular tags, cannot distinguish different campus scenarios well, and provides limited evidence for recommendation results. To address these problems, this thesis designs and implements a Spring Boot-based campus social matching and explainable recommendation system for study partner, club partner, and interest-based matching scenarios.
+
+The system is built with Java 21 and Spring Boot. MySQL stores users, tags, profiles, recommendation results, explanations, and feedback, while Redis supports tag-based inverted recall and profile caching. The recommendation pipeline consists of user profile construction, candidate recall, similarity ranking, campus-rule reranking, explanation generation, and feedback-based profile update. In the profiling stage, TF-IDF is extended with time decay and Top-K pruning. In the ranking stage, cosine similarity is used to measure interest similarity between users. In the reranking stage, grade difference, major relevance, club overlap, scenario mode, and a lightweight trust score are used to adjust the ranking results. Recommendation explanations are generated from tag contributions, rule hits, and trust reasons. The LLM component is used only to polish explanation text, with rule-based fallback retained.
+
+The system is tested with simulated campus user data, automated tests, governance checks, and offline proxy evaluation. The results show that the system can complete the full pipeline from user tags to Top-K recommendations, and can expose scores, matched tags, rule hits, trust reasons, and explanation text. It also provides transparent pipeline display, comparison views, and evaluation export functions for thesis analysis and defense demonstration. Since the current evaluation is based on simulated data and proxy relevance rules, the results are not presented as conclusions from a real online user study.
+
+This work shows that, in campus social matching scenarios, a structured recommendation pipeline and evidence-bound explanation mechanism can improve the explainability and verifiability of the recommendation process while keeping the engineering implementation lightweight.
+
+Keywords: campus recommendation; user profile; TF-IDF; explainable recommendation; campus-rule reranking; feedback update

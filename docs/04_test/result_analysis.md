@@ -48,6 +48,10 @@
 - 目前更适合展示“设计合理、工程可解释”，不适合声称“推荐效果已接近真实产品”
 
 ## 下一步建议
-- 若继续提升推荐质量，优先做：
-  - 答辩模式收口
+- 若进入论文定稿，优先使用：
+  - `acceptance_traceability_matrix.md`
+  - `final_demo_script.md`
+  - `opening_report_validation_map.md`
+- 若继续提升推荐质量，再考虑：
   - 探索位权重与触发阈值实验
+  - 更大规模 mock 数据或人工标注样本

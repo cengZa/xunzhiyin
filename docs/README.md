@@ -20,3 +20,12 @@
 - 重要规则先写成短索引，再链接到细节文档。
 - 执行计划必须放进 `exec-plans/`。
 - 跨文档冲突需要在计划或质量文档里显式记录。
+
+## 当前收口入口
+- 测试与验收：`04_test/README.md`
+- 最终验收矩阵：`04_test/acceptance_traceability_matrix.md`
+- 答辩演示脚本：`04_test/final_demo_script.md`
+- 截图与接口证据：`04_test/demo_evidence_samples.md`
+- 创新点与重难点：`05_thesis/innovation_and_difficulty.md`
+- 本地参考文献资料：docs/参考文献 目录下的 README 页面
+- 工程型论文与答辩参考：docs/更多参考 目录下的 README 页面

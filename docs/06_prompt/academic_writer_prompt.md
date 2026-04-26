@@ -10,7 +10,7 @@
 - `docs/00_meta/source_opening_report.md`
 - `docs/05_thesis/README.md`
 - `docs/05_thesis/thesis_outline.md`
-- `docs/05_thesis/template_bridge.md`
+- `docs/05_thesis/thesis_outline.md`
 
 ## 产出
 - 章节草稿

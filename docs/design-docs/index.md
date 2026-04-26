@@ -8,6 +8,7 @@
 - `doc-gardening.md`: 文档维护规则
 - `frontend_demo_console.md`: 前端演示页的范围与约束
 - `llm_explanation_integration.md`: 智谱 `GLM-4.7` 解释改写接入与规则回退策略
+- `../05_thesis/innovation_and_difficulty.md`: 论文与答辩可用的创新点、重难点和表述边界
 - `../DESIGN.md`: 设计总入口
 
 ## 旧文档映射

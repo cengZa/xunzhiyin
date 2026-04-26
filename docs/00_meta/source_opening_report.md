@@ -56,9 +56,9 @@
 ### 需要显式补强的部分
 - 量化目标与代理验证边界：`../01_planning/acceptance_criteria.md`
 - 风险清单：`../01_planning/risk_list.md`
-- 论文模板到章节文件的桥接：`../05_thesis/template_bridge.md`
+- 论文模板到章节文件的桥接：`../05_thesis/thesis_outline.md`
 
 ## 当前对 agent 的解释规则
 - 若任务是实现或验证系统，优先以 `topic.md`、`constraints.md`、`../01_planning/project_scope.md`、`../01_planning/requirement_list.md` 为入口。
-- 若任务涉及论文写作或答辩材料，除上述文档外，还必须读取 `../05_thesis/README.md` 与 `../05_thesis/template_bridge.md`。
+- 若任务涉及论文写作或答辩材料，除上述文档外，还必须读取 `../05_thesis/README.md` 与 `../05_thesis/thesis_outline.md`。
 - 若遇到代理指标、模拟数据或演示接口，必须显式区分“工程演示验证”与“论文量化目标”。
