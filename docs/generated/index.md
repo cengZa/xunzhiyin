@@ -16,15 +16,18 @@
 - `thesis_word_final_candidate_v3_render/`: v3 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
 - `thesis_word_final_candidate_v4.docx`: 旧 Word 定稿候选；已由 v5 候选稿替代。
 - `thesis_word_final_candidate_v4_render/`: v4 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
-- `figures/`: Word 组稿用图像目录，当前包含第 1、4、5 章正式 PNG 图、第 5 章专用表格 PNG，以及正文 Markdown 表格自动生成的 `table-*.png`。
+- `figures/`: Word 组稿用图像目录，当前包含第 3 章用例图、第 4 章架构/功能结构/ER 图、第 5 章类图/时序图/界面图、第 5 章专用表格 PNG，以及正文 Markdown 表格自动生成的 `table-*.png`。
+- `interface-captures/`: 第 5 章界面图的本地采图 HTML，仅作为 `figures/ch5-3-home-screenshot.png`、`figures/ch5-6-pipeline-screenshot.png`、`figures/ch5-9-feedback-screenshot.png` 的生成来源。
 - `thesis_word_final_candidate_v5.docx`: 旧 Word 定稿候选；已由 v6 候选稿替代。
 - `thesis_word_final_candidate_v5_render/`: v5 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
 - `thesis_word_final_candidate_v6.docx`: 旧 Word 定稿候选；已由 v7 候选稿替代。
 - `thesis_word_final_candidate_v6_render/`: v6 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
 - `thesis_word_final_candidate_v7.docx`: 旧 Word 定稿候选；已由 v8 候选稿替代。
 - `thesis_word_final_candidate_v7_render/`: v7 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
-- `thesis_word_final_candidate_v8.docx`: 当前 Word 定稿候选；消除正文和致谢占位符，将第 1 章技术路线图、第 4 章架构图/主流程图/ER 图落成正式图，将第 2、3、4、6 章 Markdown 表格转为样例风格 PNG 表格；已删除第 3 章验收收束小节，清理 FR/NFR、mock、模拟、代理、真实测试不足等不适合论文定稿的表述，并同步静态目录页码与实际页脚。
+- `thesis_word_final_candidate_v8.docx`: 旧 Word 定稿候选；将部分图表落成正式 PNG，并同步静态目录页码与实际页脚，已由 v9 候选稿替代。
 - `thesis_word_final_candidate_v8_render/`: v8 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
+- `thesis_word_final_candidate_v9.docx`: 当前 Word 定稿候选；基于 v8 继续重写第 1、3、4、5 章，补齐第 3 章用例图、第 4 章系统架构/功能结构/ER 图、第 5 章类图/时序图/界面图，并修正正文标题为单份章节编号。
+- `thesis_word_final_candidate_v9_render/`: v9 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
 
 ## 规则
 - 生成产物应说明来源。

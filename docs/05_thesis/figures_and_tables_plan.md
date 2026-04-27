@@ -1,124 +1,61 @@
-﻿# Figures And Tables Plan
+# Figures And Tables Plan
 
-本页规划论文正文建议使用的图表。当前不采集运行截图，只规划架构图、流程图、ER 图、关键表格和其放置位置，便于后续迁入 Word 模板。
+本页记录当前论文正文采用的图表清单。图表编号、题注和正文引用应与 Word 组稿结果保持一致。
 
 ## 1. 图表使用原则
 
-- 论文正文优先使用架构图、流程图、ER 图、表结构和实验结果表。
-- 运行页面截图不是必需项；如学校或导师要求展示系统运行效果，再由人工补截图。
-- 图表必须服务正文论述，不为了数量堆砌。
-- 图号、表号、题注和交叉引用最终以学校 Word 模板为准。
-- 若图中包含测试数据或评估指标，应在正文中说明指标含义和计算方式。
+- 图表必须服务需求分析、概要设计、详细设计与实现、系统测试四条主线。
+- 第 3 章以用例图和用例说明为主，不再展开数据需求。
+- 第 4 章图 4-1、图 4-2、图 4-3 参考 `docs/更多参考/本科论文-工程型样例-刘.docx` 的图 4-1 至图 4-3 风格，分别表达系统架构、功能结构和 ER 关系。
+- 第 5 章按重点模块给出类图、时序图和主要界面图，图 5-1 的类图风格参考工程型样例中的 UML 类图。
+- 图题放在图下方，表题放在表上方；所有图、表附近必须有正文解释和编号引用。
 
-## 2. 建议图清单
+## 2. 当前采用图清单
 
-| 图号建议 | 图题建议 | 放置章节 | 必要性 | 内容说明 | 来源依据 |
-| --- | --- | --- | --- | --- | --- |
-| 图 1-1 | 系统技术路线图 | 第 1 章 | 可选 | 展示从用户标签到反馈更新的总体路线 | `chapter1_intro.md` |
-| 图 3-1 | 系统用例图 | 第 3 章 | 必要 | 展示校园用户、系统管理员和外部 LLM 服务的用例边界 | `chapter3_diagram_drafts.md` |
-| 图 3-2 | 需求闭环流程图 | 第 3 章 | 可选 | 展示用户信息、画像、召回、排序重排、解释、反馈和画像更新闭环 | `chapter3_diagram_drafts.md` |
-| 图 4-1 | 系统总体架构图 | 第 4 章 | 必要 | 展示 Controller、Service、Strategy、Mapper/Repository、MySQL、Redis 的分层关系 | `../02_design/system_architecture.md` |
-| 图 4-3 | 数据库 ER 图 | 第 4 章 | 必要 | 展示 user、tag、user_tag_relation、user_profile、recommendation_result、recommendation_explanation、user_feedback 关系 | `../02_design/database_design.md` |
-| 图 5-1 | 推荐主链路流程图 | 第 5 章 | 必要 | 展示画像、召回、排序、重排、解释、反馈流程 | `chapter5_diagram_drafts.md` |
-| 图 5-2 | 系统核心类图 | 第 5 章 | 必要 | 展示 RecommendationServiceImpl 与画像、召回、排序、重排、解释、反馈等服务关系 | `chapter5_diagram_drafts.md` |
-| 图 5-3 | 用户标签维护时序图 | 第 5 章 | 暂不采用 | 该流程属于画像生成前的数据准备环节，正文说明即可，避免图表重复 | `chapter5_implementation.md` |
-| 图 5-4 | 用户画像生成时序图 | 第 5 章 | 必要 | 展示画像生成、权重计算、画像保存和缓存写入过程 | `chapter5_diagram_drafts.md` |
-| 图 5-5 | 候选召回与相似度排序时序图 | 第 5 章 | 必要 | 展示 Top-K 标签、倒排召回、候选合并、相似度计算和标签贡献生成过程 | `chapter5_diagram_drafts.md` |
-| 图 5-6 | 校园规则重排流程图 | 第 5 章 | 必要 | 展示场景模式、校园规则、可信连接分、探索位和最终 Top-K 结果 | `chapter5_diagram_drafts.md` |
-| 图 5-7 | 推荐解释证据流图 | 第 5 章 | 已采用 | 展示排序贡献、规则命中、可信连接原因、规则解释、LLM 改写和回退关系 | `../generated/figures/ch5-7-explanation-evidence-flow.png` |
-| 图 5-8 | 反馈更新时序图 | 第 5 章 | 已采用 | 展示反馈保存、解释证据读取和画像轻量更新过程 | `../generated/figures/ch5-8-feedback-update-sequence.png` |
+| 图号 | 图题 | 放置章节 | 内容说明 | 生成文件 |
+| --- | --- | --- | --- | --- |
+| 图 3-1 | 用户与标签维护用例图 | 第 3 章 | 展示校园用户和系统管理员在用户资料、兴趣标签、标签体系维护中的用例边界 | `docs/generated/figures/ch3-1-user-tag-usecase.png` |
+| 图 3-2 | 画像构建与推荐生成用例图 | 第 3 章 | 展示画像构建、候选召回、相似度排序、校园规则重排和推荐结果查看需求 | `docs/generated/figures/ch3-2-recommendation-usecase.png` |
+| 图 3-3 | 推荐解释用例图 | 第 3 章 | 展示推荐解释查看、解释证据读取和解释文本生成需求 | `docs/generated/figures/ch3-3-explanation-usecase.png` |
+| 图 3-4 | 用户反馈与画像更新用例图 | 第 3 章 | 展示关注或忽略反馈、反馈记录保存、画像更新和后续推荐刷新需求 | `docs/generated/figures/ch3-4-feedback-usecase.png` |
+| 图 4-1 | 系统架构图 | 第 4 章 | 参考工程型样例图 4-1，展示外部角色、系统分层、外部大语言模型服务、MySQL 和 Redis | `docs/generated/figures/ch4-1-system-architecture.png` |
+| 图 4-2 | 系统功能结构图 | 第 4 章 | 参考工程型样例图 4-2，展示用户与标签维护、画像构建、推荐生成、推荐解释、反馈更新、运行评估等功能结构 | `docs/generated/figures/ch4-2-function-structure.png` |
+| 图 4-3 | 系统 ER 图 | 第 4 章 | 参考工程型样例图 4-3，展示用户、标签、画像、推荐结果、推荐解释、用户反馈之间的核心关系 | `docs/generated/figures/ch4-3-er-diagram.png` |
+| 图 5-1 | 用户画像构建模块类图 | 第 5 章 | 展示画像控制器、画像服务、权重计算策略、Mapper 和缓存仓储之间的关系 | `docs/generated/figures/ch5-1-profile-class-diagram.png` |
+| 图 5-2 | 用户画像生成时序图 | 第 5 章 | 展示画像查询、标签读取、权重计算、画像保存和缓存写入过程 | `docs/generated/figures/ch5-2-profile-sequence.png` |
+| 图 5-3 | 系统首页画像与推荐展示界面 | 第 5 章 | 展示目标用户画像、推荐摘要和推荐对象卡片 | `docs/generated/figures/ch5-3-home-screenshot.png` |
+| 图 5-4 | 匹配推荐生成模块类图 | 第 5 章 | 展示推荐编排服务与画像、召回、排序、重排、可信连接、探索和解释服务的协作关系 | `docs/generated/figures/ch5-4-recommendation-class-diagram.png` |
+| 图 5-5 | 匹配推荐生成时序图 | 第 5 章 | 展示推荐请求进入后依次完成画像获取、召回、排序、重排和推荐详情返回的过程 | `docs/generated/figures/ch5-5-recommendation-sequence.png` |
+| 图 5-6 | 透明链路页面推荐生成阶段界面 | 第 5 章 | 展示输入标签、画像构建、候选召回、排序重排和最终解释的页面效果 | `docs/generated/figures/ch5-6-pipeline-screenshot.png` |
+| 图 5-7 | 推荐解释与用户反馈模块类图 | 第 5 章 | 展示解释生成、证据抽取、模板构造、解释保存、反馈保存和画像更新协作关系 | `docs/generated/figures/ch5-7-explanation-feedback-class-diagram.png` |
+| 图 5-8 | 用户反馈更新时序图 | 第 5 章 | 展示反馈提交、反馈保存、推荐证据读取、标签权重调整和画像重建过程 | `docs/generated/figures/ch5-8-feedback-sequence.png` |
+| 图 5-9 | 推荐解释与反馈展示界面 | 第 5 章 | 展示推荐依据、规则证据、反馈前后画像变化和反馈入口 | `docs/generated/figures/ch5-9-feedback-screenshot.png` |
 
-## 3. 建议表清单
+## 3. 当前采用表清单
 
-| 表号建议 | 表题建议 | 放置章节 | 必要性 | 内容说明 | 来源依据 |
-| --- | --- | --- | --- | --- | --- |
-| 表 3-1 | 系统功能范围说明 | 第 3 章 | 必要 | 汇总用户管理、标签管理、画像、召回、排序、重排、解释、反馈等范围 | `chapter3_analysis.md` |
-| 表 3-2 | 系统非功能需求说明 | 第 3 章 | 必要 | 汇总可实现性、可维护性、可解释性、可验证性等需求 | `chapter3_analysis.md` |
-| 表 4-1 | 系统分层结构说明 | 第 4 章 | 必要 | 汇总接口层、应用服务层、领域能力层、数据访问层 | `chapter4_design.md` |
-| 表 4-2 | 核心模块职责表 | 第 4 章 | 必要 | 汇总用户、标签、画像、召回、排序、重排、解释、反馈、推荐编排模块 | `chapter4_design.md` |
-| 表 4-3 | 核心数据表说明 | 第 4 章 | 必要 | 汇总核心表名与用途 | `chapter4_design.md` |
-| 表 4-4 | 主要接口设计表 | 第 4 章 | 可选 | 汇总用户、画像、推荐、解释、反馈、演示评估接口 | `chapter4_design.md` |
-| 表 5-1 | 核心机制设计说明 | 第 5 章 | 必要 | 汇总画像、召回、排序、重排、可信连接、解释、反馈机制 | `chapter5_implementation.md` |
-| 表 5-2 | 第 5 章核心公式说明 | 第 5 章 | 必要 | 汇总标签权重、时间衰减、余弦相似度、最终分数和规则贡献公式 | `chapter5_implementation.md` |
-| 表 5-3 | 核心服务实现说明 | 第 5 章 | 可选 | 汇总 ProfileService、RecallService、RankingService、RerankService、ExplanationService 等 | `chapter5_diagram_drafts.md` |
-| 表 6-1 | 测试环境说明 | 第 6 章 | 必要 | 汇总 Java、Maven、H2、MySQL、Redis 和治理脚本 | `chapter6_test.md` |
-| 表 6-2 | 测试数据规模 | 第 6 章 | 必要 | 展示校园用户数据集中的用户、标签和关系数量 | `chapter6_test.md` |
-| 表 6-3 | 功能测试用例表 | 第 6 章 | 必要 | 按推荐链路汇总用户标签、画像、召回、排序、重排、解释、反馈和评估导出测试 | `chapter6_test.md` |
-| 表 6-4 | 自动化测试结果 | 第 6 章 | 必要 | 展示 Tests run、Failures、Errors、Skipped、BUILD SUCCESS | `../generated/final-validation-latest.md` |
-| 表 6-5 | 离线评估基线 | 第 6 章 | 必要 | 说明标签重叠、余弦排序、完整链路无可信分、完整链路含可信分四类基线 | `chapter6_test.md` |
-| 表 6-6 | 离线评估结果 | 第 6 章 | 必要 | 展示 Precision@K、HitRate@K、解释覆盖率等评估指标 | `../generated/recommendation-evaluation-latest.md` |
-| 表 6-7 | TopK 参数实验结果 | 第 6 章 | 可选 | 展示 TopK 变化对 Precision@K、HitRate@K 和解释覆盖率的影响 | `chapter6_test.md` |
+| 表号 | 表题 | 放置章节 | 内容说明 | 生成文件或来源 |
+| --- | --- | --- | --- | --- |
+| 表 3-1 | 用户与标签维护用例说明 | 第 3 章 | 说明用户资料维护、标签维护和标签体系维护需求 | `chapter3_analysis.md` |
+| 表 3-2 | 画像构建与推荐生成用例说明 | 第 3 章 | 说明画像构建、候选召回、排序重排和推荐结果查看需求 | `chapter3_analysis.md` |
+| 表 3-3 | 推荐解释用例说明 | 第 3 章 | 说明推荐解释生成与查看需求 | `chapter3_analysis.md` |
+| 表 3-4 | 用户反馈与画像更新用例说明 | 第 3 章 | 说明关注反馈、忽略反馈和画像更新需求 | `chapter3_analysis.md` |
+| 表 3-5 | 非功能需求说明 | 第 3 章 | 说明可维护性、可解释性、可验证性、响应效率和数据一致性要求 | `chapter3_analysis.md` |
+| 表 4-1 | 系统分层结构说明 | 第 4 章 | 说明接口层、应用服务层、领域能力层和数据访问层职责 | `chapter4_design.md` |
+| 表 4-2 | 系统主要功能模块说明 | 第 4 章 | 说明第 4 章功能结构图中的核心模块职责 | `chapter4_design.md` |
+| 表 4-3 | 核心数据表说明 | 第 4 章 | 说明用户、标签、画像、推荐、解释和反馈相关数据表用途 | `chapter4_design.md` |
+| 表 4-4 | Redis 数据结构说明 | 第 4 章 | 说明画像缓存、推荐缓存和召回倒排索引用途 | `chapter4_design.md` |
+| 表 5-1 | 推荐生成核心机制说明 | 第 5 章 | 说明候选召回、基础排序、场景重排、可信连接分和轻量探索机制 | `docs/generated/figures/ch5-table-1-core-mechanisms.png` |
+| 表 5-2 | 推荐解释与反馈关键数据说明 | 第 5 章 | 说明标签贡献、规则命中、可信连接原因、反馈类型和画像版本用途 | `docs/generated/figures/ch5-table-2-explanation-feedback-data.png` |
 
-## 4. 必须优先完成的图表
+## 4. 已确认的参考范文图表
 
-若时间有限，优先完成以下 8 个：
+- 已取得并检查 `docs/更多参考/本科论文-工程型样例-刘.docx` 的图 4-1、图 4-2、图 4-3。当前第 4 章图形采用其“系统边界 + 内部模块 + 外部系统 + 数据层”的表达方式。
+- 已取得并检查该样例中的 UML 类图风格。当前第 5 章类图采用“类名 + 关键方法 + 依赖箭头”的表达方式。
+- 表格样式优先贴近该样例中的用例说明表：表题置于表格上方，表头加粗，内容按用例编号、用例名称、参与者、描述、前置条件、基本流程等字段组织。
 
-1. 图 3-1 系统用例图
-2. 图 4-1 系统总体架构图
-3. 图 4-3 数据库 ER 图
-4. 图 5-1 推荐主链路流程图
-5. 图 5-2 系统核心类图
-6. 表 3-1 系统功能需求表
-7. 表 4-2 核心数据表说明
-8. 表 6-4 自动化测试结果
+## 5. Word 整合提醒
 
-这 8 个图表覆盖需求、设计、数据、实现和验证，能支撑论文主体结构。
-
-其中第 3 章底稿见 `chapter3_diagram_drafts.md`，第 4 章底稿见 `chapter4_diagram_drafts.md`，第 5 章底稿见 `chapter5_diagram_drafts.md`。
-
-## 5. 不建议优先使用的材料
-
-- 页面运行截图：除非导师明确要求，否则不作为论文主证据；若需要展示运行效果，优先放在第 6 章测试与运行效果部分。
-- 原始 JSON 大段截图：论文中可用字段说明表替代。
-- LLM 输出截图：容易让读者误解为 LLM 参与推荐排序。
-- 过多参数实验表：参数实验应服务于推荐策略比较，避免挤占需求、设计和实现章节篇幅。
-
-## 6. 图表绘制建议
-
-### 6.1 系统总体架构图
-
-建议结构：
-
-```text
-前端页面 / API 调用
-        |
-Controller 层
-        |
-Service 编排层
-        |
-Strategy 领域能力层
-        |
-Mapper / Repository 数据访问层
-        |
-MySQL + Redis
-```
-
-### 6.2 推荐主链路流程图
-
-建议结构：
-
-```text
-用户标签 -> 用户画像 -> 倒排召回 -> 相似度排序
-       -> 校园规则重排 -> 可信连接分 / 轻量探索
-       -> 推荐解释 -> 用户反馈 -> 画像更新
-```
-
-### 6.3 数据库 ER 图
-
-建议展示关系：
-
-```text
-user 1 -- n user_tag_relation n -- 1 tag
-user 1 -- n user_profile
-user 1 -- n recommendation_result
-recommendation_result 1 -- n recommendation_explanation
-recommendation_result 1 -- n user_feedback
-```
-
-## 7. Word 整合提醒
-
-- 图题放在图下方，表题放在表上方，具体格式按学校模板。
-- 迁入 Word 后再统一编号，Markdown 中的图号只是建议。
-- 参考文献引用编号应在 Word 定稿阶段统一检查。
-- 若最终删除某张图或表，需要同步检查正文中的“如图”“如表”引用。
-
+- 若删除某张图或表，必须同步删除正文中的“如图”“如表”引用。
+- 界面图在 Word 中应等比缩放，避免横向溢出页面。
+- 第 5 章图较多，排版时应保证每个二级标题下先有过渡文字，再出现图或表。
+- 图、表中文字应保持可读；若缩放后不可读，应换用更简洁版本或拆分为两张图。

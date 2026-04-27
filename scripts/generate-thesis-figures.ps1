@@ -470,7 +470,332 @@ function Table-52 {
     Save-Figure $bmp $g "ch5-table-2-formulas.png"
 }
 
+function Draw-UseCase($g, $x, $y, $w, $h, $text) {
+    $rect = [System.Drawing.Rectangle]::new($x, $y, $w, $h)
+    $g.FillEllipse((Brush "#ffffff"), $rect)
+    $g.DrawEllipse((Pen "#111827" 2), $rect)
+    $sf = New-Object System.Drawing.StringFormat
+    $sf.Alignment = [System.Drawing.StringAlignment]::Center
+    $sf.LineAlignment = [System.Drawing.StringAlignment]::Center
+    $g.DrawString($text, (Font 13 Regular), (Brush "#111827"), [System.Drawing.RectangleF]::new($x + 8, $y + 4, $w - 16, $h - 8), $sf)
+}
+
+function Draw-Actor($g, $x, $y, $label) {
+    $pen = Pen "#111827" 2
+    $g.DrawEllipse($pen, $x + 24, $y, 26, 26)
+    $g.DrawLine($pen, $x + 37, $y + 26, $x + 37, $y + 82)
+    $g.DrawLine($pen, $x + 8, $y + 48, $x + 66, $y + 48)
+    $g.DrawLine($pen, $x + 37, $y + 82, $x + 14, $y + 120)
+    $g.DrawLine($pen, $x + 37, $y + 82, $x + 60, $y + 120)
+    $sf = New-Object System.Drawing.StringFormat
+    $sf.Alignment = [System.Drawing.StringAlignment]::Center
+    $g.DrawString($label, (Font 12 Regular), (Brush "#111827"), [System.Drawing.RectangleF]::new($x - 18, $y + 126, 112, 36), $sf)
+}
+
+function Draw-Class($g, $x, $y, $w, $h, $title, $members) {
+    $g.FillRectangle((Brush "#ffffff"), $x, $y, $w, $h)
+    $g.DrawRectangle((Pen "#111827" 2), $x, $y, $w, $h)
+    $g.FillRectangle((Brush "#e8f0fb"), $x, $y, $w, 38)
+    $g.DrawLine((Pen "#111827" 1), $x, $y + 38, $x + $w, $y + 38)
+    $sf = New-Object System.Drawing.StringFormat
+    $sf.Alignment = [System.Drawing.StringAlignment]::Center
+    $sf.LineAlignment = [System.Drawing.StringAlignment]::Center
+    $g.DrawString($title, (Font 12 Bold), (Brush "#111827"), [System.Drawing.RectangleF]::new($x + 4, $y, $w - 8, 38), $sf)
+    $body = [string]::Join("`n", $members)
+    $sf2 = New-Object System.Drawing.StringFormat
+    $sf2.Alignment = [System.Drawing.StringAlignment]::Near
+    $g.DrawString($body, (Font 10 Regular), (Brush "#111827"), [System.Drawing.RectangleF]::new($x + 10, $y + 48, $w - 20, $h - 54), $sf2)
+}
+
+function Figure-31 {
+    $c = New-Canvas 1450 700; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "用户与标签维护用例图" 1450
+    $g.DrawRectangle((Pen "#111827" 2), 330, 105, 760, 500)
+    $g.DrawString("校园社交匹配推荐系统", (Font 14 Bold), (Brush "#111827"), 580, 126)
+    Draw-Actor $g 120 210 "校园用户"
+    Draw-Actor $g 1180 210 "系统管理员"
+    Draw-UseCase $g 475 180 220 70 "维护个人资料"
+    Draw-UseCase $g 475 310 220 70 "维护兴趣标签"
+    Draw-UseCase $g 735 180 220 70 "维护标签体系"
+    Draw-UseCase $g 735 310 220 70 "维护基础用户数据"
+    Draw-UseCase $g 600 450 230 70 "保存用户标签关系"
+    Draw-Arrow $g 190 285 475 215
+    Draw-Arrow $g 190 285 475 345
+    Draw-Arrow $g 1180 285 955 215
+    Draw-Arrow $g 1180 285 955 345
+    Draw-Arrow $g 585 380 660 450
+    Draw-Arrow $g 845 380 760 450
+    Save-Figure $bmp $g "ch3-1-user-tag-usecase.png"
+}
+
+function Figure-32 {
+    $c = New-Canvas 1450 720; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "画像构建与推荐生成用例图" 1450
+    $g.DrawRectangle((Pen "#111827" 2), 320, 105, 800, 520)
+    $g.DrawString("校园社交匹配推荐系统", (Font 14 Bold), (Brush "#111827"), 600, 126)
+    Draw-Actor $g 110 230 "校园用户"
+    Draw-Actor $g 1200 230 "系统管理员"
+    Draw-UseCase $g 440 165 230 68 "请求推荐结果"
+    Draw-UseCase $g 440 285 230 68 "构建用户画像"
+    Draw-UseCase $g 720 225 240 68 "候选召回"
+    Draw-UseCase $g 720 345 240 68 "排序与重排"
+    Draw-UseCase $g 575 485 260 68 "返回 Top-K 推荐结果"
+    Draw-UseCase $g 860 485 200 68 "重建索引"
+    Draw-Arrow $g 180 305 440 199
+    Draw-Arrow $g 555 233 555 285
+    Draw-Arrow $g 670 319 720 260
+    Draw-Arrow $g 840 293 840 345
+    Draw-Arrow $g 840 413 705 485
+    Draw-Arrow $g 1200 305 960 520
+    Save-Figure $bmp $g "ch3-2-recommendation-usecase.png"
+}
+
+function Figure-33 {
+    $c = New-Canvas 1400 660; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "推荐解释用例图" 1400
+    $g.DrawRectangle((Pen "#111827" 2), 340, 115, 720, 450)
+    $g.DrawString("校园社交匹配推荐系统", (Font 14 Bold), (Brush "#111827"), 575, 136)
+    Draw-Actor $g 120 235 "校园用户"
+    Draw-Actor $g 1160 235 "外部大语言`n模型服务"
+    Draw-UseCase $g 450 190 240 72 "查看推荐解释"
+    Draw-UseCase $g 710 190 240 72 "抽取解释证据"
+    Draw-UseCase $g 450 350 240 72 "生成规则解释"
+    Draw-UseCase $g 710 350 240 72 "润色解释文本"
+    Draw-Arrow $g 190 310 450 226
+    Draw-Arrow $g 690 226 710 226
+    Draw-Arrow $g 570 262 570 350
+    Draw-Arrow $g 690 386 710 386
+    Draw-Arrow $g 1160 310 950 386
+    Save-Figure $bmp $g "ch3-3-explanation-usecase.png"
+}
+
+function Figure-34 {
+    $c = New-Canvas 1400 680; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "用户反馈与画像更新用例图" 1400
+    $g.DrawRectangle((Pen "#111827" 2), 350, 115, 720, 460)
+    $g.DrawString("校园社交匹配推荐系统", (Font 14 Bold), (Brush "#111827"), 585, 136)
+    Draw-Actor $g 130 250 "校园用户"
+    Draw-UseCase $g 455 185 240 72 "提交关注/忽略反馈"
+    Draw-UseCase $g 745 185 220 72 "保存反馈记录"
+    Draw-UseCase $g 455 355 240 72 "读取推荐证据标签"
+    Draw-UseCase $g 745 355 220 72 "重建用户画像"
+    Draw-Arrow $g 200 325 455 221
+    Draw-Arrow $g 695 221 745 221
+    Draw-Arrow $g 855 257 575 355
+    Draw-Arrow $g 695 391 745 391
+    Save-Figure $bmp $g "ch3-4-feedback-usecase.png"
+}
+
+function Figure-41 {
+    $c = New-Canvas 1650 1120; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "系统架构图" 1650
+    Draw-Box $g 85 190 170 86 "校园用户" "#ffffff" "#111827" 13
+    Draw-Box $g 85 390 170 86 "系统管理员" "#ffffff" "#111827" 13
+    Draw-Box $g 1370 310 190 90 "外部大语言`n模型服务" "#ffffff" "#111827" 12
+    $g.DrawRectangle((Pen "#111827" 2), 340, 110, 900, 790)
+    $g.DrawString("校园社交匹配推荐系统", (Font 16 Bold), (Brush "#111827"), 670, 132)
+    Draw-Box $g 470 185 640 62 "接口层：用户、标签、画像、推荐、解释、反馈 Controller" "#eef6ff" "#1d4ed8" 12
+    Draw-Box $g 470 300 640 70 "应用服务层：业务编排与推荐主链路" "#f0fdf4" "#15803d" 13
+    Draw-Box $g 470 430 640 92 "领域能力层：画像计算 / 候选召回 / 相似度排序 / 校园规则重排 / 解释证据抽取" "#fefce8" "#a16207" 12
+    Draw-Box $g 470 580 640 70 "数据访问层：Mapper / Repository" "#fff7ed" "#c2410c" 13
+    Draw-Box $g 470 760 250 82 "MySQL`n结构化业务数据" "#ffffff" "#111827" 12
+    Draw-Box $g 860 760 250 82 "Redis`n倒排索引与缓存" "#ffffff" "#111827" 12
+    Draw-Arrow $g 255 233 470 216
+    Draw-Arrow $g 255 433 470 216
+    Draw-Arrow $g 790 247 790 300
+    Draw-Arrow $g 790 370 790 430
+    Draw-Arrow $g 790 522 790 580
+    Draw-Arrow $g 650 650 600 760
+    Draw-Arrow $g 930 650 985 760
+    Draw-Arrow $g 1110 476 1370 355
+    Save-Figure $bmp $g "ch4-1-system-architecture.png"
+}
+
+function Figure-42 {
+    $c = New-Canvas 1700 820; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "系统功能结构图" 1700
+    Draw-Box $g 600 90 500 70 "校园社交匹配推荐系统" "#0f4c92" "#0f4c92" 18
+    $cols = @(
+        @("用户与标签维护", @("用户资料维护", "标签体系维护", "用户标签绑定"), 130),
+        @("用户画像构建", @("标签权重计算", "Top-K 标签截取", "画像缓存"), 390),
+        @("匹配推荐生成", @("候选召回", "相似度排序", "校园规则重排"), 650),
+        @("推荐解释", @("证据抽取", "规则解释", "解释润色"), 910),
+        @("用户反馈更新", @("反馈记录", "权重调整", "画像重建"), 1170),
+        @("运行评估", @("透明链路", "双视图对比", "离线评估"), 1430)
+    )
+    foreach ($col in $cols) {
+        Draw-Arrow $g 850 160 ($col[2] + 80) 235
+        Draw-Box $g $col[2] 235 190 62 $col[0] "#dbeafe" "#1d4ed8" 12
+        $y = 345
+        foreach ($item in $col[1]) {
+            Draw-Box $g ($col[2] + 14) $y 162 54 $item "#ffffff" "#64748b" 11
+            Draw-Arrow $g ($col[2] + 95) 297 ($col[2] + 95) $y "#9ca3af"
+            $y += 88
+        }
+    }
+    Save-Figure $bmp $g "ch4-2-function-structure.png"
+}
+
+function Figure-43 {
+    $c = New-Canvas 1550 980; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "系统 ER 图" 1550
+    Draw-Box $g 90 170 190 62 "用户" "#ffffff" "#111827" 12
+    Draw-Box $g 390 170 190 62 "用户标签关系" "#ffffff" "#111827" 12
+    Draw-Box $g 690 170 190 62 "标签" "#ffffff" "#111827" 12
+    Draw-Box $g 390 360 190 62 "用户画像" "#ffffff" "#111827" 12
+    Draw-Box $g 690 360 210 62 "推荐结果" "#ffffff" "#111827" 12
+    Draw-Box $g 1010 260 220 62 "推荐解释" "#ffffff" "#111827" 12
+    Draw-Box $g 1010 460 190 62 "用户反馈" "#ffffff" "#111827" 12
+    Draw-Arrow $g 280 201 390 201; $g.DrawString("1", (Font 11 Regular), (Brush "#111827"), 300, 178); $g.DrawString("n", (Font 11 Regular), (Brush "#111827"), 365, 178)
+    Draw-Arrow $g 580 201 690 201; $g.DrawString("n", (Font 11 Regular), (Brush "#111827"), 600, 178); $g.DrawString("1", (Font 11 Regular), (Brush "#111827"), 665, 178)
+    Draw-Arrow $g 485 232 485 360; $g.DrawString("1", (Font 11 Regular), (Brush "#111827"), 500, 255); $g.DrawString("n", (Font 11 Regular), (Brush "#111827"), 500, 330)
+    Draw-Arrow $g 580 391 690 391
+    Draw-Arrow $g 900 391 1010 291
+    Draw-Arrow $g 900 391 1010 491
+    Draw-Arrow $g 185 232 690 391 "#6b7280"
+    Save-Figure $bmp $g "ch4-3-er-diagram.png"
+}
+
+function Figure-51 {
+    $c = New-Canvas 1700 900; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "用户画像构建模块类图" 1700
+    Draw-Class $g 90 150 260 130 "ProfileController" @("+ buildProfile()", "+ getProfile()")
+    Draw-Class $g 470 130 300 170 "ProfileServiceImpl" @("- weightCalculator", "- userTagRelationMapper", "- userProfileMapper", "- profileCacheRepository", "+ buildProfile()", "+ getProfile()")
+    Draw-Class $g 900 130 320 140 "ProfileWeightCalculator" @("+ calculate(userId, relations)")
+    Draw-Class $g 900 340 320 150 "ImprovedTfIdfProfileWeightCalculator" @("+ calculate()", "- applyTimeDecay()", "- selectTopK()")
+    Draw-Class $g 120 560 280 130 "UserTagRelationMapper" @("+ selectList()")
+    Draw-Class $g 510 560 260 130 "UserProfileMapper" @("+ insert()", "+ selectOne()")
+    Draw-Class $g 900 560 300 130 "ProfileCacheRepository" @("+ get()", "+ save()")
+    Draw-Arrow $g 350 215 470 215
+    Draw-Arrow $g 770 215 900 200
+    Draw-Arrow $g 1060 270 1060 340
+    Draw-Arrow $g 610 300 260 560
+    Draw-Arrow $g 630 300 640 560
+    Draw-Arrow $g 680 300 1030 560
+    Save-Figure $bmp $g "ch5-1-profile-class-diagram.png"
+}
+
+function Figure-52 {
+    $c = New-Canvas 1700 980; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "用户画像生成时序图" 1700
+    $lanes = @(180, 430, 680, 930, 1180, 1430)
+    $labels = @("用户", "ProfileController", "ProfileService", "标签关系Mapper", "权重计算器", "画像存储/缓存")
+    for ($i=0; $i -lt $lanes.Count; $i++) { Draw-Lane $g $lanes[$i] 130 900 $labels[$i] }
+    Draw-Message $g 180 430 190 "请求生成/刷新画像"
+    Draw-Message $g 430 680 280 "buildProfile(userId)"
+    Draw-Message $g 680 930 370 "查询用户标签关系"
+    Draw-Message $g 930 680 460 "返回标签、时间、权重种子"
+    Draw-Message $g 680 1180 550 "计算 TF-IDF、时间衰减、Top-K"
+    Draw-Message $g 1180 680 640 "返回画像权重向量"
+    Draw-Message $g 680 1430 730 "保存画像并写入缓存"
+    Draw-Message $g 680 430 820 "返回画像结果"
+    Save-Figure $bmp $g "ch5-2-profile-sequence.png"
+}
+
+function Figure-54 {
+    $c = New-Canvas 1720 930; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "匹配推荐生成模块类图" 1720
+    Draw-Class $g 70 105 260 120 "RecommendationController" @("+ recommend()", "+ detail()")
+    Draw-Class $g 450 80 320 190 "RecommendationServiceImpl" @("- profileService", "- recallService", "- rankingService", "- rerankService", "- explanationService", "+ recommend()")
+    $classes = @(
+        @("ProfileService", 90, 410), @("RecallService", 370, 410), @("RankingService", 650, 410),
+        @("RerankService", 930, 410), @("TrustScoreService", 1210, 410), @("ExplorationService", 90, 640),
+        @("RecallIndexRepository", 370, 640), @("RerankRule", 650, 640), @("RecommendationResultMapper", 930, 640), @("ExplanationService", 1210, 640)
+    )
+    foreach ($cinfo in $classes) { Draw-Class $g $cinfo[1] $cinfo[2] 230 105 $cinfo[0] @("+ execute()") }
+    Draw-Arrow $g 330 165 450 175
+    foreach ($cinfo in $classes) { Draw-Arrow $g 610 270 ($cinfo[1] + 115) $cinfo[2] "#6b7280" }
+    Save-Figure $bmp $g "ch5-4-recommendation-class-diagram.png"
+}
+
+function Figure-55 {
+    $c = New-Canvas 1700 960; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "匹配推荐生成时序图" 1700
+    $lanes = @(150, 380, 610, 840, 1070, 1300, 1530)
+    $labels = @("用户", "RecommendationController", "RecommendationService", "ProfileService", "RecallService", "RankingService", "RerankService")
+    for ($i=0; $i -lt $lanes.Count; $i++) { Draw-Lane $g $lanes[$i] 130 900 $labels[$i] }
+    Draw-Message $g 150 380 190 "请求 Top-K 推荐"
+    Draw-Message $g 380 610 280 "recommend(userId, topK)"
+    Draw-Message $g 610 840 370 "获取目标用户画像"
+    Draw-Message $g 610 1070 460 "按 Top-K 标签召回候选"
+    Draw-Message $g 610 1300 550 "计算余弦相似度"
+    Draw-Message $g 610 1530 640 "执行校园规则重排"
+    Draw-Message $g 1530 610 730 "返回最终排序"
+    Draw-Message $g 610 380 820 "返回推荐详情"
+    Save-Figure $bmp $g "ch5-5-recommendation-sequence.png"
+}
+
+function Figure-57 {
+    $c = New-Canvas 1700 900; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "推荐解释与用户反馈模块类图" 1700
+    Draw-Class $g 90 120 260 130 "RecommendationController" @("+ getExplanation()")
+    Draw-Class $g 90 340 260 130 "FeedbackController" @("+ submitFeedback()")
+    Draw-Class $g 470 100 300 180 "ExplanationServiceImpl" @("- evidenceExtractor", "- templateBuilder", "- aiClient", "+ generate()", "+ getByRecommendationId()")
+    Draw-Class $g 470 350 300 150 "FeedbackServiceImpl" @("- feedbackMapper", "- profileService", "+ submitFeedback()", "+ applyFeedbackUpdate()")
+    Draw-Class $g 900 80 300 120 "ExplanationEvidenceExtractor" @("+ extract()")
+    Draw-Class $g 900 240 300 120 "ExplanationTemplateBuilder" @("+ build()")
+    Draw-Class $g 900 400 300 120 "AiExplanationClient" @("+ generateExplanation()")
+    Draw-Class $g 1280 150 300 120 "RecommendationExplanationMapper" @("+ insert()", "+ selectOne()")
+    Draw-Class $g 1280 360 260 120 "UserFeedbackMapper" @("+ insert()", "+ selectList()")
+    Draw-Arrow $g 350 185 470 190
+    Draw-Arrow $g 350 405 470 425
+    Draw-Arrow $g 770 190 900 140
+    Draw-Arrow $g 770 190 900 300
+    Draw-Arrow $g 770 190 900 460
+    Draw-Arrow $g 770 190 1280 210
+    Draw-Arrow $g 770 425 1280 420
+    Save-Figure $bmp $g "ch5-7-explanation-feedback-class-diagram.png"
+}
+
+function Figure-58 {
+    $c = New-Canvas 1700 940; $bmp = $c[0]; $g = $c[1]
+    Draw-Title $g "用户反馈更新时序图" 1700
+    $lanes = @(170, 430, 690, 950, 1210, 1470)
+    $labels = @("用户", "FeedbackController", "FeedbackService", "UserFeedbackMapper", "RecommendationResultMapper", "ProfileService")
+    for ($i=0; $i -lt $lanes.Count; $i++) { Draw-Lane $g $lanes[$i] 130 880 $labels[$i] }
+    Draw-Message $g 170 430 200 "提交关注/忽略反馈"
+    Draw-Message $g 430 690 300 "submitFeedback()"
+    Draw-Message $g 690 950 400 "保存反馈记录"
+    Draw-Message $g 690 1210 500 "读取推荐证据标签"
+    Draw-Message $g 690 690 600 "调整相关标签权重"
+    Draw-Message $g 690 1470 700 "重建用户画像"
+    Draw-Message $g 690 430 800 "返回处理结果"
+    Save-Figure $bmp $g "ch5-8-feedback-sequence.png"
+}
+
+function Table-52 {
+    $c = New-Canvas 1520 440; $bmp = $c[0]; $g = $c[1]
+    $headers = @("数据项", "含义", "用途")
+    $rows = @(
+        @("标签贡献", "共同标签及其对相似度的贡献", "支撑推荐解释和画像更新"),
+        @("规则命中", "年级、专业、社团等校园规则命中情况", "支撑场景重排和解释生成"),
+        @("可信连接原因", "资料完整度、反馈记录等可信依据", "支撑可信连接分和解释展示"),
+        @("反馈类型", "关注或忽略", "决定画像权重调整方向"),
+        @("画像版本", "用户画像更新后的版本号", "支撑反馈前后结果对比")
+    )
+    Draw-Table $g 80 30 @(280, 570, 500) @(50, 58, 58, 58, 58, 58) $headers $rows
+    Save-Figure $bmp $g "ch5-table-2-explanation-feedback-data.png"
+}
+
+function Table-51 {
+    $c = New-Canvas 1560 450; $bmp = $c[0]; $g = $c[1]
+    $headers = @("机制", "作用", "实现要点")
+    $rows = @(
+        @("候选召回", "缩小排序计算范围", "根据 Top-K 标签读取倒排集合并合并候选用户"),
+        @("基础排序", "计算兴趣相似度", "使用画像向量余弦相似度，并记录标签贡献"),
+        @("场景重排", "适配校园匹配场景", "按学习、社团、兴趣模式调整规则权重"),
+        @("可信连接分", "抑制证据不足的推荐对象", "根据资料完整度和历史反馈生成可信原因"),
+        @("轻量探索", "保留少量非最高相似度对象", "在不破坏主排序的前提下增加推荐多样性")
+    )
+    Draw-Table $g 80 30 @(250, 480, 650) @(50, 58, 58, 58, 58, 58) $headers $rows
+    Save-Figure $bmp $g "ch5-table-1-core-mechanisms.png"
+}
+
 Figure-11
+Figure-31
+Figure-32
+Figure-33
+Figure-34
 Figure-41
 Figure-42
 Figure-43

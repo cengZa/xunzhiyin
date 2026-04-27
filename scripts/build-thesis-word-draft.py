@@ -16,7 +16,7 @@ from docx.text.paragraph import Paragraph
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "docs" / "本科毕设论文模板-论文主体.docx"
-OUT = ROOT / "docs" / "generated" / "thesis_word_final_candidate_v8.docx"
+OUT = ROOT / "docs" / "generated" / "thesis_word_final_candidate_v9.docx"
 
 SOURCES = [
     ("abstract_cn", ROOT / "docs" / "05_thesis" / "abstract_cn.md"),
@@ -47,22 +47,27 @@ TOC_ENTRIES = [
 ]
 
 FIGURE_IMAGES = {
-    "图 1-1": ("figures/ch1-1-technical-route.png", "图 1-1 系统技术路线图"),
-    "图 4-1": ("figures/ch4-1-system-architecture.png", "图 4-1 系统总体架构图"),
-    "图 4-2": ("figures/ch4-2-main-process.png", "图 4-2 推荐主流程概要图"),
-    "图 4-3": ("figures/ch4-3-er-diagram.png", "图 4-3 数据库 ER 图"),
-    "图 5-1": ("figures/ch5-1-recommendation-pipeline.png", "图 5-1 推荐主链路流程图"),
-    "图 5-2": ("figures/ch5-2-core-class-diagram.png", "图 5-2 系统核心类图"),
-    "图 5-4": ("figures/ch5-4-profile-sequence.png", "图 5-4 用户画像生成时序图"),
-    "图 5-5": ("figures/ch5-5-recall-ranking-sequence.png", "图 5-5 候选召回与相似度排序时序图"),
-    "图 5-6": ("figures/ch5-6-rerank-flow.png", "图 5-6 校园规则重排流程图"),
-    "图 5-7": ("figures/ch5-7-explanation-evidence-flow.png", "图 5-7 推荐解释证据流图"),
-    "图 5-8": ("figures/ch5-8-feedback-update-sequence.png", "图 5-8 反馈更新时序图"),
+    "图 3-1": ("figures/ch3-1-user-tag-usecase.png", "图 3-1 用户与标签维护用例图"),
+    "图 3-2": ("figures/ch3-2-recommendation-usecase.png", "图 3-2 画像构建与推荐生成用例图"),
+    "图 3-3": ("figures/ch3-3-explanation-usecase.png", "图 3-3 推荐解释用例图"),
+    "图 3-4": ("figures/ch3-4-feedback-usecase.png", "图 3-4 用户反馈与画像更新用例图"),
+    "图 4-1": ("figures/ch4-1-system-architecture.png", "图 4-1 系统架构图"),
+    "图 4-2": ("figures/ch4-2-function-structure.png", "图 4-2 系统功能结构图"),
+    "图 4-3": ("figures/ch4-3-er-diagram.png", "图 4-3 系统 ER 图"),
+    "图 5-1": ("figures/ch5-1-profile-class-diagram.png", "图 5-1 用户画像构建模块类图"),
+    "图 5-2": ("figures/ch5-2-profile-sequence.png", "图 5-2 用户画像生成时序图"),
+    "图 5-3": ("figures/ch5-3-home-screenshot.png", "图 5-3 系统首页画像与推荐展示界面"),
+    "图 5-4": ("figures/ch5-4-recommendation-class-diagram.png", "图 5-4 匹配推荐生成模块类图"),
+    "图 5-5": ("figures/ch5-5-recommendation-sequence.png", "图 5-5 匹配推荐生成时序图"),
+    "图 5-6": ("figures/ch5-6-pipeline-screenshot.png", "图 5-6 透明链路页面推荐生成阶段界面"),
+    "图 5-7": ("figures/ch5-7-explanation-feedback-class-diagram.png", "图 5-7 推荐解释与用户反馈模块类图"),
+    "图 5-8": ("figures/ch5-8-feedback-sequence.png", "图 5-8 用户反馈更新时序图"),
+    "图 5-9": ("figures/ch5-9-feedback-screenshot.png", "图 5-9 推荐解释与反馈展示界面"),
 }
 
 TABLE_IMAGES = {
     ("机制", "作用", "实现要点"): "figures/ch5-table-1-core-mechanisms.png",
-    ("公式", "含义", "用途"): "figures/ch5-table-2-formulas.png",
+    ("数据项", "含义", "用途"): "figures/ch5-table-2-explanation-feedback-data.png",
 }
 
 
@@ -140,12 +145,12 @@ def normalize_heading(text: str) -> tuple[int, str] | None:
         title = text[2:].strip()
         m = re.match(r"第\s*(\d+)\s*章\s*(.+)", title)
         if m:
-            return 1, m.group(2).strip()
+            return 1, f"{m.group(1)} {m.group(2).strip()}"
         return 0, title
     if text.startswith("## "):
-        return 2, re.sub(r"^\d+(\.\d+)*\s*", "", text[3:].strip())
+        return 2, text[3:].strip()
     if text.startswith("### "):
-        return 3, re.sub(r"^\d+(\.\d+)*\s*", "", text[4:].strip())
+        return 3, text[4:].strip()
     return None
 
 
