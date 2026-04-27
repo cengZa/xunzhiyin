@@ -8,7 +8,7 @@
 - 运行页面截图不是必需项；如学校或导师要求展示系统运行效果，再由人工补截图。
 - 图表必须服务正文论述，不为了数量堆砌。
 - 图号、表号、题注和交叉引用最终以学校 Word 模板为准。
-- 若图中包含模拟校园用户数据或代理指标，应在正文中说明数据来源和验证边界。
+- 若图中包含测试数据或评估指标，应在正文中说明指标含义和计算方式。
 
 ## 2. 建议图清单
 
@@ -42,11 +42,11 @@
 | 表 5-2 | 第 5 章核心公式说明 | 第 5 章 | 必要 | 汇总标签权重、时间衰减、余弦相似度、最终分数和规则贡献公式 | `chapter5_implementation.md` |
 | 表 5-3 | 核心服务实现说明 | 第 5 章 | 可选 | 汇总 ProfileService、RecallService、RankingService、RerankService、ExplanationService 等 | `chapter5_diagram_drafts.md` |
 | 表 6-1 | 测试环境说明 | 第 6 章 | 必要 | 汇总 Java、Maven、H2、MySQL、Redis 和治理脚本 | `chapter6_test.md` |
-| 表 6-2 | 测试数据规模 | 第 6 章 | 必要 | 展示模拟校园用户数据中的用户、标签和关系数量 | `chapter6_test.md` |
+| 表 6-2 | 测试数据规模 | 第 6 章 | 必要 | 展示校园用户数据集中的用户、标签和关系数量 | `chapter6_test.md` |
 | 表 6-3 | 功能测试用例表 | 第 6 章 | 必要 | 按推荐链路汇总用户标签、画像、召回、排序、重排、解释、反馈和评估导出测试 | `chapter6_test.md` |
 | 表 6-4 | 自动化测试结果 | 第 6 章 | 必要 | 展示 Tests run、Failures、Errors、Skipped、BUILD SUCCESS | `../generated/final-validation-latest.md` |
 | 表 6-5 | 离线评估基线 | 第 6 章 | 必要 | 说明标签重叠、余弦排序、完整链路无可信分、完整链路含可信分四类基线 | `chapter6_test.md` |
-| 表 6-6 | 离线评估结果 | 第 6 章 | 必要 | 展示 Precision@K、HitRate@K、解释覆盖率等代理指标 | `../generated/recommendation-evaluation-latest.md` |
+| 表 6-6 | 离线评估结果 | 第 6 章 | 必要 | 展示 Precision@K、HitRate@K、解释覆盖率等评估指标 | `../generated/recommendation-evaluation-latest.md` |
 | 表 6-7 | TopK 参数实验结果 | 第 6 章 | 可选 | 展示 TopK 变化对 Precision@K、HitRate@K 和解释覆盖率的影响 | `chapter6_test.md` |
 
 ## 4. 必须优先完成的图表
@@ -71,7 +71,7 @@
 - 页面运行截图：除非导师明确要求，否则不作为论文主证据；若需要展示运行效果，优先放在第 6 章测试与运行效果部分。
 - 原始 JSON 大段截图：论文中可用字段说明表替代。
 - LLM 输出截图：容易让读者误解为 LLM 参与推荐排序。
-- 过多参数实验表：当前数据为模拟校园用户数据，过度展开会放大代理验证的局限。
+- 过多参数实验表：参数实验应服务于推荐策略比较，避免挤占需求、设计和实现章节篇幅。
 
 ## 6. 图表绘制建议
 

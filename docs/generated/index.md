@@ -23,7 +23,7 @@
 - `thesis_word_final_candidate_v6_render/`: v6 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
 - `thesis_word_final_candidate_v7.docx`: 旧 Word 定稿候选；已由 v8 候选稿替代。
 - `thesis_word_final_candidate_v7_render/`: v7 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
-- `thesis_word_final_candidate_v8.docx`: 当前 Word 定稿候选；消除正文和致谢占位符，将第 1 章技术路线图、第 4 章架构图/主流程图/ER 图落成正式图，将第 2、3、4、6 章 Markdown 表格转为样例风格 PNG 表格，并已同步静态目录页码与实际页脚。
+- `thesis_word_final_candidate_v8.docx`: 当前 Word 定稿候选；消除正文和致谢占位符，将第 1 章技术路线图、第 4 章架构图/主流程图/ER 图落成正式图，将第 2、3、4、6 章 Markdown 表格转为样例风格 PNG 表格；已删除第 3 章验收收束小节，清理 FR/NFR、mock、模拟、代理、真实测试不足等不适合论文定稿的表述，并同步静态目录页码与实际页脚。
 - `thesis_word_final_candidate_v8_render/`: v8 Word 候选稿的 artifact-tool 渲染检查输出，仅用于内部版式 QA。
 
 ## 规则
@@ -31,3 +31,4 @@
 - 若产物会被 agent 消费，应提供稳定入口，而不是散落在聊天记录里。
 - 采用 7 章工程型结构后，旧 8 章 Word 组稿产物应视为过时生成物，不再保留。
 - artifact-tool 对学校模板和工程型样例中的 Word 原生表格存在竖排渲染缺陷；自动候选稿中已定稿的关键表格可先生成为样例风格 PNG 插入，未定稿表格仍用醒目占位块保留字段底稿，最终 Word 中再按 `docs/更多参考/本科论文-工程型样例-刘.docx` 表 2-1 或表 3-2 样式重排。
+- 论文定稿表述不使用未解释缩写、过程性自述或削弱工程真实性的表述；如需需求编号，优先使用“功能-xx”“非功能-xx”等中文编号。

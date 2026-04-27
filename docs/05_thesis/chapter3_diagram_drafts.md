@@ -108,18 +108,18 @@ flowchart LR
 
 | 编号 | 需求名称 | 需求说明 | 对应实现 |
 | --- | --- | --- | --- |
-| FR-01 | 用户管理 | 支持用户基础信息创建、查询和维护 | `UserController`, `UserService` |
-| FR-02 | 标签管理 | 支持标签定义、分类和用户标签绑定 | `TagController`, `TagService` |
-| FR-03 | 用户画像生成 | 根据用户标签关系生成可计算画像 | `ProfileService`, `ProfileServiceImpl` |
-| FR-04 | 改进 TF-IDF 权重计算 | 综合标签频次、时间衰减和 Top-K 裁剪 | `ImprovedTfIdfProfileWeightCalculator` |
-| FR-05 | 候选召回 | 根据 Top-K 标签和倒排索引召回候选用户 | `RecallService`, `RecallIndexRepository` |
-| FR-06 | 相似度排序 | 根据用户画像计算候选用户兴趣相似度 | `RankingService` |
-| FR-07 | 校园规则重排 | 根据年级、专业、社团等校园规则调整排序 | `RerankService`, `strategy.rerank` |
-| FR-08 | 推荐结果输出 | 输出 Top-K 推荐结果、匹配标签和评分信息 | `RecommendationController`, `RecommendationService` |
-| FR-09 | 推荐解释 | 根据标签贡献和规则命中生成推荐理由 | `ExplanationService`, `strategy.explain` |
-| FR-10 | 反馈采集 | 记录用户关注、忽略等反馈行为 | `FeedbackController`, `FeedbackService` |
-| FR-11 | 反馈更新 | 根据反馈证据对画像进行轻量更新 | `FeedbackServiceImpl`, `ProfileServiceImpl` |
-| FR-12 | 推荐记录持久化 | 保存推荐结果、解释和反馈记录 | `RecommendationResultMapper`, `RecommendationExplanationMapper`, `UserFeedbackMapper` |
+| 功能-01 | 用户管理 | 支持用户基础信息创建、查询和维护 | `UserController`, `UserService` |
+| 功能-02 | 标签管理 | 支持标签定义、分类和用户标签绑定 | `TagController`, `TagService` |
+| 功能-03 | 用户画像生成 | 根据用户标签关系生成可计算画像 | `ProfileService`, `ProfileServiceImpl` |
+| 功能-04 | 改进 TF-IDF 权重计算 | 综合标签频次、时间衰减和 Top-K 裁剪 | `ImprovedTfIdfProfileWeightCalculator` |
+| 功能-05 | 候选召回 | 根据 Top-K 标签和倒排索引召回候选用户 | `RecallService`, `RecallIndexRepository` |
+| 功能-06 | 相似度排序 | 根据用户画像计算候选用户兴趣相似度 | `RankingService` |
+| 功能-07 | 校园规则重排 | 根据年级、专业、社团等校园规则调整排序 | `RerankService`, `strategy.rerank` |
+| 功能-08 | 推荐结果输出 | 输出 Top-K 推荐结果、匹配标签和评分信息 | `RecommendationController`, `RecommendationService` |
+| 功能-09 | 推荐解释 | 根据标签贡献和规则命中生成推荐理由 | `ExplanationService`, `strategy.explain` |
+| 功能-10 | 反馈采集 | 记录用户关注、忽略等反馈行为 | `FeedbackController`, `FeedbackService` |
+| 功能-11 | 反馈更新 | 根据反馈证据对画像进行轻量更新 | `FeedbackServiceImpl`, `ProfileServiceImpl` |
+| 功能-12 | 推荐记录持久化 | 保存推荐结果、解释和反馈记录 | `RecommendationResultMapper`, `RecommendationExplanationMapper`, `UserFeedbackMapper` |
 
 ## 4. 表 3-2 系统非功能需求表
 
@@ -131,12 +131,12 @@ flowchart LR
 
 | 编号 | 非功能需求 | 约束说明 | 设计响应 |
 | --- | --- | --- | --- |
-| NFR-01 | 可实现性 | 适合本科工程项目规模 | 采用 Spring Boot 单体架构，不引入复杂分布式推荐平台 |
-| NFR-02 | 可维护性 | 模块职责清晰，便于扩展和测试 | 按 controller、service、strategy、mapper、domain、infra 分层 |
-| NFR-03 | 可解释性 | 推荐结果应能追溯到计算证据 | 保存标签贡献、规则命中、证据 JSON 和解释文本 |
-| NFR-04 | 可验证性 | 功能和推荐逻辑可重复验证 | 建立单元测试、集成测试、治理检查和离线评估材料 |
-| NFR-05 | 性能可接受 | 小规模校园数据下推荐接口可用 | 使用倒排召回减少排序候选集合 |
-| NFR-06 | 论文一致性 | 论文表述不得超过实现边界 | 区分已实现、代理验证和后续工作 |
+| 非功能-01 | 可实现性 | 适合本科工程项目规模 | 采用 Spring Boot 单体架构，不引入复杂分布式推荐平台 |
+| 非功能-02 | 可维护性 | 模块职责清晰，便于扩展和测试 | 按 controller、service、strategy、mapper、domain、infra 分层 |
+| 非功能-03 | 可解释性 | 推荐结果应能追溯到计算证据 | 保存标签贡献、规则命中、证据 JSON 和解释文本 |
+| 非功能-04 | 可验证性 | 功能和推荐逻辑可重复验证 | 建立单元测试、集成测试、治理检查和离线评估材料 |
+| 非功能-05 | 性能可接受 | 小规模校园数据下推荐接口可用 | 使用倒排召回减少排序候选集合 |
+| 非功能-06 | 论文一致性 | 论文表述应与设计实现保持一致 | 建立需求、设计、实现和测试之间的对应关系 |
 
 ## 5. Word 阶段处理项
 

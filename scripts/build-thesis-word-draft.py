@@ -39,11 +39,11 @@ TOC_ENTRIES = [
     ("2 相关理论及技术综述", "4"),
     ("3 校园社交匹配推荐系统需求分析", "8"),
     ("4 校园社交匹配推荐系统概要设计", "13"),
-    ("5 校园社交匹配推荐系统详细设计与实现", "19"),
-    ("6 系统测试", "27"),
-    ("7 总结与展望", "32"),
-    ("参考文献", "35"),
-    ("致谢", "37"),
+    ("5 校园社交匹配推荐系统详细设计与实现", "18"),
+    ("6 系统测试", "26"),
+    ("7 总结与展望", "31"),
+    ("参考文献", "34"),
+    ("致谢", "36"),
 ]
 
 FIGURE_IMAGES = {
@@ -482,7 +482,7 @@ def render_markdown(doc: Document, path: Path, doc_kind: str, before: Paragraph 
 
 def update_cover(doc: Document) -> None:
     title_cn = "基于 Spring Boot 的校园社交匹配与可解释推荐系统的设计与实现"
-    title_en = "Design and Implementation of a Spring Boot-Based Campus Social Matching and Explainable Recommendation System"
+    title_en = "Design and Implementation of Spring Boot-Based Campus Social Matching and Explainable Recommendation System"
     if len(doc.paragraphs) > 7:
         doc.paragraphs[7].text = title_cn
         doc.paragraphs[7].alignment = WD_ALIGN_PARAGRAPH.CENTER
