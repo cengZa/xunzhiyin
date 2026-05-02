@@ -6,7 +6,7 @@
     <title>CampusReco 校园匹配首页</title>
     <link rel="stylesheet" href="/app.css">
 </head>
-<body class="defense-mode">
+<body class="presentation-mode">
 <div class="page-shell">
     <div class="backdrop backdrop-left"></div>
     <div class="backdrop backdrop-right"></div>
@@ -17,7 +17,7 @@
             <h1>CampusReco 校园匹配首页</h1>
             <p class="hero-text">
                 页面围绕固定演示用户 <strong id="hero-user-id">2001</strong> 展示“兴趣相似 + 场景重排 + 可信连接分”的新算法匹配过程，
-                把推荐理由、规则命中、可信信号、反馈闭环和参数实验组织成适合答辩讲解的产品首页。
+                把推荐理由、规则命中、可信信号、反馈闭环和参数实验组织成适合演示讲解的产品首页。
             </p>
             <div class="hero-tags">
                 <span>新算法匹配</span>
@@ -30,14 +30,14 @@
                 <a class="ghost-button" href="/pipeline.html?userId=2001&topK=3&scenarioMode=interest_partner">查看透明链路</a>
                 <label class="mode-switch">
                     <input id="presentation-mode-toggle" type="checkbox" checked>
-                    <span>答辩模式</span>
+                    <span>展示模式</span>
                 </label>
             </div>
         </div>
         <div class="hero-stats">
             <article class="metric-card metric-highlight">
                 <span class="metric-label">当前阶段</span>
-                <strong class="metric-value">后端 MVP + 答辩演示页</strong>
+                <strong class="metric-value">后端 MVP + 演示页面</strong>
                 <span class="metric-note">主链路、解释、双视图、可信连接分和实验导出已经打通。</span>
             </article>
             <article class="metric-card">
@@ -58,7 +58,7 @@
             <section class="story-card">
                 <div class="section-head">
                     <div>
-                        <p class="section-kicker">答辩故事线</p>
+                        <p class="section-kicker">演示故事线</p>
                         <h2 id="story-title">演示用户 2001：兴趣搭子模式</h2>
                     </div>
                     <button class="ghost-button" id="refresh-overview" type="button">刷新概览</button>
@@ -183,15 +183,15 @@
                         <div class="summary-pills" id="explanation-summary"></div>
                         <div class="explanation-panel">
                             <div class="explanation-block">
-                                <strong>当前展示解释</strong>
+                                <strong>用户可读解释</strong>
                                 <p id="explanation-primary">点击推荐卡片中的“查看解释”。</p>
                             </div>
                             <div class="explanation-block">
-                                <strong>规则依据</strong>
+                                <strong>规则依据（系统模板）</strong>
                                 <p id="explanation-rule">系统会在这里显示规则链路产生的解释。</p>
                             </div>
                             <div class="explanation-block">
-                                <strong>LLM 改写解释</strong>
+                                <strong>LLM 改写解释（表达生成）</strong>
                                 <p id="explanation-llm">当智谱可用时，这里会显示基于规则证据改写后的自然语言解释。</p>
                             </div>
                         </div>
@@ -206,7 +206,7 @@
                     <div class="section-head compact">
                         <div>
                             <p class="section-kicker">原始明细</p>
-                            <h3>调试与答辩备用数据</h3>
+                            <h3>调试与演示备用数据</h3>
                         </div>
                         <span class="section-meta" id="detail-meta">等待数据</span>
                     </div>

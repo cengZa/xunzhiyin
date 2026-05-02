@@ -104,23 +104,29 @@ class EvaluationServiceImplTest {
         assertEquals(1, summary.getActiveUserCount());
         assertEquals(3, summary.getTagCount());
         assertEquals(4, summary.getRelationCount());
-        assertEquals(4, summary.getBaselines().size());
+        assertEquals(5, summary.getBaselines().size());
 
-        EvaluationBaselineVO overlap = find(summary, "tag_overlap");
-        EvaluationBaselineVO cosine = find(summary, "cosine_similarity");
-        EvaluationBaselineVO fullNoTrust = find(summary, "full_pipeline_no_trust");
-        EvaluationBaselineVO fullWithTrust = find(summary, "full_pipeline_with_trust");
+        EvaluationBaselineVO overlap = find(summary, "a1_tag_overlap");
+        EvaluationBaselineVO jaccard = find(summary, "a2_jaccard_tag_similarity");
+        EvaluationBaselineVO plainTfIdf = find(summary, "a3_plain_tfidf_cosine");
+        EvaluationBaselineVO improvedTfIdf = find(summary, "a4_improved_tfidf");
+        EvaluationBaselineVO fullPipeline = find(summary, "a5_improved_tfidf_with_scene_rerank");
 
         assertEquals(new BigDecimal("2.0000"), overlap.getAverageRecallCandidateCount());
         assertEquals(new BigDecimal("0.0000"), overlap.getPrecisionAtK());
-        assertEquals(new BigDecimal("1.0000"), cosine.getPrecisionAtK());
-        assertEquals(new BigDecimal("1.0000"), fullNoTrust.getHitRateAtK());
-        assertEquals(new BigDecimal("1.0000"), fullWithTrust.getExplanationPresenceRate());
+        assertTrue(jaccard.getNdcgAtK().compareTo(BigDecimal.ZERO) >= 0);
+        assertEquals(new BigDecimal("1.0000"), improvedTfIdf.getPrecisionAtK());
+        assertEquals(new BigDecimal("1.0000"), fullPipeline.getHitRateAtK());
+        assertEquals(new BigDecimal("1.0000"), fullPipeline.getExplanationPresenceRate());
+        assertTrue(plainTfIdf.getNdcgAtK().compareTo(BigDecimal.ZERO) >= 0);
+        assertTrue(fullPipeline.getCoverageRate().compareTo(BigDecimal.ZERO) > 0);
+        assertTrue(fullPipeline.getAverageResponseTimeMs().compareTo(BigDecimal.ZERO) >= 0);
 
         String markdown = evaluationService.generateMarkdownReport(1);
-        assertTrue(markdown.contains("| 基线 |"));
+        assertTrue(markdown.contains("| 算法方案 |"));
         assertTrue(markdown.contains("标签重叠"));
-        assertTrue(markdown.contains("完整链路（含可信分）"));
+        assertTrue(markdown.contains("Jaccard 标签集合相似度"));
+        assertTrue(markdown.contains("改进 TF-IDF + 场景规则重排"));
     }
 
     private EvaluationBaselineVO find(com.lcj.campusreco.domain.vo.EvaluationSummaryVO summary, String code) {

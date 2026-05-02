@@ -1,6 +1,11 @@
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
+.m2/
+lcj-tmp/
+__pycache__/
+*.py[cod]
+.DS_Store
 !**/src/main/**/target/
 !**/src/test/**/target/
 

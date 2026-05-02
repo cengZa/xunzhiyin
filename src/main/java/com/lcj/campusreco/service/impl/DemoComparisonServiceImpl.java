@@ -96,7 +96,7 @@ public class DemoComparisonServiceImpl implements DemoComparisonService {
         comparison.setFullPipelineView(buildView(
                 "full_pipeline",
                 "完整链路",
-                "在兴趣相似度基础上叠加当前场景重排和可信连接分，更适合答辩展示“新算法匹配”。",
+                    "在兴趣相似度基础上叠加当前场景重排和可信连接分，更适合演示展示“新算法匹配”。",
                 fullPipelineList,
                 RecommendationScenarioMode.labelOf(normalizedMode)
         ));

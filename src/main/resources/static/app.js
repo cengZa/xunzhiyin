@@ -2,7 +2,7 @@ const state = {
   userId: 2001,
   topK: 3,
   scenarioMode: "interest_partner",
-  presentationMode: "defense",
+  presentationMode: "presentation",
   scenarioModes: "interest_partner,study_partner,club_partner",
   matrixTopKs: "3,5",
   profileTopTagCounts: "3,5",
@@ -203,28 +203,28 @@ function renderEvaluationSummary(summary) {
     </tr>
   `).join("");
 
-  const noTrust = baselines.find((item) => item.baselineCode === "full_pipeline_no_trust");
-  const withTrust = baselines.find((item) => item.baselineCode === "full_pipeline_with_trust");
-  const tagOverlap = baselines.find((item) => item.baselineCode === "tag_overlap");
+  const tagOverlap = baselines.find((item) => item.baselineCode === "a1_tag_overlap");
+  const jaccard = baselines.find((item) => item.baselineCode === "a2_jaccard_tag_similarity");
+  const fullPipeline = baselines.find((item) => item.baselineCode === "a5_improved_tfidf_with_scene_rerank");
 
   clearNode(els.baselineComparisonGrid);
   els.baselineComparisonGrid.append(
     createSimpleCard(
       "完整链路 vs 标签重叠",
-      tagOverlap && withTrust
-        ? `Precision@K 从 ${formatScore(tagOverlap.precisionAtK)} 提升到 ${formatScore(withTrust.precisionAtK)}。`
+      tagOverlap && fullPipeline
+        ? `Precision@K 从 ${formatScore(tagOverlap.precisionAtK)} 变化到 ${formatScore(fullPipeline.precisionAtK)}。`
         : "等待基线数据。"
     ),
     createSimpleCard(
-      "完整链路（含可信分）vs 无可信分",
-      noTrust && withTrust
-        ? `Precision@K 从 ${formatScore(noTrust.precisionAtK)} 变化到 ${formatScore(withTrust.precisionAtK)}。`
-        : "等待可信连接分消融数据。"
+      "Jaccard 基线",
+      jaccard
+        ? `集合相似度 NDCG@K 为 ${formatScore(jaccard.ndcgAtK)}，用于对比 TF-IDF 画像路线。`
+        : "等待 Jaccard 基线数据。"
     ),
     createSimpleCard(
       "当前结论",
-      withTrust
-        ? `当前模式 ${formatValue(summary.scenarioLabel)} 的解释覆盖率为 ${formatScore(withTrust.explanationPresenceRate)}。`
+      fullPipeline
+        ? `当前模式 ${formatValue(summary.scenarioLabel)} 的解释覆盖率为 ${formatScore(fullPipeline.explanationPresenceRate)}。`
         : "等待完整链路数据。"
     )
   );
@@ -369,7 +369,7 @@ function renderExplanation(explanation, recommendationId) {
 }
 
 function applyPresentationMode() {
-  document.body.classList.toggle("defense-mode", state.presentationMode === "defense");
+  document.body.classList.toggle("presentation-mode", state.presentationMode === "presentation");
 }
 
 function snapshotFeedbackState() {
@@ -427,7 +427,7 @@ function scenarioLabel(mode) {
 async function loadStory() {
   const story = await apiFetch(`/api/admin/demo/story?scenarioMode=${state.scenarioMode}`);
   renderStory(story);
-  addLog(`已加载 ${scenarioLabel(state.scenarioMode)} 的答辩故事线。`);
+  addLog(`已加载 ${scenarioLabel(state.scenarioMode)} 的演示故事线。`);
 }
 
 async function loadOverview() {
@@ -596,8 +596,8 @@ function bindEvents() {
   els.scenarioModes.addEventListener("input", () => {
     state.scenarioModes = els.scenarioModes.value;
   });
-  els.matrixTopKs.addEventListener("input", () => {
-    state.matrixTopKs = els.matrixTopKs.value;
+  els.matrixTopks.addEventListener("input", () => {
+    state.matrixTopKs = els.matrixTopks.value;
   });
   els.profileTopTagCounts.addEventListener("input", () => {
     state.profileTopTagCounts = els.profileTopTagCounts.value;
@@ -606,9 +606,9 @@ function bindEvents() {
     state.rerankWeightScales = els.rerankWeightScales.value;
   });
   els.presentationModeToggle.addEventListener("change", () => {
-    state.presentationMode = els.presentationModeToggle.checked ? "defense" : "debug";
+    state.presentationMode = els.presentationModeToggle.checked ? "presentation" : "debug";
     applyPresentationMode();
-    addLog(state.presentationMode === "defense" ? "已切换到答辩模式。" : "已切换到调试模式。");
+    addLog(state.presentationMode === "presentation" ? "已切换到展示模式。" : "已切换到调试模式。");
   });
 }
 

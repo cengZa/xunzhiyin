@@ -6,7 +6,7 @@
     <title>CampusReco 透明链路页</title>
     <link rel="stylesheet" href="/app.css">
 </head>
-<body class="defense-mode">
+<body class="presentation-mode">
 <div class="page-shell">
     <div class="backdrop backdrop-left"></div>
     <div class="backdrop backdrop-right"></div>
@@ -24,7 +24,7 @@
                 <a class="ghost-button" href="/">返回首页</a>
                 <label class="mode-switch">
                     <input id="pipeline-presentation-mode-toggle" type="checkbox" checked>
-                    <span>答辩模式</span>
+                    <span>展示模式</span>
                 </label>
             </div>
         </div>
@@ -42,7 +42,7 @@
             <article class="metric-card">
                 <span class="metric-label">目标</span>
                 <strong class="metric-value">过程透明化</strong>
-                <span class="metric-note">让老师看清推荐结果是如何一步一步形成的</span>
+                <span class="metric-note">让评审和用户看清推荐结果是如何一步一步形成的</span>
             </article>
         </div>
     </header>
@@ -186,7 +186,7 @@
             <div class="recommendation-list" id="pipeline-final-stage"></div>
         </section>
 
-        <section class="panel-card">
+        <section class="panel-card" id="pipeline-explanation-section">
             <div class="section-head compact">
                 <div>
                     <p class="section-kicker">Step 6.1</p>
@@ -196,15 +196,15 @@
             </div>
             <div class="explanation-panel">
                 <div class="explanation-block">
-                    <strong>当前展示解释</strong>
+                    <strong>用户可读解释</strong>
                     <p id="pipeline-explanation-primary">点击最终推荐卡片中的“查看解释对照”。</p>
                 </div>
                 <div class="explanation-block">
-                    <strong>规则依据</strong>
+                    <strong>规则依据（系统模板）</strong>
                     <p id="pipeline-explanation-rule">这里会显示规则链路直接生成的解释。</p>
                 </div>
                 <div class="explanation-block">
-                    <strong>LLM 改写解释</strong>
+                    <strong>LLM 改写解释（表达生成）</strong>
                     <p id="pipeline-explanation-llm">当智谱可用时，这里会显示基于规则证据改写后的自然语言解释。</p>
                 </div>
             </div>

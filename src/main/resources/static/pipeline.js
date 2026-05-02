@@ -2,7 +2,7 @@ const pipelineState = {
   userId: 2001,
   topK: 3,
   scenarioMode: "interest_partner",
-  presentationMode: "defense"
+  presentationMode: "presentation"
 };
 
 const pipelineEls = {
@@ -119,7 +119,7 @@ async function apiFetch(path) {
 }
 
 function applyPresentationMode() {
-  document.body.classList.toggle("defense-mode", pipelineState.presentationMode === "defense");
+  document.body.classList.toggle("presentation-mode", pipelineState.presentationMode === "presentation");
 }
 
 function renderStageCards(container, items, factory) {
@@ -286,6 +286,18 @@ async function loadPipelineExplanation(recommendationId) {
   renderSelectedExplanation(explanation, recommendationId);
 }
 
+function renderPipelineFallbackExplanation(item) {
+  renderSelectedExplanation(
+    {
+      reasonSource: "rule",
+      reasonText: item.reasonText,
+      ruleReasonText: item.reasonText,
+      evidence: item.evidence || {}
+    },
+    `pipeline-${formatValue(item.targetUserId)}`
+  );
+}
+
 function renderFinalStage(pipeline) {
   clearNode(pipelineEls.finalStage);
   const finalItems = safeArray(pipeline.finalStage);
@@ -331,7 +343,11 @@ function renderFinalStage(pipeline) {
     explanationButton.addEventListener("click", async () => {
       try {
         pipelineEls.status.textContent = "正在加载解释对照...";
-        await loadPipelineExplanation(item.recommendationId);
+        if (item.recommendationId) {
+          await loadPipelineExplanation(item.recommendationId);
+        } else {
+          renderPipelineFallbackExplanation(item);
+        }
         pipelineEls.status.textContent = "透明链路已加载";
       } catch (error) {
         pipelineEls.status.textContent = `解释加载失败：${error.message}`;
@@ -347,6 +363,8 @@ function renderFinalStage(pipeline) {
     loadPipelineExplanation(finalItems[0].recommendationId).catch(() => {
       pipelineEls.explanationSource.textContent = "默认解释加载失败";
     });
+  } else if (finalItems.length) {
+    renderPipelineFallbackExplanation(finalItems[0]);
   } else {
     pipelineEls.explanationSource.textContent = "当前没有可展示的最终推荐";
   }
@@ -400,7 +418,7 @@ function bindEvents() {
     pipelineState.scenarioMode = pipelineEls.scenarioMode.value;
   });
   pipelineEls.presentationModeToggle.addEventListener("change", () => {
-    pipelineState.presentationMode = pipelineEls.presentationModeToggle.checked ? "defense" : "debug";
+    pipelineState.presentationMode = pipelineEls.presentationModeToggle.checked ? "presentation" : "debug";
     applyPresentationMode();
   });
   pipelineEls.loadButton.addEventListener("click", async () => {

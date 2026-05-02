@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
 import tools.jackson.core.type.TypeReference;
 
@@ -33,6 +34,7 @@ public class ExplanationServiceImpl implements ExplanationService {
     private final AiExplanationClient aiExplanationClient;
     private final ExplanationTemplateBuilder explanationTemplateBuilder;
     private final ExplanationEvidenceExtractor explanationEvidenceExtractor;
+    private final Map<String, String> llmReasonCache = new ConcurrentHashMap<>();
 
     public ExplanationServiceImpl(RecommendationQueryRepository recommendationQueryRepository,
                                   RecommendationExplanationMapper recommendationExplanationMapper,
@@ -111,11 +113,19 @@ public class ExplanationServiceImpl implements ExplanationService {
         explanationVO.setEvidence(evidence);
         explanationVO.setContribution(contribution);
 
+        String scenarioMode = extractScenarioMode(evidence);
+        String cacheKey = buildLlmCacheKey(scenarioMode, ruleReasonText);
+        String cachedLlmReasonText = llmReasonCache.get(cacheKey);
+        if (cachedLlmReasonText != null && !cachedLlmReasonText.isBlank()) {
+            applyLlmReason(explanationVO, cachedLlmReasonText);
+            return explanationVO;
+        }
+
         try {
             String llmReasonText = aiExplanationClient.generateExplanation(
                     AiExplanationRequest.builder()
                             .recommendationId(entity.getRecommendationId())
-                            .scenarioMode(extractScenarioMode(evidence))
+                            .scenarioMode(scenarioMode)
                             .ruleReasonText(ruleReasonText)
                             .evidence(evidence)
                             .contribution(contribution)
@@ -124,15 +134,24 @@ public class ExplanationServiceImpl implements ExplanationService {
                             .build()
             );
             if (llmReasonText != null && !llmReasonText.isBlank()) {
-                explanationVO.setReasonText(llmReasonText);
-                explanationVO.setLlmReasonText(llmReasonText);
-                explanationVO.setReasonSource("llm");
+                llmReasonCache.put(cacheKey, llmReasonText);
+                applyLlmReason(explanationVO, llmReasonText);
             }
         } catch (Exception ignored) {
             explanationVO.setReasonText(ruleReasonText);
             explanationVO.setReasonSource("rule");
         }
         return explanationVO;
+    }
+
+    private void applyLlmReason(ExplanationVO explanationVO, String llmReasonText) {
+        explanationVO.setReasonText(llmReasonText);
+        explanationVO.setLlmReasonText(llmReasonText);
+        explanationVO.setReasonSource("llm");
+    }
+
+    private String buildLlmCacheKey(String scenarioMode, String ruleReasonText) {
+        return defaultReasonText(scenarioMode) + "|" + defaultReasonText(ruleReasonText);
     }
 
     private ExplanationVO buildFallbackExplanation(ExplanationVO explanationVO, String reasonText) {

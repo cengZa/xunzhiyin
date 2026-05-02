@@ -57,28 +57,32 @@ class EvaluationScenarioMatrixServiceImplTest {
         assertTrue(markdown.contains("| interest_partner | 3 | 5 | 1.0 |"));
     }
 
-    private EvaluationSummaryVO createSummary(int topK, String noTrustPrecision, String withTrustPrecision) {
+    private EvaluationSummaryVO createSummary(int topK, String improvedTfIdfPrecision, String fullPipelinePrecision) {
         EvaluationSummaryVO summary = new EvaluationSummaryVO();
         summary.setGeneratedAt("2026-04-20T23:50:00");
         summary.setTopK(topK);
         summary.setActiveUserCount(12);
 
-        EvaluationBaselineVO noTrust = new EvaluationBaselineVO();
-        noTrust.setBaselineCode("full_pipeline_no_trust");
-        noTrust.setBaselineName("完整链路（无可信分）");
-        noTrust.setPrecisionAtK(new BigDecimal(noTrustPrecision));
-        noTrust.setHitRateAtK(new BigDecimal("0.7500"));
-        noTrust.setExplanationPresenceRate(new BigDecimal("1.0000"));
+        EvaluationBaselineVO improvedTfIdf = new EvaluationBaselineVO();
+        improvedTfIdf.setBaselineCode("a4_improved_tfidf");
+        improvedTfIdf.setBaselineName("A4 改进 TF-IDF 画像算法");
+        improvedTfIdf.setPrecisionAtK(new BigDecimal(improvedTfIdfPrecision));
+        improvedTfIdf.setNdcgAtK(new BigDecimal("0.8000"));
+        improvedTfIdf.setHitRateAtK(new BigDecimal("0.7500"));
+        improvedTfIdf.setCoverageRate(new BigDecimal("0.6667"));
+        improvedTfIdf.setExplanationPresenceRate(new BigDecimal("1.0000"));
 
-        EvaluationBaselineVO withTrust = new EvaluationBaselineVO();
-        withTrust.setBaselineCode("full_pipeline_with_trust");
-        withTrust.setBaselineName("完整链路（含可信分）");
-        withTrust.setPrecisionAtK(new BigDecimal(withTrustPrecision));
-        withTrust.setHitRateAtK(new BigDecimal("1.0000"));
-        withTrust.setExplanationPresenceRate(new BigDecimal("1.0000"));
+        EvaluationBaselineVO fullPipeline = new EvaluationBaselineVO();
+        fullPipeline.setBaselineCode("a5_improved_tfidf_with_scene_rerank");
+        fullPipeline.setBaselineName("A5 改进 TF-IDF + 场景规则重排");
+        fullPipeline.setPrecisionAtK(new BigDecimal(fullPipelinePrecision));
+        fullPipeline.setNdcgAtK(new BigDecimal("0.9000"));
+        fullPipeline.setHitRateAtK(new BigDecimal("1.0000"));
+        fullPipeline.setCoverageRate(new BigDecimal("0.7500"));
+        fullPipeline.setExplanationPresenceRate(new BigDecimal("1.0000"));
 
-        summary.getBaselines().add(noTrust);
-        summary.getBaselines().add(withTrust);
+        summary.getBaselines().add(improvedTfIdf);
+        summary.getBaselines().add(fullPipeline);
         return summary;
     }
 }

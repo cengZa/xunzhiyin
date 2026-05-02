@@ -29,20 +29,23 @@ public class ZhipuAiExplanationClient implements AiExplanationClient {
     private final String apiKey;
     private final String model;
     private final double temperature;
+    private final int maxTokens;
     private final Duration requestTimeout;
 
     public ZhipuAiExplanationClient(
             @Value("${app.ai.explanation.enabled:true}") boolean enabled,
             @Value("${app.ai.zhipu.base-url:https://open.bigmodel.cn/api/paas/v4}") String baseUrl,
             @Value("${app.ai.zhipu.api-key:${ZAI_API_KEY:}}") String apiKey,
-            @Value("${app.ai.zhipu.model:GLM-4.7}") String model,
+            @Value("${app.ai.zhipu.model:glm-4-flash-250414}") String model,
             @Value("${app.ai.zhipu.temperature:0.2}") double temperature,
+            @Value("${app.ai.zhipu.max-tokens:220}") int maxTokens,
             @Value("${app.ai.zhipu.timeout-ms:5000}") long timeoutMs) {
         this.enabled = enabled;
         this.baseUrl = trimTrailingSlash(baseUrl);
         this.apiKey = apiKey;
         this.model = model;
         this.temperature = temperature;
+        this.maxTokens = maxTokens;
         this.requestTimeout = Duration.ofMillis(timeoutMs);
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(this.requestTimeout)
@@ -84,6 +87,8 @@ public class ZhipuAiExplanationClient implements AiExplanationClient {
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("model", model);
         payload.put("temperature", temperature);
+        payload.put("max_tokens", maxTokens);
+        payload.put("thinking", Map.of("type", "disabled"));
         payload.put("messages", List.of(
                 Map.of("role", "system", "content", buildSystemPrompt()),
                 Map.of("role", "user", "content", buildUserPrompt(request))
@@ -93,31 +98,33 @@ public class ZhipuAiExplanationClient implements AiExplanationClient {
 
     private String buildSystemPrompt() {
         return """
-                你是校园匹配推荐系统的解释助手。
-                你的任务是把结构化推荐证据改写成自然、准确、简洁的中文说明。
+                你是校园匹配推荐系统的用户解释生成助手。
+                你不参与召回、评分、排序或重排，只负责把系统已经生成的规则证据转换成用户可读解释。
                 约束：
                 1. 只能使用输入中提供的事实，不能臆造任何用户信息。
-                2. 只输出一段中文解释，不要输出 JSON，不要输出标题。
-                3. 解释要覆盖：当前场景模式、关键匹配标签、命中规则或可信信号、探索位信息（如果存在）。
-                4. 语气直接，适合本科毕业设计答辩展示。
+                2. 输出要明显区别于规则模板，不要机械复述“推荐原因”“命中了”“可信连接信号来自”等模板化措辞。
+                3. 进行解释性转述：共同标签可说明为交流基础，场景规则可说明为校园情境更接近，可信信号可说明为信息支撑更充分。
+                4. 用完整语句说明共同标签、场景规则、可信信号或探索位对用户理解推荐结果的意义。
+                5. 采用客观书面表达，不要使用“我”“我们”“我觉得”等第一人称或拟人化说法。
+                6. 只输出一段中文解释，不要输出 JSON，不要输出标题或编号。
                 """;
     }
 
     private String buildUserPrompt(AiExplanationRequest request) {
         return """
-                请基于以下推荐证据，生成一段 60 到 120 字的中文解释。
+                请基于以下规则解释生成 90 到 130 字的用户可读说明。
+                写法要求：先给出推荐结论，再说明共同标签、场景规则和可信信号分别提供了什么依据。
+                不要新增规则解释中没有出现的事实，不要改变推荐含义。
+                不要使用“推荐原因：”“命中了”等模板化开头，也不要使用“我”“我们”“我觉得”等第一人称。
+                尽量不要照抄规则解释中的长句，应把规则信号解释成用户能理解的推荐依据。
 
                 recommendationId: %s
                 scenarioMode: %s
                 规则解释: %s
-                evidenceJson: %s
-                contributionJson: %s
                 """.formatted(
                 request.getRecommendationId(),
                 nullToDash(request.getScenarioMode()),
-                nullToDash(request.getRuleReasonText()),
-                nullToDash(request.getEvidenceJson()),
-                nullToDash(request.getContributionJson())
+                nullToDash(request.getRuleReasonText())
         );
     }
 

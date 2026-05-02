@@ -131,7 +131,7 @@ public class MockDataServiceImpl implements MockDataService {
 
     private int ensureUsers() {
         List<UserEntity> users = List.of(
-                createUser(2001L, "20230001", "林舟", 2023, "Computer Science", "Engineering", "答辩主讲演示用户，偏好 Java、Spring、音乐、ACM 和羽毛球。"),
+                createUser(2001L, "20230001", "林舟", 2023, "Computer Science", "Engineering", "主讲演示用户，偏好 Java、Spring、音乐、ACM 和羽毛球。"),
                 createUser(2002L, "20230002", "柏宇", 2023, "Computer Science", "Engineering", "学习搭子第一候选，技术社团活跃，擅长 Java、Spring、ACM 与 AI 协作。"),
                 createUser(2003L, "20220003", "陈栀", 2022, "Design", "Arts", "兴趣同频候选，摄影、音乐和前端设计并重，适合展示跨专业兴趣匹配。"),
                 createUser(2004L, "20230004", "段可", 2023, "Mathematics", "Science", "兼顾 AI、志愿活动和辩论，适合展示学习与社团规则交叉命中。"),

@@ -47,7 +47,7 @@ a.ghost-button {
     text-decoration: none;
 }
 
-body.defense-mode .debug-only {
+body.presentation-mode .debug-only {
     display: none !important;
 }
 

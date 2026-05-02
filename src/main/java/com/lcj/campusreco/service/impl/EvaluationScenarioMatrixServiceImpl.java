@@ -109,8 +109,8 @@ public class EvaluationScenarioMatrixServiceImpl implements EvaluationScenarioMa
         builder.append("- TopK 集合: ").append(topKValues).append('\n');
         builder.append("- 画像 Top 标签数集合: ").append(profileTopTagCounts).append('\n');
         builder.append("- 重排权重缩放集合: ").append(rerankWeightScales).append("\n\n");
-        builder.append("| 场景模式 | TopK | 画像 Top 标签数 | 重排权重缩放 | 完整链路（无可信分）Precision@K | 完整链路（含可信分）Precision@K | Precision 增益 | HitRate | 解释覆盖率 |\n");
-        builder.append("| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n");
+        builder.append("| 场景模式 | TopK | 画像 Top 标签数 | 重排权重缩放 | 改进 TF-IDF Precision@K | 场景重排 Precision@K | Precision 增益 | 场景重排 NDCG@K | 覆盖率 | 解释覆盖率 |\n");
+        builder.append("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n");
         for (ScenarioRow row : rows) {
             builder.append("| ")
                     .append(row.scenarioMode)
@@ -121,15 +121,17 @@ public class EvaluationScenarioMatrixServiceImpl implements EvaluationScenarioMa
                     .append(" | ")
                     .append(formatScale(row.rerankWeightScale))
                     .append(" | ")
-                    .append(format(row.noTrustPrecision))
+                    .append(format(row.improvedTfIdfPrecision))
                     .append(" | ")
-                    .append(format(row.withTrustPrecision))
+                    .append(format(row.fullPipelinePrecision))
                     .append(" | ")
                     .append(format(row.precisionGain))
                     .append(" | ")
-                    .append(format(row.withTrustHitRate))
+                    .append(format(row.fullPipelineNdcg))
                     .append(" | ")
-                    .append(format(row.withTrustExplanationRate))
+                    .append(format(row.fullPipelineCoverageRate))
+                    .append(" | ")
+                    .append(format(row.fullPipelineExplanationRate))
                     .append(" |\n");
         }
         return builder.toString();
@@ -190,30 +192,32 @@ public class EvaluationScenarioMatrixServiceImpl implements EvaluationScenarioMa
                                int topK,
                                int profileTopTagCount,
                                BigDecimal rerankWeightScale,
-                               BigDecimal noTrustPrecision,
-                               BigDecimal withTrustPrecision,
+                               BigDecimal improvedTfIdfPrecision,
+                               BigDecimal fullPipelinePrecision,
                                BigDecimal precisionGain,
-                               BigDecimal withTrustHitRate,
-                               BigDecimal withTrustExplanationRate) {
+                               BigDecimal fullPipelineNdcg,
+                               BigDecimal fullPipelineCoverageRate,
+                               BigDecimal fullPipelineExplanationRate) {
 
         private static ScenarioRow from(String scenarioMode,
                                         EvaluationSummaryVO summary,
                                         Integer profileTopTagCount,
                                         BigDecimal rerankWeightScale) {
-            EvaluationBaselineVO noTrust = findBaseline(summary, "full_pipeline_no_trust");
-            EvaluationBaselineVO withTrust = findBaseline(summary, "full_pipeline_with_trust");
-            BigDecimal noTrustPrecision = valueOf(noTrust == null ? null : noTrust.getPrecisionAtK());
-            BigDecimal withTrustPrecision = valueOf(withTrust == null ? null : withTrust.getPrecisionAtK());
+            EvaluationBaselineVO improvedTfIdf = findBaseline(summary, "a4_improved_tfidf");
+            EvaluationBaselineVO fullPipeline = findBaseline(summary, "a5_improved_tfidf_with_scene_rerank");
+            BigDecimal improvedTfIdfPrecision = valueOf(improvedTfIdf == null ? null : improvedTfIdf.getPrecisionAtK());
+            BigDecimal fullPipelinePrecision = valueOf(fullPipeline == null ? null : fullPipeline.getPrecisionAtK());
             return new ScenarioRow(
                     RecommendationScenarioMode.normalize(scenarioMode),
                     summary.getTopK(),
                     profileTopTagCount,
                     rerankWeightScale,
-                    noTrustPrecision,
-                    withTrustPrecision,
-                    withTrustPrecision.subtract(noTrustPrecision),
-                    valueOf(withTrust == null ? null : withTrust.getHitRateAtK()),
-                    valueOf(withTrust == null ? null : withTrust.getExplanationPresenceRate())
+                    improvedTfIdfPrecision,
+                    fullPipelinePrecision,
+                    fullPipelinePrecision.subtract(improvedTfIdfPrecision),
+                    valueOf(fullPipeline == null ? null : fullPipeline.getNdcgAtK()),
+                    valueOf(fullPipeline == null ? null : fullPipeline.getCoverageRate()),
+                    valueOf(fullPipeline == null ? null : fullPipeline.getExplanationPresenceRate())
             );
         }
 

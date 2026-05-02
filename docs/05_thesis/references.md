@@ -1,40 +1,63 @@
 # 参考文献
 
-本页记录当前论文章节已经使用的参考文献。最终 Word 论文中应按学校模板统一转换为 GB/T 7714 顺序编码格式，并保持正文引用编号与文后列表顺序一致。
+[1] Tang J, Hu X, Liu H. Social recommendation: a review [J]. Social Network Analysis and Mining, 2013, 3(4): 1113-1133.
 
-[1] Roy D, Dutta M. A systematic review and research perspective on recommender systems[J]. Journal of Big Data, 2022, 9(1): 59. DOI: 10.1186/s40537-022-00592-5.
+[2] Liben-Nowell D, Kleinberg J. The link-prediction problem for social networks [J]. Journal of the American Society for Information Science and Technology, 2007, 58(7): 1019-1031.
 
-[2] 余江龙, 宋腾飞, 汪德超, 等. 个性化推荐系统研究方法综述[J]. 电脑知识与技术, 2024, 20(10): 46-49. DOI: 10.14004/j.cnki.ckt.2024.0483.
+[3] Guy I, Ronen I, Wilcox E. Do you know? Recommending people to invite into your social network [C]// Proceedings of the 13th International Conference on Intelligent User Interfaces. New York: ACM, 2009: 77-86.
 
-[3] Lops P, de Gemmis M, Semeraro G. Content-based recommender systems: State of the art and trends[M]//Ricci F, Rokach L, Shapira B, Kantor P B. Recommender Systems Handbook. Boston: Springer, 2011: 73-105. DOI: 10.1007/978-0-387-85820-3_3.
+[4] Drachsler H, Verbert K, Santos O C, Manouselis N. Panorama of recommender systems to support learning [M]// Ricci F, Rokach L, Shapira B. Recommender Systems Handbook. 2nd ed. Boston: Springer, 2015: 421-451.
 
-[4] Salton G, Buckley C. Term-weighting approaches in automatic text retrieval[J]. Information Processing & Management, 1988, 24(5): 513-523. DOI: 10.1016/0306-4573(88)90021-0.
+[5] Klašnja-Milićević A, Ivanović M, Nanopoulos A. Recommender systems in e-learning environments: a survey of the state-of-the-art and possible extensions [J]. Artificial Intelligence Review, 2015, 44(4): 571-604.
 
-[5] 白雨珂, 卢胜男. 基于改进的TF-IDF标签权重算法的电商用户画像构建[J]. 信息技术与信息化, 2024(8): 48-51. DOI: 10.3969/j.issn.1672-9528.2024.08.011.
+[6] 彭舰, 王屯屯, 陈瑜, 等. 基于跨平台的在线社交网络用户推荐研究 [J]. 通信学报, 2018, 39(3): 147-158.
 
-[6] Resnick P, Iacovou N, Suchak M, Bergstrom P, Riedl J. GroupLens: An open architecture for collaborative filtering of netnews[C]//Proceedings of the 1994 ACM Conference on Computer Supported Cooperative Work. Chapel Hill: ACM, 1994: 175-186. DOI: 10.1145/192844.192905.
+[7] 刘芳, 田枫, 李欣, 等. 融入学习者模型在线学习资源协同过滤推荐方法 [J]. 智能系统学报, 2021, 16(6): 1117-1125.
 
-[7] Hu Y, Koren Y, Volinsky C. Collaborative filtering for implicit feedback datasets[C]//Proceedings of the 8th IEEE International Conference on Data Mining. Pisa: IEEE, 2008. DOI: 10.1109/ICDM.2008.22.
+[8] 王刚, 郭雪梅. 社交网络环境下基于用户响应的推荐方法研究 [J]. 情报工程, 2019, 5(1): 37-44.
 
-[8] Koren Y, Bell R, Volinsky C. Matrix factorization techniques for recommender systems[J]. Computer, 2009, 42(8): 30-37. DOI: 10.1109/MC.2009.263.
+[9] Roy D, Dutta M. A systematic review and research perspective on recommender systems [J]. Journal of Big Data, 2022, 9(1): 59.
 
-[9] 俞军. 基于协同过滤的推荐系统方法研究[D]. 大连: 大连交通大学, 2024. DOI: 10.26990/d.cnki.gsltc.2024.000192.
+[10] 余江龙, 宋腾飞, 汪德超, 等. 个性化推荐系统研究方法综述 [J]. 电脑知识与技术, 2024, 20(10): 46-49.
 
-[10] 刘珣. 基于协同过滤算法的书籍推荐系统的研究与实现[D]. 大连: 大连交通大学, 2024. DOI: 10.26990/d.cnki.gsltc.2024.000225.
+[11] Lops P, de Gemmis M, Semeraro G. Content-based recommender systems: State of the art and trends [M]// Ricci F, Rokach L, Shapira B, Kantor P B. Recommender Systems Handbook. Boston: Springer, 2011: 73-105.
 
-[11] 邢艳芳. 基于协同过滤算法的电影推荐系统设计与实现[J]. 信息技术, 2025(5): 9-14.
+[12] Salton G, Buckley C. Term-weighting approaches in automatic text retrieval [J]. Information Processing & Management, 1988, 24(5): 513-523.
 
-[12] Zhang Y, Chen X. Explainable recommendation: A survey and new perspectives[J]. Foundations and Trends in Information Retrieval, 2020, 14(1): 1-101. DOI: 10.1561/1500000066.
+[13] 白雨珂, 卢胜男. 基于改进的 TF-IDF 标签权重算法的电商用户画像构建 [J]. 信息技术与信息化, 2024(8): 48-51.
 
-[13] 吕学强, 王夏雨, 马登豪. 面向推荐系统的用户兴趣建模综述[J]. 计算机工程与应用, 2025, 61(21): 15. DOI: 10.3778/j.issn.1002-8331.2501-0190.
+[14] Resnick P, Iacovou N, Suchak M, Bergstrom P, Riedl J. GroupLens: An open architecture for collaborative filtering of netnews [C]// Proceedings of the 1994 ACM Conference on Computer Supported Cooperative Work. Chapel Hill: ACM, 1994: 175-186.
 
-[14] 史鸿旭, 刘艺, 刘坤. 基于大语言模型的推荐系统综述[J/OL]. 计算机科学, 2026-02-05. https://link.cnki.net/urlid/50.1075.tp.20260205.0906.004.
+[15] Hu Y, Koren Y, Volinsky C. Collaborative filtering for implicit feedback datasets [C]// Proceedings of the 8th IEEE International Conference on Data Mining. Pisa: IEEE, 2008: 263-272.
 
-[15] Burke R. Hybrid recommender systems: Survey and experiments[J]. User Modeling and User-Adapted Interaction, 2002, 12(4): 331-370. DOI: 10.1023/A:1021240730564.
+[16] Koren Y, Bell R, Volinsky C. Matrix factorization techniques for recommender systems [J]. Computer, 2009, 42(8): 30-37.
 
-## 使用说明
+[17] 俞军. 基于协同过滤的推荐系统方法研究 [D]. 大连: 大连交通大学, 2024.
 
-- 第 2 章目前使用了 [1] 至 [15]，编号按正文首次出现顺序排列。
-- `../参考文献/` 中保存了本地 PDF 原文和核验状态。
-- [6]、[8]、[15] 为补充的推荐系统经典文献，当前仓库未保存 PDF 原文；Word 定稿前如学校要求，可再补原文或 DOI 核验截图。
-- 不要在正文中引用未列入本页的文献。
+[18] 刘珣. 基于协同过滤算法的书籍推荐系统的研究与实现 [D]. 大连: 大连交通大学, 2024.
+
+[19] 邢艳芳. 基于协同过滤算法的电影推荐系统设计与实现 [J]. 信息技术, 2025(5): 9-14.
+
+[20] Zhang Y, Chen X. Explainable recommendation: A survey and new perspectives [J]. Foundations and Trends in Information Retrieval, 2020, 14(1): 1-101.
+
+[21] 吕学强, 王夏雨, 马登豪. 面向推荐系统的用户兴趣建模综述 [J]. 计算机工程与应用, 2025, 61(21): 15.
+
+[22] 史鸿旭, 刘艺, 刘坤. 基于大语言模型的推荐系统综述 [J/OL]. 计算机科学, 2026-02-05.
+
+[23] Burke R. Hybrid recommender systems: Survey and experiments [J]. User Modeling and User-Adapted Interaction, 2002, 12(4): 331-370.
+
+[24] Adomavicius G, Tuzhilin A. Toward the next generation of recommender systems: a survey of the state-of-the-art and possible extensions [J]. IEEE Transactions on Knowledge and Data Engineering, 2005, 17(6): 734-749.
+
+[25] Bobadilla J, Ortega F, Hernando A, Gutiérrez A. Recommender systems survey [J]. Knowledge-Based Systems, 2013, 46: 109-132.
+
+[26] Konstan J A, Riedl J. Recommender systems: from algorithms to user experience [J]. User Modeling and User-Adapted Interaction, 2012, 22(1-2): 101-123.
+
+[27] Pu P, Chen L, Hu R. Evaluating recommender systems from the user's perspective: survey of the state of the art [J]. User Modeling and User-Adapted Interaction, 2012, 22(4-5): 317-355.
+
+[28] Ma H, King I, Lyu M R. Learning to recommend with social trust ensemble [C]// Proceedings of the 32nd International ACM SIGIR Conference on Research and Development in Information Retrieval. New York: ACM, 2009: 203-210.
+
+[29] Guo G, Zhang J, Yorke-Smith N. TrustSVD: collaborative filtering with both the explicit and implicit influence of user trust and of item ratings [C]// Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence. Palo Alto: AAAI Press, 2015: 123-129.
+
+[30] Palomares I, Porcel C, Pizzato L, Guy I, Herrera-Viedma E. Reciprocal recommender systems: analysis of state-of-art literature, challenges and opportunities towards social recommendation [J]. Information Fusion, 2021, 69: 103-127.
+
+[31] Wu L, Zheng Z, Qiu Z, Wang H, Gu H, Shen T, Qin C, Zhu C, Zhu H, Liu Q, Xiong H, Chen E. A survey on large language models for recommendation [J/OL]. arXiv, 2023.

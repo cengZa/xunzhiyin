@@ -201,7 +201,7 @@ flowchart TB
     Trust["可信连接原因<br/>TrustScoreResult"]
     Extractor["ExplanationEvidenceExtractor<br/>证据提取"]
     Template["ExplanationTemplateBuilder<br/>规则解释模板"]
-    AI["AiExplanationClient<br/>可选 LLM 润色"]
+    AI["AiExplanationClient<br/>可选解释改写"]
     Fallback["规则解释回退"]
     VO["ExplanationVO<br/>解释结果"]
     Store[("recommendation_explanation<br/>解释证据持久化")]
@@ -265,7 +265,7 @@ sequenceDiagram
 | 重排服务 | `RerankServiceImpl` | 应用年级、专业、社团等校园规则 |
 | 可信连接服务 | `TrustScoreServiceImpl` | 根据资料完整度和匹配证据计算可信连接分 |
 | 探索服务 | `ExplorationServiceImpl` | 在特定场景中保留轻量探索位 |
-| 解释服务 | `ExplanationServiceImpl` | 提取解释证据、生成规则解释、处理 LLM 润色回退 |
+| 解释服务 | `ExplanationServiceImpl` | 提取解释证据、生成规则解释、处理外部解释改写回退 |
 | 反馈服务 | `FeedbackServiceImpl` | 保存用户反馈并触发画像轻量更新 |
 | 推荐编排服务 | `RecommendationServiceImpl` | 串联画像、召回、排序、重排、解释和持久化流程 |
 

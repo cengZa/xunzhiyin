@@ -59,7 +59,10 @@ class EvaluationMatrixServiceImplTest {
         fullPipeline.setBaselineCode("full_pipeline");
         fullPipeline.setBaselineName("完整链路");
         fullPipeline.setPrecisionAtK(new java.math.BigDecimal(precisionAtK));
+        fullPipeline.setNdcgAtK(new java.math.BigDecimal("0.9500"));
         fullPipeline.setHitRateAtK(new java.math.BigDecimal("1.0000"));
+        fullPipeline.setCoverageRate(new java.math.BigDecimal("0.7500"));
+        fullPipeline.setAverageResponseTimeMs(new java.math.BigDecimal("3.2000"));
         fullPipeline.setExplanationPresenceRate(new java.math.BigDecimal("1.0000"));
         fullPipeline.setAverageRecallCandidateCount(new java.math.BigDecimal("7.6667"));
         fullPipeline.setAverageTopKReturnCount(new java.math.BigDecimal(topK));

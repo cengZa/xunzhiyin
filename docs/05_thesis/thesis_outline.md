@@ -44,8 +44,8 @@ ABSTRACT
 | 4 校园社交匹配推荐系统概要设计 | `chapter4_design.md`, `chapter4_diagram_drafts.md` | 已补系统体系结构和 ER 图底稿 |
 | 5 校园社交匹配推荐系统详细设计与实现 | `chapter5_implementation.md`, `chapter5_diagram_drafts.md` | 已合并为工程型详细设计与实现章节，并补核心类图与时序图底稿 |
 | 6 系统测试 | `chapter6_test.md` | 已强化测试用例表、测试结果表和离线评估 |
-| 7 总结与展望 | `chapter7_conclusion.md` | 已压缩重复总结并修正为第 7 章编号 |
-| 参考文献 | `references.md` | 已扩充到 15 篇并保证正文实际引用 |
+| 7 总结与展望 | `chapter7_conclusion.md` | 已按结论章要求保留全文总结和系统展望两部分 |
+| 参考文献 | `references.md` | 已扩充到 31 篇并保证正文实际引用 |
 | 致谢 | Word 中补写 | 由作者补个性化内容 |
 
 ## 3. 当前阶段顺序

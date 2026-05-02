@@ -12,6 +12,9 @@ public class EvaluationBaselineVO {
     private BigDecimal averageRecallCandidateCount;
     private BigDecimal averageTopKReturnCount;
     private BigDecimal precisionAtK;
+    private BigDecimal ndcgAtK;
+    private BigDecimal coverageRate;
     private BigDecimal hitRateAtK;
     private BigDecimal explanationPresenceRate;
+    private BigDecimal averageResponseTimeMs;
 }

@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.lcj.campusreco.domain.entity.RecommendationExplanationEntity;
@@ -101,5 +103,32 @@ class ExplanationServiceImplTest {
         assertEquals("规则解释", explanation.getReasonText());
         assertEquals("规则解释", explanation.getRuleReasonText());
         assertEquals("rule", explanation.getReasonSource());
+    }
+
+    @Test
+    void getByRecommendationIdReusesLlmReasonForSameRuleExplanation() {
+        RecommendationExplanationEntity first = new RecommendationExplanationEntity();
+        first.setRecommendationId(104L);
+        first.setReasonText("规则解释");
+        first.setEvidenceJson("{\"scenarioMode\":\"interest_partner\"}");
+        first.setContributionJson("[]");
+
+        RecommendationExplanationEntity second = new RecommendationExplanationEntity();
+        second.setRecommendationId(105L);
+        second.setReasonText("规则解释");
+        second.setEvidenceJson("{\"scenarioMode\":\"interest_partner\"}");
+        second.setContributionJson("[]");
+
+        when(recommendationQueryRepository.getExplanationByRecommendationId(104L)).thenReturn(first);
+        when(recommendationQueryRepository.getExplanationByRecommendationId(105L)).thenReturn(second);
+        when(aiExplanationClient.generateExplanation(any())).thenReturn("LLM 改写解释");
+
+        var firstExplanation = explanationService.getByRecommendationId(104L);
+        var secondExplanation = explanationService.getByRecommendationId(105L);
+
+        assertEquals("LLM 改写解释", firstExplanation.getReasonText());
+        assertEquals("LLM 改写解释", secondExplanation.getReasonText());
+        assertEquals("llm", secondExplanation.getReasonSource());
+        verify(aiExplanationClient, times(1)).generateExplanation(any());
     }
 }

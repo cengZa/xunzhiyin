@@ -3,12 +3,18 @@ package com.lcj.campusreco.service.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.lcj.campusreco.config.RecommendationTuningContext;
+import com.lcj.campusreco.domain.entity.RecommendationResultEntity;
 import com.lcj.campusreco.domain.entity.TagEntity;
 import com.lcj.campusreco.domain.entity.UserEntity;
 import com.lcj.campusreco.domain.entity.UserTagRelationEntity;
@@ -18,6 +24,7 @@ import com.lcj.campusreco.domain.model.TagWeightModel;
 import com.lcj.campusreco.domain.model.UserProfileModel;
 import com.lcj.campusreco.domain.vo.ExplanationVO;
 import com.lcj.campusreco.infra.redis.RecallIndexRepository;
+import com.lcj.campusreco.mapper.RecommendationResultMapper;
 import com.lcj.campusreco.mapper.UserFeedbackMapper;
 import com.lcj.campusreco.mapper.UserTagRelationMapper;
 import com.lcj.campusreco.service.ExplorationService;
@@ -56,6 +63,8 @@ class DemoPipelineServiceImplTest {
     @Mock
     private TagService tagService;
     @Mock
+    private RecommendationResultMapper recommendationResultMapper;
+    @Mock
     private UserTagRelationMapper userTagRelationMapper;
     @Mock
     private UserFeedbackMapper userFeedbackMapper;
@@ -74,6 +83,7 @@ class DemoPipelineServiceImplTest {
                 userService,
                 tagService,
                 new RecommendationTuningContext(5, BigDecimal.ONE, "study_partner", true),
+                recommendationResultMapper,
                 userTagRelationMapper,
                 userFeedbackMapper,
                 recallIndexRepository
@@ -170,6 +180,11 @@ class DemoPipelineServiceImplTest {
         when(rankingService.rank(eq(2001L), anySet())).thenReturn(List.of(ranked, explored));
         when(rerankService.rerank(eq(2001L), anyList())).thenReturn(List.of(ranked, explored));
         when(explorationService.apply(eq(2001L), anyList(), eq(3), eq("study_partner"))).thenReturn(List.of(ranked, explored));
+        doAnswer(invocation -> {
+            RecommendationResultEntity entity = invocation.getArgument(0);
+            entity.setId(entity.getTargetUserId() == 2002L ? 510L : 511L);
+            return 1;
+        }).when(recommendationResultMapper).insert(any(RecommendationResultEntity.class));
         when(explanationService.generate(ranked)).thenReturn(explanationVO);
         when(explanationService.generate(explored)).thenReturn(explanationVO);
 
@@ -192,6 +207,10 @@ class DemoPipelineServiceImplTest {
         assertEquals("兴趣分 + 场景分 + 可信分 × trustWeight", result.getRerankStage().get(0).get("finalScoreFormulaLabel"));
         assertTrue(result.getRerankStage().get(0).containsKey("trustBreakdown"));
         assertTrue(result.getRerankStage().get(0).containsKey("ruleDetails"));
+        assertEquals("510", result.getFinalStage().get(0).get("recommendationId"));
+        assertEquals("511", result.getFinalStage().get(1).get("recommendationId"));
         assertTrue(Boolean.TRUE.equals(result.getFinalStage().get(1).get("exploration")));
+        verify(recommendationResultMapper, times(2)).insert(any(RecommendationResultEntity.class));
+        verify(explanationService).batchSaveExplanation(anyList(), anyMap());
     }
 }

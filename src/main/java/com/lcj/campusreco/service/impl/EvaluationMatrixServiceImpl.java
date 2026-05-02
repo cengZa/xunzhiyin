@@ -80,8 +80,8 @@ public class EvaluationMatrixServiceImpl implements EvaluationMatrixService {
         builder.append("# 推荐评估矩阵\n\n");
         builder.append("- 实验数量: ").append(topKValues.size()).append('\n');
         builder.append("- TopK 集合: ").append(topKValues).append("\n\n");
-        builder.append("| TopK | 活跃用户数 | 基线 | Precision@K | HitRate@K | 解释覆盖率 |\n");
-        builder.append("| --- | --- | --- | --- | --- | --- |\n");
+        builder.append("| TopK | 活跃用户数 | 算法方案 | Precision@K | NDCG@K | HitRate@K | 覆盖率 | 平均响应时间/ms | 解释覆盖率 |\n");
+        builder.append("| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n");
 
         for (EvaluationSummaryVO summary : summaries) {
             for (EvaluationBaselineVO baseline : summary.getBaselines()) {
@@ -94,7 +94,13 @@ public class EvaluationMatrixServiceImpl implements EvaluationMatrixService {
                         .append(" | ")
                         .append(formatMetric(baseline.getPrecisionAtK()))
                         .append(" | ")
+                        .append(formatMetric(baseline.getNdcgAtK()))
+                        .append(" | ")
                         .append(formatMetric(baseline.getHitRateAtK()))
+                        .append(" | ")
+                        .append(formatMetric(baseline.getCoverageRate()))
+                        .append(" | ")
+                        .append(formatMetric(baseline.getAverageResponseTimeMs()))
                         .append(" | ")
                         .append(formatMetric(baseline.getExplanationPresenceRate()))
                         .append(" |\n");

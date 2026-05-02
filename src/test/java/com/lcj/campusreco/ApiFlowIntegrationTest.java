@@ -47,7 +47,7 @@ class ApiFlowIntegrationTest {
 
         String html = indexResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
         assertThat(html).contains("CampusReco 校园匹配首页");
-        assertThat(html).contains("答辩故事线");
+        assertThat(html).contains("演示故事线");
         assertThat(html).contains("标签重叠基线 vs 完整链路");
         assertThat(html).contains("反馈前后变化");
         assertThat(html).contains("演示侧栏");
@@ -128,7 +128,15 @@ class ApiFlowIntegrationTest {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.topK").value(3))
                 .andExpect(jsonPath("$.data.scenarioMode").isNotEmpty())
-                .andExpect(jsonPath("$.data.baselines.length()").value(4));
+                .andExpect(jsonPath("$.data.baselines.length()").value(5));
+
+        mockMvc.perform(post("/api/admin/evaluation/experiments/export")
+                        .param("topKs", "3,5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.fileName").value("recommendation-evaluation-matrix-latest.md"))
+                .andExpect(jsonPath("$.data.experimentCount").value(2));
+        assertThat(Files.exists(Path.of("target/integration-generated-docs/recommendation-evaluation-matrix-latest.md"))).isTrue();
 
         mockMvc.perform(post("/api/admin/evaluation/scenarios/export")
                         .param("scenarioModes", "interest_partner,study_partner")

@@ -3,6 +3,7 @@ package com.lcj.campusreco.service.impl;
 import com.lcj.campusreco.common.constant.RecommendationScenarioMode;
 import com.lcj.campusreco.common.constant.FeedbackType;
 import com.lcj.campusreco.config.RecommendationTuningContext;
+import com.lcj.campusreco.domain.entity.RecommendationResultEntity;
 import com.lcj.campusreco.domain.entity.UserFeedbackEntity;
 import com.lcj.campusreco.domain.entity.UserTagRelationEntity;
 import com.lcj.campusreco.domain.entity.TagEntity;
@@ -15,6 +16,7 @@ import com.lcj.campusreco.domain.model.UserProfileModel;
 import com.lcj.campusreco.domain.vo.DemoPipelineVO;
 import com.lcj.campusreco.domain.vo.ExplanationVO;
 import com.lcj.campusreco.infra.redis.RecallIndexRepository;
+import com.lcj.campusreco.mapper.RecommendationResultMapper;
 import com.lcj.campusreco.mapper.UserFeedbackMapper;
 import com.lcj.campusreco.mapper.UserTagRelationMapper;
 import com.lcj.campusreco.service.DemoPipelineService;
@@ -37,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +63,7 @@ public class DemoPipelineServiceImpl implements DemoPipelineService {
     private final UserService userService;
     private final TagService tagService;
     private final RecommendationTuningContext tuningContext;
+    private final RecommendationResultMapper recommendationResultMapper;
     private final UserTagRelationMapper userTagRelationMapper;
     private final UserFeedbackMapper userFeedbackMapper;
     private final RecallIndexRepository recallIndexRepository;
@@ -73,6 +77,7 @@ public class DemoPipelineServiceImpl implements DemoPipelineService {
                                    UserService userService,
                                    TagService tagService,
                                    RecommendationTuningContext tuningContext,
+                                   RecommendationResultMapper recommendationResultMapper,
                                    UserTagRelationMapper userTagRelationMapper,
                                    UserFeedbackMapper userFeedbackMapper,
                                    RecallIndexRepository recallIndexRepository) {
@@ -85,6 +90,7 @@ public class DemoPipelineServiceImpl implements DemoPipelineService {
         this.userService = userService;
         this.tagService = tagService;
         this.tuningContext = tuningContext;
+        this.recommendationResultMapper = recommendationResultMapper;
         this.userTagRelationMapper = userTagRelationMapper;
         this.userFeedbackMapper = userFeedbackMapper;
         this.recallIndexRepository = recallIndexRepository;
@@ -141,7 +147,9 @@ public class DemoPipelineServiceImpl implements DemoPipelineService {
         pipeline.setRecallStage(buildRecallStage(rankingList, userCache, candidateProfiles, profileModel, recallSourceMap));
         pipeline.setRankingStage(buildRankingStage(rankingList, userCache, candidateProfiles, profileModel));
         pipeline.setRerankStage(buildRerankStage(rerankedList, userCache));
-        pipeline.setFinalStage(buildFinalStage(finalList, userCache));
+        Map<Long, Long> recommendationIdMap = saveRecommendationResults(userId, UUID.randomUUID().toString(), finalList);
+        explanationService.batchSaveExplanation(finalList, recommendationIdMap);
+        pipeline.setFinalStage(buildFinalStage(finalList, userCache, recommendationIdMap));
         return pipeline;
     }
 
@@ -307,12 +315,15 @@ public class DemoPipelineServiceImpl implements DemoPipelineService {
     }
 
     private List<Map<String, Object>> buildFinalStage(List<RankingCandidateModel> finalList,
-                                                      Map<Long, UserEntity> userCache) {
+                                                      Map<Long, UserEntity> userCache,
+                                                      Map<Long, Long> recommendationIdMap) {
         int[] rankNo = {1};
         return finalList.stream()
                 .map(candidate -> {
                     Map<String, Object> item = buildCandidateStageItem(candidate, userCache, true, true);
                     item.put("rankNo", rankNo[0]++);
+                    Long recommendationId = recommendationIdMap.get(candidate.getTargetUserId());
+                    item.put("recommendationId", recommendationId == null ? null : String.valueOf(recommendationId));
                     ExplanationVO explanationVO = explanationService.generate(candidate);
                     item.put("reasonText", explanationVO.getReasonText());
                     item.put("evidence", explanationVO.getEvidence());
@@ -320,6 +331,28 @@ public class DemoPipelineServiceImpl implements DemoPipelineService {
                     return item;
                 })
                 .toList();
+    }
+
+    private Map<Long, Long> saveRecommendationResults(Long requestUserId,
+                                                      String traceId,
+                                                      List<RankingCandidateModel> finalList) {
+        Map<Long, Long> recommendationIdMap = new LinkedHashMap<>();
+        int rankNo = 1;
+        for (RankingCandidateModel candidate : finalList) {
+            RecommendationResultEntity entity = new RecommendationResultEntity();
+            entity.setRequestUserId(requestUserId);
+            entity.setTargetUserId(candidate.getTargetUserId());
+            entity.setRecallScore(candidate.getRecallScore());
+            entity.setRankScore(candidate.getRankScore());
+            entity.setRerankScore(candidate.getRerankScore());
+            entity.setFinalScore(candidate.getFinalScore());
+            entity.setRankNo(rankNo++);
+            entity.setRequestTraceId(traceId);
+            entity.setCreatedAt(LocalDateTime.now());
+            recommendationResultMapper.insert(entity);
+            recommendationIdMap.put(candidate.getTargetUserId(), entity.getId());
+        }
+        return recommendationIdMap;
     }
 
     private Map<String, Object> buildCandidateStageItem(RankingCandidateModel candidate,
