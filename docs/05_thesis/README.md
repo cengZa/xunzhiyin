@@ -52,6 +52,7 @@
 - `chapter3_diagram_drafts.md`: 已补第 3 章用例图、需求闭环图、功能需求表和非功能需求表底稿。
 - `chapter4_diagram_drafts.md`: 已补第 4 章系统总体架构图和数据库 ER 图的可绘制底稿。
 - `chapter5_diagram_drafts.md`: 已补第 5 章推荐主链路流程图、核心类图、画像时序图、推荐时序图、解释证据流图和反馈时序图底稿。
+- `aigc_detection_review_2026-05-11.md`: 记录 2026-05-11 维普 AIGC 检测报告结论、章节风险分布和后续降风险修改顺序；原始报告位于 `../generated/aigc_reports/2026-05-11/`。
 
 ## 使用约束
 - 论文表述必须回链到仓库内已实现、已验证的事实。
