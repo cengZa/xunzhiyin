@@ -8,6 +8,7 @@ import com.lcj.campusreco.domain.vo.EvaluationExportVO;
 import com.lcj.campusreco.domain.vo.EvaluationMatrixExportVO;
 import com.lcj.campusreco.domain.vo.EvaluationScenarioExportVO;
 import com.lcj.campusreco.domain.vo.EvaluationSummaryVO;
+import com.lcj.campusreco.domain.vo.ScalabilityEvaluationExportVO;
 import com.lcj.campusreco.service.DemoComparisonService;
 import com.lcj.campusreco.service.DemoPipelineService;
 import com.lcj.campusreco.service.DemoStoryService;
@@ -16,6 +17,7 @@ import com.lcj.campusreco.service.EvaluationScenarioMatrixService;
 import com.lcj.campusreco.service.EvaluationService;
 import com.lcj.campusreco.service.EvaluationSnapshotService;
 import com.lcj.campusreco.service.MockDataService;
+import com.lcj.campusreco.service.ScalabilityEvaluationService;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,7 @@ public class AdminController {
     private final EvaluationSnapshotService evaluationSnapshotService;
     private final EvaluationMatrixService evaluationMatrixService;
     private final EvaluationScenarioMatrixService evaluationScenarioMatrixService;
+    private final ScalabilityEvaluationService scalabilityEvaluationService;
 
     public AdminController(MockDataService mockDataService,
                            DemoComparisonService demoComparisonService,
@@ -45,7 +48,8 @@ public class AdminController {
                            EvaluationService evaluationService,
                            EvaluationSnapshotService evaluationSnapshotService,
                            EvaluationMatrixService evaluationMatrixService,
-                           EvaluationScenarioMatrixService evaluationScenarioMatrixService) {
+                           EvaluationScenarioMatrixService evaluationScenarioMatrixService,
+                           ScalabilityEvaluationService scalabilityEvaluationService) {
         this.mockDataService = mockDataService;
         this.demoComparisonService = demoComparisonService;
         this.demoPipelineService = demoPipelineService;
@@ -54,6 +58,7 @@ public class AdminController {
         this.evaluationSnapshotService = evaluationSnapshotService;
         this.evaluationMatrixService = evaluationMatrixService;
         this.evaluationScenarioMatrixService = evaluationScenarioMatrixService;
+        this.scalabilityEvaluationService = scalabilityEvaluationService;
     }
 
     @PostMapping("/mock/init")
@@ -126,6 +131,16 @@ public class AdminController {
                         profileTopTagCounts,
                         rerankWeightScales
                 )
+        );
+    }
+
+    @PostMapping("/evaluation/scalability/export")
+    public ApiResponse<ScalabilityEvaluationExportVO> exportScalabilityMatrix(
+            @RequestParam(required = false) List<Integer> userCounts,
+            @RequestParam(defaultValue = "5") Integer topK,
+            @RequestParam(defaultValue = "interest_partner") String scenarioMode) {
+        return ApiResponse.success(
+                scalabilityEvaluationService.exportScalabilityMatrix(userCounts, topK, scenarioMode)
         );
     }
 }

@@ -150,6 +150,17 @@ class ApiFlowIntegrationTest {
                 .andExpect(jsonPath("$.data.scenarioModes.length()").value(2));
         assertThat(Files.exists(Path.of("target/integration-generated-docs/recommendation-scenario-matrix-latest.md"))).isTrue();
 
+        mockMvc.perform(post("/api/admin/evaluation/scalability/export")
+                        .param("userCounts", "100,300,500")
+                        .param("topK", "5")
+                        .param("scenarioMode", "study_partner"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.fileName").value("recommendation-scalability-matrix-latest.md"))
+                .andExpect(jsonPath("$.data.experimentCount").value(3))
+                .andExpect(jsonPath("$.data.userCounts.length()").value(3));
+        assertThat(Files.exists(Path.of("target/integration-generated-docs/recommendation-scalability-matrix-latest.md"))).isTrue();
+
         MvcResult recommendationResult = mockMvc.perform(get("/api/recommendations/{userId}", 2001L)
                         .param("topK", "3")
                         .param("useCache", "false")

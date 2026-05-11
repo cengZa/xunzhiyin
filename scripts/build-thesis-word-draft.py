@@ -57,10 +57,10 @@ TOC_ENTRIES = [
     (2, "2.1 推荐系统概述", "7"),
     (2, "2.2 基于内容的推荐", "8"),
     (2, "2.3 TF-IDF 与用户画像", "9"),
-    (2, "2.4 协同过滤与本文取舍", "10"),
+    (2, "2.4 协同过滤与算法取舍", "10"),
     (2, "2.5 可解释推荐与大语言模型辅助解释", "10"),
     (2, "2.6 混合推荐与场景化规则重排", "11"),
-    (2, "2.7 本文技术路线选择", "11"),
+    (2, "2.7 系统技术路线选择", "11"),
     (2, "2.8 本章小结", "12"),
     (1, "3 校园社交匹配推荐系统需求分析", "13"),
     (2, "3.1 需求分析综述", "13"),
@@ -92,14 +92,19 @@ TOC_ENTRIES = [
     (2, "6.4 功能性需求测试用例", "51"),
     (2, "6.5 非功能性需求测试用例", "54"),
     (2, "6.6 离线评估设计", "55"),
-    (2, "6.7 测试结果分析", "58"),
-    (2, "6.8 本章小结", "59"),
-    (1, "7 总结与展望", "60"),
-    (2, "7.1 全文总结", "60"),
-    (2, "7.2 系统展望", "61"),
-    (1, "参考文献", "63"),
-    (1, "致谢", "66"),
+    (2, "6.7 扩展评估与工程化验证", "59"),
+    (2, "6.8 测试结果分析", "60"),
+    (2, "6.9 本章小结", "61"),
+    (1, "7 总结与展望", "62"),
+    (2, "7.1 全文总结", "62"),
+    (2, "7.2 系统展望", "63"),
+    (1, "参考文献", "65"),
+    (1, "致谢", "68"),
 ]
+TOC_BOOKMARKS = {
+    title: f"_TocLCJ{idx:03d}"
+    for idx, (_, title, _) in enumerate(TOC_ENTRIES, start=1)
+}
 
 FIGURE_IMAGES = {
     "图 3-1": ("figures/ch3-1-user-tag-usecase.png", "图 3-1 用户与标签维护用例图"),
@@ -109,7 +114,7 @@ FIGURE_IMAGES = {
     "图 4-1": ("figures/ch4-1-system-architecture.png", "图 4-1 系统整体架构图"),
     "图 4-2": ("figures/ch4-2-function-structure.png", "图 4-2 系统功能模块结构图"),
     "图 4-3": ("figures/ch4-3-core-flow.png", "图 4-3 系统核心流程图"),
-    "图 4-4": ("figures/ch4-4-conceptual-model.png", "图 4-4 数据存储 ER 图（Peter Chen 表示法）"),
+    "图 4-4": ("figures/ch4-4-conceptual-model.png", "图 4-4 数据存储 ER 图"),
     "图 4-5": ("figures/ch4-5-physical-model.png", "图 4-5 数据存储物理模型示意图"),
     "图 5-1": ("figures/ch5-1-profile-business-flow.png", "图 5-1 用户画像构建模块业务流程图"),
     "图 5-2": ("figures/ch5-2-profile-class-diagram.png", "图 5-2 用户画像构建模块类图"),
@@ -269,6 +274,82 @@ def add_heading(doc: Document, level: int, text: str, before: Paragraph | None =
     fmt.keep_together = True
     fmt.widow_control = True
     set_heading_font(run, HEADING_FONT_SIZES.get(level, 14))
+
+
+def add_bookmark(paragraph: Paragraph, name: str, bookmark_id: int) -> None:
+    start = OxmlElement("w:bookmarkStart")
+    start.set(qn("w:id"), str(bookmark_id))
+    start.set(qn("w:name"), name)
+    end = OxmlElement("w:bookmarkEnd")
+    end.set(qn("w:id"), str(bookmark_id))
+    paragraph._p.insert(0, start)
+    paragraph._p.append(end)
+
+
+def normalize_bookmark_match(text: str) -> str:
+    return re.sub(r"\s+", "", text).casefold()
+
+
+def toc_target_heading_text(title: str) -> str:
+    if title == "ABSTRACT":
+        return "Abstract"
+    if title == "致谢":
+        return "致    谢"
+    return strip_heading_number(title)
+
+
+def add_toc_hyperlink(paragraph: Paragraph, title: str, page: str, level: int) -> None:
+    hyperlink = OxmlElement("w:hyperlink")
+    hyperlink.set(qn("w:anchor"), TOC_BOOKMARKS[title])
+    hyperlink.set(qn("w:history"), "1")
+
+    run = OxmlElement("w:r")
+    r_pr = OxmlElement("w:rPr")
+    r_fonts = OxmlElement("w:rFonts")
+    if level == 1:
+        r_fonts.set(qn("w:eastAsia"), "黑体")
+    else:
+        r_fonts.set(qn("w:eastAsia"), "宋体")
+    r_fonts.set(qn("w:ascii"), "Times New Roman")
+    r_fonts.set(qn("w:hAnsi"), "Times New Roman")
+    r_pr.append(r_fonts)
+    size = OxmlElement("w:sz")
+    size.set(qn("w:val"), "24")
+    r_pr.append(size)
+    run.append(r_pr)
+
+    title_text = OxmlElement("w:t")
+    title_text.set(qn("xml:space"), "preserve")
+    title_text.text = title
+    run.append(title_text)
+    run.append(OxmlElement("w:tab"))
+    page_text = OxmlElement("w:t")
+    page_text.set(qn("xml:space"), "preserve")
+    page_text.text = page
+    run.append(page_text)
+    hyperlink.append(run)
+    paragraph._p.append(hyperlink)
+
+
+def add_toc_bookmarks(doc: Document) -> None:
+    targets = [
+        (normalize_bookmark_match(toc_target_heading_text(title)), TOC_BOOKMARKS[title], idx)
+        for idx, (_, title, _) in enumerate(TOC_ENTRIES, start=1)
+    ]
+    target_index = 0
+    heading_styles = {"标题名（不入目录）", "1级标题", "2级标题", "3级标题"}
+    for paragraph in doc.paragraphs:
+        if target_index >= len(targets):
+            break
+        if paragraph.style.name not in heading_styles:
+            continue
+        expected_text, bookmark_name, bookmark_id = targets[target_index]
+        if normalize_bookmark_match(paragraph.text) == expected_text:
+            add_bookmark(paragraph, bookmark_name, bookmark_id)
+            target_index += 1
+    if target_index != len(targets):
+        missing = TOC_ENTRIES[target_index][1]
+        raise RuntimeError(f"未能为目录项创建书签：{missing}")
 
 
 def is_table_start(lines: list[str], idx: int) -> bool:
@@ -729,17 +810,7 @@ def add_static_toc(doc: Document, before: Paragraph | None = None) -> None:
         fmt.line_spacing = Pt(20)
         fmt.tab_stops.clear_all()
         fmt.tab_stops.add_tab_stop(Inches(6.15), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
-        run = p.add_run(f"{title}\t{page}")
-        if level == 1:
-            run.font.name = "黑体"
-            r_fonts = run._element.rPr.rFonts
-            r_fonts.set(qn("w:eastAsia"), "黑体")
-            r_fonts.set(qn("w:ascii"), "Times New Roman")
-            r_fonts.set(qn("w:hAnsi"), "Times New Roman")
-            run.font.size = Pt(12)
-            run.bold = False
-        else:
-            set_run_font(run, 12, bold=False)
+        add_toc_hyperlink(p, title, page, level)
 
 
 def normalize_inline_text(text: str) -> str:
@@ -842,6 +913,15 @@ def update_cover(doc: Document) -> None:
             "是本人在指导教师的指导下，独立进行研究工作所取得的成果。尽我所知，除了文中特别加以标注和致谢中所罗列的内容以外，"
             "论文中不包含其他人已经发表或撰写过的研究成果，也不包含为获得北京交通大学或其他教育机构的学位或证书而使用过的材料。"
         )
+    for index in (84, 85, 87):
+        if len(doc.paragraphs) > index:
+            paragraph = doc.paragraphs[index]
+            paragraph.paragraph_format.line_spacing = Pt(20)
+            paragraph.paragraph_format.space_before = Pt(0)
+            paragraph.paragraph_format.space_after = Pt(0)
+            paragraph.paragraph_format.widow_control = True
+            for run in paragraph.runs:
+                set_run_font(run, BODY_FONT_SIZE)
 
 
 def set_section_pg_num(section, fmt: str | None = None, start: int | None = None) -> None:
@@ -992,6 +1072,7 @@ def build() -> None:
     clear_after(ack_start, doc)
     add_heading(doc, 0, "致    谢")
 
+    add_toc_bookmarks(doc)
     normalize_section_page_numbers(doc)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
