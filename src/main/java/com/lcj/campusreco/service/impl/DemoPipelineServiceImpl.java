@@ -232,7 +232,7 @@ public class DemoPipelineServiceImpl implements DemoPipelineService {
         stage.put("vectorSize", profileModel.getVector().size());
         stage.put("tagWeightCount", profileModel.getTagWeights().size());
         stage.put("weightFormulaLabel", "改进 TF-IDF");
-        stage.put("weightFormula", "finalWeight = tf × idf × timeDecay × weightSeed；当前 idf 固定为 1.0。");
+        stage.put("weightFormula", "finalWeight = tf × idf × timeDecay × weightSeed；idf 由全体有效用户的标签文档频次计算。");
         stage.put("profileTopTagLimit", tuningContext.getProfileTopTagLimit());
         stage.put("tagWeights", profileModel.getTagWeights().stream()
                 .sorted(Comparator.comparing(TagWeightModel::getFinalWeight, Comparator.nullsLast(BigDecimal::compareTo)).reversed())
@@ -266,12 +266,14 @@ public class DemoPipelineServiceImpl implements DemoPipelineService {
         item.put("tf", tagWeightModel.getTf());
         item.put("idf", tagWeightModel.getIdf());
         item.put("timeDecay", tagWeightModel.getTimeDecay());
+        item.put("weightSeed", tagWeightModel.getWeightSeed());
         item.put("finalWeight", tagWeightModel.getFinalWeight());
         item.put("formulaText",
-                String.format("tf(%s) × idf(%s) × timeDecay(%s) × weightSeed(1.0000)",
+                String.format("tf(%s) × idf(%s) × timeDecay(%s) × weightSeed(%s)",
                         scoreText(tagWeightModel.getTf()),
                         scoreText(tagWeightModel.getIdf()),
-                        scoreText(tagWeightModel.getTimeDecay())));
+                        scoreText(tagWeightModel.getTimeDecay()),
+                        scoreText(tagWeightModel.getWeightSeed())));
         item.put("relations", relations.stream()
                 .filter(relation -> tagWeightModel.getTagId().equals(relation.getTagId()))
                 .map(relation -> {

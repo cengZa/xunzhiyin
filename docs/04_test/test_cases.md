@@ -31,9 +31,9 @@
 - 调用 `POST /api/admin/mock/init`
 - 期望：返回 tagCount / userCount / relationCount / profileRebuiltCount / recallIndexCount
 - 当前稳定答辩数据集期望值：
-  - `tagCount=18`
+  - `tagCount=36`
   - `userCount=18`
-  - `relationCount=86`
+  - `relationCount=130`
 
 ## 5.1 演示故事线接口
 - 调用 `GET /api/admin/demo/story?scenarioMode=study_partner`

@@ -530,6 +530,7 @@ def add_native_markdown_table(
     before: Paragraph | None = None,
     widths: list[int] | None = None,
     compact: bool = False,
+    body_row_height: int | None = None,
 ) -> None:
     table = doc.add_table(rows=len(rows) + 1, cols=len(headers))
     if before:
@@ -548,9 +549,10 @@ def add_native_markdown_table(
         row = table.rows[row_idx]
         set_row_cant_split(row)
         if compact:
-            set_row_min_height(row, 320 if row_idx == 0 else 270)
+            default_height = 320 if row_idx == 0 else 270
         else:
-            set_row_min_height(row, 460 if row_idx == 0 else 430)
+            default_height = 460 if row_idx == 0 else 430
+        set_row_min_height(row, default_height if row_idx == 0 else (body_row_height or default_height))
         merge_tail = (
             row_idx != 0
             and len(headers) == 4
@@ -584,8 +586,8 @@ def add_native_markdown_table(
             fmt.space_before = Pt(0 if compact else 1)
             fmt.space_after = Pt(0 if compact else 1)
             fmt.line_spacing = Pt(12 if compact else 14)
-            fmt.keep_with_next = row_idx < len(rows)
-            fmt.keep_together = True
+            fmt.keep_with_next = False
+            fmt.keep_together = False
             run = p.add_run(normalize_inline_text(text))
             set_run_font(run, TABLE_FONT_SIZE, bold=(row_idx == 0))
     add_after_table_spacing(doc, before=before)
@@ -650,8 +652,19 @@ def add_markdown_table(doc: Document, lines: list[str], idx: int, before: Paragr
         )
         return idx
 
+    compact = False
+    body_row_height = None
     if len(normalized_headers) == 4 and rows and rows[0][0] == "用例编号":
         widths = [1100, 2850, 1100, table_width_twips(doc) - 5050]
+    elif normalized_headers == ["机制", "作用", "实现要点"]:
+        total = table_width_twips(doc)
+        widths = [1800, 3000, total - 4800]
+        body_row_height = 720
+    elif normalized_headers == ["方案", "排序依据", "设计目的", "取舍说明"]:
+        total = table_width_twips(doc)
+        widths = [1500, 2200, 3100, total - 6800]
+        compact = True
+        body_row_height = 1050
     else:
         widths = column_widths(normalized_headers, rows, table_width_twips(doc))
     add_native_markdown_table(
@@ -660,6 +673,8 @@ def add_markdown_table(doc: Document, lines: list[str], idx: int, before: Paragr
         [[normalize_inline_text(cell) for cell in row[: len(headers)]] for row in rows],
         before=before,
         widths=widths,
+        compact=compact,
+        body_row_height=body_row_height,
     )
     return idx
 
@@ -756,6 +771,9 @@ def add_formula(doc: Document, formula_ref: str, before: Paragraph | None = None
 def add_paragraph_text(doc: Document, text: str, style: str | None = None, before: Paragraph | None = None) -> None:
     text = normalize_inline_text(text)
     text = re.sub(r"^(\d+)\.\s+", lambda m: f"（{m.group(1)}）", text)
+    if not is_centered_caption(text):
+        text = re.sub(r"([图表式])\s+(\d+)\s*[-－]\s*(\d+)", r"\1\2-\3", text)
+        text = re.sub(r"([图表式]\d+-\d+)\s+(?=[\u4e00-\u9fff])", r"\1", text)
     p = insert_paragraph_before(before, style) if before else (doc.add_paragraph(style=style) if style else doc.add_paragraph())
     if text.startswith("["):
         p.alignment = WD_ALIGN_PARAGRAPH.LEFT

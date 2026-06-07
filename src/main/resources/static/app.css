@@ -463,11 +463,39 @@ body.presentation-mode .debug-only {
     margin-top: 12px;
 }
 
+.evaluation-table-wrap {
+    overflow-x: auto;
+}
+
 .evaluation-table th,
 .evaluation-table td {
     padding: 12px 10px;
     border-bottom: 1px solid rgba(34, 48, 40, 0.1);
     text-align: left;
+}
+
+.metric-definition-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 16px 0 0;
+}
+
+.metric-definition-list div {
+    padding: 14px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.metric-definition-list dt {
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.metric-definition-list dd {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.65;
 }
 
 .pipeline-table-wrap {
@@ -672,6 +700,7 @@ body.presentation-mode .debug-only {
     .highlight-grid,
     .comparison-grid,
     .overview-grid,
+    .metric-definition-list,
     .score-board {
         grid-template-columns: 1fr;
     }

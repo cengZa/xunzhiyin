@@ -60,9 +60,9 @@ class MockDataServiceImplTest {
 
         var result = service.initMockData();
 
-        assertEquals(18, result.get("tagCount"));
+        assertEquals(36, result.get("tagCount"));
         assertEquals(18, result.get("userCount"));
-        assertEquals(86, result.get("relationCount"));
+        assertEquals(130, result.get("relationCount"));
         verify(tagMapper, atLeastOnce()).insert(any(TagEntity.class));
         verify(userMapper, atLeastOnce()).insert(any(UserEntity.class));
         verify(userTagRelationMapper, atLeastOnce()).insert(any(UserTagRelationEntity.class));

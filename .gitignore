@@ -2,6 +2,7 @@ HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 .m2/
+**/.m2repo/
 lcj-tmp/
 __pycache__/
 *.py[cod]

@@ -21,7 +21,7 @@ public class ExplorationServiceImpl implements ExplorationService {
     private static final BigDecimal MIN_TRUST_SCORE = new BigDecimal("0.1500");
     private static final BigDecimal CROSS_MAJOR_BONUS = new BigDecimal("0.1200");
     private static final BigDecimal SAME_MAJOR_BONUS = new BigDecimal("0.0400");
-    private static final BigDecimal REASONABLE_INTEREST_SCORE = new BigDecimal("0.3500");
+    private static final BigDecimal REASONABLE_INTEREST_SCORE = new BigDecimal("0.1500");
 
     private final UserService userService;
 
@@ -57,7 +57,7 @@ public class ExplorationServiceImpl implements ExplorationService {
         int stableCount = Math.min(2, limit);
         List<RankingCandidateModel> stable = new ArrayList<>(cleanList.subList(0, stableCount));
 
-        RankingCandidateModel explorationCandidate = chooseExplorationCandidate(requestUser, cleanList, topK);
+        RankingCandidateModel explorationCandidate = chooseExplorationCandidate(requestUser, cleanList, stableCount);
         List<RankingCandidateModel> result = new ArrayList<>(stable);
         Set<Long> chosenUserIds = new HashSet<>();
         stable.stream().map(RankingCandidateModel::getTargetUserId).forEach(chosenUserIds::add);
@@ -97,9 +97,9 @@ public class ExplorationServiceImpl implements ExplorationService {
 
     private RankingCandidateModel chooseExplorationCandidate(UserEntity requestUser,
                                                              List<RankingCandidateModel> candidates,
-                                                             int topK) {
+                                                             int startIndex) {
         List<RankingCandidateModel> explorationPool = new ArrayList<>();
-        for (int index = Math.min(topK, candidates.size()); index < candidates.size(); index++) {
+        for (int index = Math.min(startIndex, candidates.size()); index < candidates.size(); index++) {
             RankingCandidateModel candidate = candidates.get(index);
             if (isEligible(candidate)) {
                 explorationPool.add(candidate);

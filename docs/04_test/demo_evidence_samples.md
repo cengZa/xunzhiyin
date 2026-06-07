@@ -23,9 +23,9 @@ POST /api/admin/mock/init
 
 | 字段 | 预期值 |
 | --- | --- |
-| `tagCount` | 18 |
+| `tagCount` | 36 |
 | `userCount` | 18 |
-| `relationCount` | 86 |
+| `relationCount` | 130 |
 
 ## 2. 推荐截图清单
 

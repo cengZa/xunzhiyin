@@ -8,10 +8,12 @@ import static org.mockito.Mockito.when;
 
 import com.lcj.campusreco.config.RecommendationTuningContext;
 import com.lcj.campusreco.domain.entity.TagEntity;
+import com.lcj.campusreco.domain.entity.UserEntity;
 import com.lcj.campusreco.domain.entity.UserProfileEntity;
 import com.lcj.campusreco.domain.entity.UserTagRelationEntity;
 import com.lcj.campusreco.infra.redis.ProfileCacheRepository;
 import com.lcj.campusreco.mapper.TagMapper;
+import com.lcj.campusreco.mapper.UserMapper;
 import com.lcj.campusreco.mapper.UserProfileMapper;
 import com.lcj.campusreco.mapper.UserTagRelationMapper;
 import com.lcj.campusreco.strategy.profile.ImprovedTfIdfProfileWeightCalculator;
@@ -30,6 +32,8 @@ class ProfileServiceImplTest {
     @Mock
     private ProfileCacheRepository profileCacheRepository;
     @Mock
+    private UserMapper userMapper;
+    @Mock
     private UserTagRelationMapper userTagRelationMapper;
     @Mock
     private TagMapper tagMapper;
@@ -46,6 +50,7 @@ class ProfileServiceImplTest {
     void buildProfileCreatesVectorAndPersistsSnapshot() {
         ProfileServiceImpl service = new ProfileServiceImpl(
                 profileCacheRepository,
+                userMapper,
                 userTagRelationMapper,
                 tagMapper,
                 userProfileMapper,
@@ -76,6 +81,7 @@ class ProfileServiceImplTest {
         tag2.setTagType("academic");
 
         when(userTagRelationMapper.selectList(any())).thenReturn(List.of(relation1, relation2));
+        when(userMapper.selectList(any())).thenReturn(List.of(activeUser(1L), activeUser(2L)));
         when(tagMapper.selectBatchIds(any())).thenReturn(List.of(tag1, tag2));
         when(userProfileMapper.selectOne(any())).thenReturn(null);
 
@@ -93,6 +99,7 @@ class ProfileServiceImplTest {
     void buildProfileRespectsTopTagLimitOverride() {
         ProfileServiceImpl service = new ProfileServiceImpl(
                 profileCacheRepository,
+                userMapper,
                 userTagRelationMapper,
                 tagMapper,
                 userProfileMapper,
@@ -123,6 +130,7 @@ class ProfileServiceImplTest {
         tag2.setTagType("academic");
 
         when(userTagRelationMapper.selectList(any())).thenReturn(List.of(relation1, relation2));
+        when(userMapper.selectList(any())).thenReturn(List.of(activeUser(1L), activeUser(2L)));
         when(tagMapper.selectBatchIds(any())).thenReturn(List.of(tag1, tag2));
         when(userProfileMapper.selectOne(any())).thenReturn(null);
 
@@ -130,5 +138,12 @@ class ProfileServiceImplTest {
             var profile = service.buildProfile(1L, "init");
             assertEquals(1, profile.getTopKTags().size());
         }
+    }
+
+    private UserEntity activeUser(Long userId) {
+        UserEntity user = new UserEntity();
+        user.setId(userId);
+        user.setStatus(1);
+        return user;
     }
 }

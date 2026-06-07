@@ -12,5 +12,6 @@ public class TagWeightModel {
     private BigDecimal tf;
     private BigDecimal idf;
     private BigDecimal timeDecay;
+    private BigDecimal weightSeed;
     private BigDecimal finalWeight;
 }

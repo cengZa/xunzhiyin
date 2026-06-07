@@ -191,14 +191,16 @@ function renderOverview(summary) {
 function renderEvaluationSummary(summary) {
   const baselines = safeArray(summary.baselines);
   if (!baselines.length) {
-    els.evaluationSummaryBody.innerHTML = `<tr><td colspan="4">当前没有返回评估基线。</td></tr>`;
+    els.evaluationSummaryBody.innerHTML = `<tr><td colspan="6">当前没有返回评估基线。</td></tr>`;
     return;
   }
   els.evaluationSummaryBody.innerHTML = baselines.map((baseline) => `
     <tr>
       <td>${formatValue(baseline.baselineName || baseline.baselineCode)}</td>
       <td>${formatScore(baseline.precisionAtK)}</td>
+      <td>${formatScore(baseline.ndcgAtK)}</td>
       <td>${formatScore(baseline.hitRateAtK)}</td>
+      <td>${formatScore(baseline.coverageRate)}</td>
       <td>${formatScore(baseline.explanationPresenceRate)}</td>
     </tr>
   `).join("");
@@ -487,7 +489,7 @@ async function runMockInit() {
     { title: "初始化结果", content: `用户 ${summary.userCount} / 标签 ${summary.tagCount} / 关系 ${summary.relationCount}` },
     { title: "派生重建", content: `画像 ${summary.profileRebuiltCount ?? "-"} / 召回索引 ${summary.recallIndexCount ?? "-"}` }
   ]);
-  addLog("已初始化 mock 数据，并重建画像与召回索引。");
+  addLog("已初始化演示数据，并重建画像与召回索引。");
   await reloadAll();
 }
 

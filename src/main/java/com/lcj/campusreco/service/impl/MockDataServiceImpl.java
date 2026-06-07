@@ -28,7 +28,9 @@ public class MockDataServiceImpl implements MockDataService {
     );
     private static final List<Long> MOCK_TAG_IDS = List.of(
             1001L, 1002L, 1003L, 1004L, 1005L, 1006L, 1007L, 1008L, 1009L,
-            1010L, 1011L, 1012L, 1013L, 1014L, 1015L, 1016L, 1017L, 1018L
+            1010L, 1011L, 1012L, 1013L, 1014L, 1015L, 1016L, 1017L, 1018L,
+            1019L, 1020L, 1021L, 1022L, 1023L, 1024L, 1025L, 1026L, 1027L,
+            1028L, 1029L, 1030L, 1031L, 1032L, 1033L, 1034L, 1035L, 1036L
     );
 
     private final UserMapper userMapper;
@@ -115,7 +117,25 @@ public class MockDataServiceImpl implements MockDataService {
                 createTag(1015L, "Debate", "club"),
                 createTag(1016L, "StudentUnion", "club"),
                 createTag(1017L, "Guitar", "hobby"),
-                createTag(1018L, "DataMining", "academic")
+                createTag(1018L, "DataMining", "academic"),
+                createTag(1019L, "Backend", "academic"),
+                createTag(1020L, "MyBatis", "academic"),
+                createTag(1021L, "Maven", "academic"),
+                createTag(1022L, "Algorithm", "academic"),
+                createTag(1023L, "Database", "academic"),
+                createTag(1024L, "EnglishSpeech", "hobby"),
+                createTag(1025L, "UIUX", "academic"),
+                createTag(1026L, "VideoEditing", "hobby"),
+                createTag(1027L, "Reading", "hobby"),
+                createTag(1028L, "Fitness", "hobby"),
+                createTag(1029L, "Robotics", "club"),
+                createTag(1030L, "CyberSecurity", "academic"),
+                createTag(1031L, "CloudNative", "academic"),
+                createTag(1032L, "ProductDesign", "interest"),
+                createTag(1033L, "PublicWelfare", "club"),
+                createTag(1034L, "Entrepreneurship", "interest"),
+                createTag(1035L, "Statistics", "academic"),
+                createTag(1036L, "Writing", "hobby")
         );
         for (TagEntity tag : tags) {
             TagEntity existing = tagMapper.selectById(tag.getId());
@@ -164,24 +184,24 @@ public class MockDataServiceImpl implements MockDataService {
 
     private int ensureUserTagRelations() {
         List<UserTagRelationEntity> relations = List.of(
-                createRelation(2001L, 1001L), createRelation(2001L, 1002L), createRelation(2001L, 1003L), createRelation(2001L, 1006L), createRelation(2001L, 1014L),
-                createRelation(2002L, 1001L), createRelation(2002L, 1002L), createRelation(2002L, 1006L), createRelation(2002L, 1007L), createRelation(2002L, 1018L),
-                createRelation(2003L, 1003L), createRelation(2003L, 1008L), createRelation(2003L, 1011L), createRelation(2003L, 1012L), createRelation(2003L, 1017L),
-                createRelation(2004L, 1007L), createRelation(2004L, 1009L), createRelation(2004L, 1004L), createRelation(2004L, 1015L), createRelation(2004L, 1018L),
-                createRelation(2005L, 1001L), createRelation(2005L, 1007L), createRelation(2005L, 1011L), createRelation(2005L, 1013L), createRelation(2005L, 1018L),
-                createRelation(2006L, 1003L), createRelation(2006L, 1008L), createRelation(2006L, 1005L), createRelation(2006L, 1014L), createRelation(2006L, 1017L),
-                createRelation(2007L, 1007L), createRelation(2007L, 1009L), createRelation(2007L, 1010L), createRelation(2007L, 1013L), createRelation(2007L, 1018L),
-                createRelation(2008L, 1002L), createRelation(2008L, 1004L), createRelation(2008L, 1005L), createRelation(2008L, 1010L), createRelation(2008L, 1014L),
-                createRelation(2009L, 1003L), createRelation(2009L, 1008L), createRelation(2009L, 1009L), createRelation(2009L, 1012L), createRelation(2009L, 1016L),
-                createRelation(2010L, 1009L), createRelation(2010L, 1012L), createRelation(2010L, 1015L), createRelation(2010L, 1016L), createRelation(2010L, 1017L),
-                createRelation(2011L, 1001L), createRelation(2011L, 1002L), createRelation(2011L, 1006L), createRelation(2011L, 1011L), createRelation(2011L, 1013L),
-                createRelation(2012L, 1008L), createRelation(2012L, 1010L), createRelation(2012L, 1012L), createRelation(2012L, 1016L), createRelation(2012L, 1017L),
-                createRelation(2013L, 1001L), createRelation(2013L, 1007L), createRelation(2013L, 1013L), createRelation(2013L, 1015L), createRelation(2013L, 1018L),
-                createRelation(2014L, 1005L), createRelation(2014L, 1009L), createRelation(2014L, 1014L), createRelation(2014L, 1015L), createRelation(2014L, 1016L),
-                createRelation(2015L, 1003L), createRelation(2015L, 1008L), createRelation(2015L, 1012L), createRelation(2015L, 1014L), createRelation(2015L, 1017L),
-                createRelation(2016L, 1008L), createRelation(2016L, 1011L), createRelation(2016L, 1012L), createRelation(2016L, 1016L), createRelation(2016L, 1017L),
-                createRelation(2017L, 1007L), createRelation(2017L, 1013L), createRelation(2017L, 1018L),
-                createRelation(2018L, 1009L), createRelation(2018L, 1012L), createRelation(2018L, 1016L)
+                createRelation(2001L, 1001L, 2, "1.8"), createRelation(2001L, 1002L, 3, "1.7"), createRelation(2001L, 1019L, 5, "1.5"), createRelation(2001L, 1020L, 8, "1.4"), createRelation(2001L, 1006L, 15, "1.2"), createRelation(2001L, 1003L, 90, "0.7"), createRelation(2001L, 1014L, 25, "0.9"), createRelation(2001L, 1021L, 12, "1.3"),
+                createRelation(2002L, 1001L, 4, "1.6"), createRelation(2002L, 1002L, 2, "1.8"), createRelation(2002L, 1019L, 7, "1.4"), createRelation(2002L, 1022L, 3, "1.7"), createRelation(2002L, 1006L, 6, "1.5"), createRelation(2002L, 1007L, 18, "1.2"), createRelation(2002L, 1018L, 25, "1.1"), createRelation(2002L, 1021L, 14, "1.2"),
+                createRelation(2003L, 1003L, 5, "1.4"), createRelation(2003L, 1008L, 2, "1.8"), createRelation(2003L, 1011L, 12, "1.3"), createRelation(2003L, 1025L, 3, "1.7"), createRelation(2003L, 1026L, 7, "1.5"), createRelation(2003L, 1012L, 45, "0.9"), createRelation(2003L, 1017L, 20, "1.1"),
+                createRelation(2004L, 1007L, 4, "1.6"), createRelation(2004L, 1018L, 9, "1.5"), createRelation(2004L, 1022L, 20, "1.2"), createRelation(2004L, 1009L, 40, "0.9"), createRelation(2004L, 1004L, 80, "0.7"), createRelation(2004L, 1015L, 6, "1.4"), createRelation(2004L, 1024L, 8, "1.3"),
+                createRelation(2005L, 1001L, 12, "1.3"), createRelation(2005L, 1007L, 3, "1.7"), createRelation(2005L, 1013L, 2, "1.8"), createRelation(2005L, 1018L, 6, "1.5"), createRelation(2005L, 1030L, 18, "1.2"), createRelation(2005L, 1011L, 55, "0.8"), createRelation(2005L, 1023L, 22, "1.1"), createRelation(2005L, 1031L, 30, "1.0"),
+                createRelation(2006L, 1003L, 4, "1.6"), createRelation(2006L, 1008L, 8, "1.5"), createRelation(2006L, 1017L, 2, "1.8"), createRelation(2006L, 1014L, 20, "1.2"), createRelation(2006L, 1005L, 40, "0.9"), createRelation(2006L, 1026L, 10, "1.3"), createRelation(2006L, 1027L, 100, "0.8"),
+                createRelation(2007L, 1007L, 6, "1.5"), createRelation(2007L, 1013L, 4, "1.6"), createRelation(2007L, 1018L, 2, "1.7"), createRelation(2007L, 1035L, 1, "1.8"), createRelation(2007L, 1023L, 16, "1.2"), createRelation(2007L, 1009L, 70, "0.8"), createRelation(2007L, 1010L, 95, "0.7"),
+                createRelation(2008L, 1004L, 3, "1.7"), createRelation(2008L, 1005L, 5, "1.6"), createRelation(2008L, 1014L, 8, "1.5"), createRelation(2008L, 1028L, 12, "1.4"), createRelation(2008L, 1010L, 35, "1.0"), createRelation(2008L, 1002L, 130, "0.6"), createRelation(2008L, 1029L, 25, "1.1"),
+                createRelation(2009L, 1003L, 14, "1.2"), createRelation(2009L, 1008L, 4, "1.7"), createRelation(2009L, 1026L, 5, "1.6"), createRelation(2009L, 1009L, 12, "1.3"), createRelation(2009L, 1012L, 8, "1.4"), createRelation(2009L, 1016L, 20, "1.2"), createRelation(2009L, 1036L, 3, "1.5"),
+                createRelation(2010L, 1009L, 7, "1.5"), createRelation(2010L, 1016L, 2, "1.8"), createRelation(2010L, 1012L, 10, "1.4"), createRelation(2010L, 1034L, 3, "1.7"), createRelation(2010L, 1015L, 18, "1.2"), createRelation(2010L, 1017L, 90, "0.8"), createRelation(2010L, 1033L, 15, "1.3"),
+                createRelation(2011L, 1001L, 1, "1.8"), createRelation(2011L, 1002L, 2, "1.7"), createRelation(2011L, 1006L, 4, "1.6"), createRelation(2011L, 1013L, 5, "1.5"), createRelation(2011L, 1022L, 9, "1.4"), createRelation(2011L, 1019L, 13, "1.3"), createRelation(2011L, 1031L, 35, "1.1"), createRelation(2011L, 1020L, 18, "1.2"),
+                createRelation(2012L, 1008L, 4, "1.6"), createRelation(2012L, 1010L, 7, "1.5"), createRelation(2012L, 1017L, 15, "1.3"), createRelation(2012L, 1016L, 25, "1.1"), createRelation(2012L, 1027L, 8, "1.4"), createRelation(2012L, 1026L, 65, "0.9"), createRelation(2012L, 1025L, 22, "1.2"),
+                createRelation(2013L, 1007L, 5, "1.5"), createRelation(2013L, 1018L, 2, "1.8"), createRelation(2013L, 1013L, 4, "1.6"), createRelation(2013L, 1035L, 14, "1.3"), createRelation(2013L, 1015L, 30, "1.0"), createRelation(2013L, 1022L, 18, "1.2"), createRelation(2013L, 1030L, 40, "1.1"),
+                createRelation(2014L, 1009L, 3, "1.7"), createRelation(2014L, 1033L, 5, "1.6"), createRelation(2014L, 1016L, 7, "1.5"), createRelation(2014L, 1015L, 9, "1.4"), createRelation(2014L, 1005L, 45, "1.0"), createRelation(2014L, 1014L, 80, "0.8"), createRelation(2014L, 1024L, 20, "1.2"),
+                createRelation(2015L, 1003L, 5, "1.6"), createRelation(2015L, 1008L, 2, "1.8"), createRelation(2015L, 1017L, 3, "1.7"), createRelation(2015L, 1026L, 8, "1.5"), createRelation(2015L, 1014L, 35, "1.0"), createRelation(2015L, 1012L, 60, "0.9"), createRelation(2015L, 1027L, 18, "1.2"),
+                createRelation(2016L, 1011L, 6, "1.5"), createRelation(2016L, 1025L, 2, "1.8"), createRelation(2016L, 1032L, 3, "1.7"), createRelation(2016L, 1012L, 12, "1.3"), createRelation(2016L, 1008L, 18, "1.2"), createRelation(2016L, 1016L, 90, "0.8"), createRelation(2016L, 1034L, 28, "1.1"),
+                createRelation(2017L, 1007L, 4, "1.6"), createRelation(2017L, 1013L, 6, "1.5"), createRelation(2017L, 1018L, 8, "1.4"), createRelation(2017L, 1035L, 1, "1.8"), createRelation(2017L, 1022L, 18, "1.2"), createRelation(2017L, 1023L, 35, "1.0"), createRelation(2017L, 1030L, 70, "0.9"),
+                createRelation(2018L, 1009L, 8, "1.4"), createRelation(2018L, 1012L, 4, "1.6"), createRelation(2018L, 1034L, 6, "1.5"), createRelation(2018L, 1016L, 18, "1.2"), createRelation(2018L, 1033L, 10, "1.3"), createRelation(2018L, 1036L, 30, "1.1"), createRelation(2018L, 1024L, 55, "0.9")
         );
 
         userTagRelationMapper.delete(
@@ -228,14 +248,19 @@ public class MockDataServiceImpl implements MockDataService {
     }
 
     private UserTagRelationEntity createRelation(Long userId, Long tagId) {
+        return createRelation(userId, tagId, 0, "1.0");
+    }
+
+    private UserTagRelationEntity createRelation(Long userId, Long tagId, int daysAgo, String weightSeed) {
         UserTagRelationEntity relation = new UserTagRelationEntity();
+        LocalDateTime selectedAt = LocalDateTime.now().minusDays(daysAgo);
         relation.setUserId(userId);
         relation.setTagId(tagId);
         relation.setSourceType("manual");
-        relation.setSelectedAt(LocalDateTime.now());
-        relation.setWeightSeed(BigDecimal.ONE);
-        relation.setCreatedAt(LocalDateTime.now());
-        relation.setUpdatedAt(LocalDateTime.now());
+        relation.setSelectedAt(selectedAt);
+        relation.setWeightSeed(new BigDecimal(weightSeed));
+        relation.setCreatedAt(selectedAt);
+        relation.setUpdatedAt(selectedAt);
         return relation;
     }
 }

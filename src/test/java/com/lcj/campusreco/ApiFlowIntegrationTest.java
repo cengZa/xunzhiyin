@@ -65,9 +65,9 @@ class ApiFlowIntegrationTest {
         mockMvc.perform(post("/api/admin/mock/init"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.tagCount").value(18))
+                .andExpect(jsonPath("$.data.tagCount").value(36))
                 .andExpect(jsonPath("$.data.userCount").value(18))
-                .andExpect(jsonPath("$.data.relationCount").value(86));
+                .andExpect(jsonPath("$.data.relationCount").value(130));
 
         mockMvc.perform(get("/api/admin/demo/story")
                         .param("scenarioMode", "study_partner"))

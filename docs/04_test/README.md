@@ -5,6 +5,8 @@
 ## 建议阅读顺序
 - `test_cases.md`: 功能、接口、页面、评估与解释回退测试清单
 - `acceptance_traceability_matrix.md`: 需求、验收、代码、测试与论文章节映射
+- `demo_presentation_guide.md`: 录制演示视频的固定顺序、操作说明与对应讲稿
+- `defense_question_bank.md`: 答辩老师可能提问与建议回答口径
 - `final_demo_script.md`: 答辩演示固定路径
 - `demo_evidence_samples.md`: 论文和答辩截图、接口样例与图表建议
 - `metrics_definition.md`: 指标定义、代理验证边界与当前实验参数

@@ -42,7 +42,7 @@
             </article>
             <article class="metric-card">
                 <span class="metric-label">演示数据规模</span>
-                <strong class="metric-value" id="hero-data-scale">18 / 18 / 86</strong>
+                <strong class="metric-value" id="hero-data-scale">18 / 36 / 130</strong>
                 <span class="metric-note">用户 / 标签 / 关系</span>
             </article>
             <article class="metric-card">
@@ -114,17 +114,41 @@
                             <tr>
                                 <th>基线</th>
                                 <th>Precision@K</th>
+                                <th>NDCG@K</th>
                                 <th>HitRate@K</th>
+                                <th>覆盖率</th>
                                 <th>解释覆盖率</th>
                             </tr>
                             </thead>
                             <tbody id="evaluation-summary-body">
                             <tr>
-                                <td colspan="4">评估摘要将在这里显示。</td>
+                                <td colspan="6">评估摘要将在这里显示。</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
+                    <dl class="metric-definition-list" aria-label="离线评估指标说明">
+                        <div>
+                            <dt>Precision@K</dt>
+                            <dd>TopK 结果中达到相关性阈值的候选占比，用于观察推荐结果的准确性。</dd>
+                        </div>
+                        <div>
+                            <dt>NDCG@K</dt>
+                            <dd>考虑排序位置的相关性指标，高相关候选越靠前，分值越高。</dd>
+                        </div>
+                        <div>
+                            <dt>HitRate@K</dt>
+                            <dd>每个用户的 TopK 中至少出现一个相关候选时记为命中，用于观察推荐可用性。</dd>
+                        </div>
+                        <div>
+                            <dt>覆盖率</dt>
+                            <dd>被推荐过的不同候选用户数占候选全集的比例，用于观察结果是否过度集中。</dd>
+                        </div>
+                        <div>
+                            <dt>解释覆盖率</dt>
+                            <dd>TopK 结果中能够生成推荐理由的比例，用于观察解释链路是否完整。</dd>
+                        </div>
+                    </dl>
                     <div class="comparison-grid" id="baseline-comparison-grid"></div>
                 </article>
             </section>

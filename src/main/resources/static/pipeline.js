@@ -162,6 +162,7 @@ function renderProfileStage(pipeline) {
         <td>${formatScore(item.tf)}</td>
         <td>${formatScore(item.idf)}</td>
         <td>${formatScore(item.timeDecay)}</td>
+        <td>${formatScore(item.weightSeed)}</td>
         <td>${formatScore(item.finalWeight)}</td>
         <td>${formatValue(item.formulaText)}</td>
       </tr>
